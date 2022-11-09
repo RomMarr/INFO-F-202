@@ -38,7 +38,9 @@ Crée une matrice pour tout ce qui est déplacement puis d’un autre côté fai
         - class sol
         - class sol vide (dehors)
         - class teleportation
-- main :
+- Class personnage :
+        -> compteur de pas, meilleur pas
+- Main :
        -> bouton (ou autre) pour reset le niveau 
 - Changement de terrain :
        -> on clique sur un bloc ça passe au type suivant en boucle
