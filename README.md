@@ -27,3 +27,20 @@ Les tâches additionnelles :
 - [ ] Déplacement automatique à la souris
 - [ ] Éditeur de niveau
 - [ ] Détection d’échec
+
+
+Idées :
+Crée une matrice pour tout ce qui est déplacement puis d’un autre côté faire le graphisme basé sur la matrice 
+
+- Class objet (abstraite):
+        -> class mur
+        -> class boite (différents poids) 
+        -> class cible 
+        -> class sol
+        -> class sol vide (dehors)
+- main :
+       -> bouton (ou autre) pour reset le niveau 
+       
+- Changement de terrain :
+       -> on clique sur un bloc ça passe au type suivant en boucle
+       -> limité aux classes descendantes de objet
