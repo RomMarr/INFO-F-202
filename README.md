@@ -37,6 +37,7 @@ Crée une matrice pour tout ce qui est déplacement puis d’un autre côté fai
         - class cible 
         - class sol
         - class sol vide (dehors)
+        - class teleportation
 - main :
        -> bouton (ou autre) pour reset le niveau 
 - Changement de terrain :
