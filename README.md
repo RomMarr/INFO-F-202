@@ -32,11 +32,11 @@ Les tâches additionnelles :
 Idées :
 Crée une matrice pour tout ce qui est déplacement puis d’un autre côté faire le graphisme basé sur la matrice 
 - Class objet (abstraite):
-        -> class mur
-        -> class boite (différents poids) 
-        -> class cible 
-        -> class sol
-        -> class sol vide (dehors)
+        - class mur
+        - class boite (différents poids) 
+        - class cible 
+        - class sol
+        - class sol vide (dehors)
 - main :
        -> bouton (ou autre) pour reset le niveau 
 - Changement de terrain :
