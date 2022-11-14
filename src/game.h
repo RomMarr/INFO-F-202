@@ -7,6 +7,10 @@
 
 class Game {
   std::vector<std::vector<Wall, Floor, Box, Target>> matrix;
+public:
+  void draw();
+  Game();
+  ~Game();
 };
 
 #endif
