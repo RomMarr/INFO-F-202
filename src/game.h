@@ -6,11 +6,11 @@
 #include "bloc.h"
 
 class Game {
-  std::vector<std::vector<Wall, Floor, Box, Target>> matrix;
+  // std::vector<std::vector<Wall, Floor, Box, Target>> matrix;
 public:
-  void draw();
+  void show_menu();
   Game();
-  ~Game();
+  // ~Game();
 };
 
 #endif
