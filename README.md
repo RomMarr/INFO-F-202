@@ -30,6 +30,7 @@ Les tâches additionnelles :
 
 NOTES : 
 - Déconseiller de faire d el'héritage d'après Léopold (?)
+- Faire le projet en MVC
 
 
 Idées :
