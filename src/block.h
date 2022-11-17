@@ -22,9 +22,11 @@ public:
     void setColor(Fl_Color color);
     void setType(BlockType new_type);
     int getWeight();
+    int getWidth();
+    int getHeight();
     Fl_Color getColor();
     BlockType getType();
-    ~Block();
+    //~Block();
 };
 
 #endif
