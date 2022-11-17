@@ -6,14 +6,16 @@
 #include <FL/Fl_Box.H>
 #include <vector>
 
-#include "bloc.h"
+#include "block.h"
 
 class Game: public Fl_Window {
-  std::vector<std::vector<Bloc>> board_matrix;
+  std::vector<std::vector<Block>> board_matrix;
 public:
   Game();
   void draw() override;
   void show_menu();
+  void show_game();
+  void init_game();
   // ~Game();
 };
 

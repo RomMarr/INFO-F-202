@@ -7,20 +7,14 @@ LDFLAGS  += $(shell fltk-config --ldflags)
 CXXFLAGS += -std='c++20' -Wall -Wextra -Wsign-compare -pedantic -fmax-errors=2
 LDFLAGS  += -lfltk
 
-main: main.cpp game.o bloc.o drawable.o
-	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o bloc.o drawable.o ${LDFLAGS}
-
-gamee: main.cpp game.o
-	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o ${LDFLAGS}
+main: main.cpp game.o block.o
+	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o block.o ${LDFLAGS}
 
 game.o: game.cpp game.h
 	${COMPILER} ${CXXFLAGS} -c game.cpp ${LDFLAGS}
 
-bloc.o: bloc.cpp bloc.h
-	${COMPILER} ${CXXFLAGS} -c bloc.cpp ${LDFLAGS}
-
-drawable.o: drawable.cpp drawable.h
-	${COMPILER} ${CXXFLAGS} -c drawable.cpp ${LDFLAGS}
+block.o: block.cpp block.h
+	${COMPILER} ${CXXFLAGS} -c block.cpp ${LDFLAGS}
 
 .PHONY: clean
 clean:
