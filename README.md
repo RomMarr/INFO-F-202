@@ -36,12 +36,12 @@ NOTES :
 Idées :
 Crée une matrice pour tout ce qui est déplacement puis d’un autre côté faire le graphisme basé sur la matrice 
 - Class objet (abstraite):
-        - class mur
-        - class boite (différents poids) 
-        - class cible 
-        - class sol
-        - class sol vide (dehors)
-        - class teleportation
+  - class mur
+  - class boite (différents poids) 
+  - class cible 
+  - class sol
+  - class sol vide (dehors)
+  - class teleportation
 - Class personnage :
         -> compteur de pas, meilleur pas
 - Main :
