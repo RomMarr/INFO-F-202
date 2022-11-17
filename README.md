@@ -28,6 +28,9 @@ Les tâches additionnelles :
 - [ ] Éditeur de niveau
 - [ ] Détection d’échec
 
+NOTES : 
+- Déconseiller de faire d el'héritage d'après Léopold (?)
+
 
 Idées :
 Crée une matrice pour tout ce qui est déplacement puis d’un autre côté faire le graphisme basé sur la matrice 
