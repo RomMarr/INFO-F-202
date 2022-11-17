@@ -28,20 +28,24 @@ Les tâches additionnelles :
 - [ ] Éditeur de niveau
 - [ ] Détection d’échec
 
+NOTES : 
+- Déconseiller de faire d el'héritage d'après Léopold (?)
+- Faire le projet en MVC
+
 
 Idées :
 Crée une matrice pour tout ce qui est déplacement puis d’un autre côté faire le graphisme basé sur la matrice 
 - Class objet (abstraite):
-        - class mur
-        - class boite (différents poids) 
-        - class cible 
-        - class sol
-        - class sol vide (dehors)
-        - class teleportation
+  - class mur
+  - class boite (différents poids) 
+  - class cible 
+  - class sol
+  - class sol vide (dehors)
+  - class teleportation
 - Class personnage :
-        -> compteur de pas, meilleur pas
+  - compteur de pas, meilleur pas
 - Main :
-       -> bouton (ou autre) pour reset le niveau 
+  - bouton (ou autre) pour reset le niveau 
 - Changement de terrain :
-       -> on clique sur un bloc ça passe au type suivant en boucle
-       -> limité aux classes descendantes de objet
+  - on clique sur un bloc ça passe au type suivant en boucle
+  - limité aux classes descendantes de objet
