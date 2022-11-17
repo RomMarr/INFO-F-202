@@ -9,7 +9,9 @@ using namespace std;
 
 
 class Block {
+public:
     enum BlockType {wall, floor, target, box, teleporter}; // peut ajouter Block pour extérieur si on veut
+private:
     int weight;            // poids du Block
     Fl_Color color;        // couleur du Block 
     const int width = 50;  // largeur du Block

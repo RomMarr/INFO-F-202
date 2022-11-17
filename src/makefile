@@ -10,6 +10,9 @@ LDFLAGS  += -lfltk
 main: main.cpp game.o bloc.o drawable.o
 	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o bloc.o drawable.o ${LDFLAGS}
 
+gamee: main.cpp game.o
+	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o ${LDFLAGS}
+
 game.o: game.cpp game.h
 	${COMPILER} ${CXXFLAGS} -c game.cpp ${LDFLAGS}
 

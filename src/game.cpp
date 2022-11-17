@@ -4,7 +4,15 @@
 
 #include "game.h"
 
-Game::Game() {}
+Game::Game(): Fl_Window(500, 500, 500, 500, "Sokoban") {
+  resizable(this);
+}
+
+void Game::draw() {
+    Fl_Window::draw();
+    Game game;
+    game.show_menu();
+  }
 
 // Game::~Game() {}
 
