@@ -10,13 +10,14 @@ using namespace std;
 
 class Block {
 public:
-    enum BlockType {wall, floor, target, box, teleporter}; // peut ajouter Block pour extérieur si on veut
+    enum BlockType {wall, floor, target, box, light_box, teleporter}; // peut ajouter Block pour extérieur si on veut
 private:
     int weight;            // poids du Block
     Fl_Color color;        // couleur du Block 
     const int width = 50;  // largeur du Block
     const int height = 50; // hauteur du Block 
     BlockType type;
+    int posX, posY;
 public:
     Block(int weight, Fl_Color color, BlockType type) ;
     void draw(int x, int y);

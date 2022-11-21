@@ -1,1 +1,9 @@
-// controller du MVC : donne les mouvements au model en fct des entrées de l'utilisateur
+#include "controller.h"
+#include "model.h"
+
+
+void Controller::move_request(){
+
+};
+
+Controller::Controller(shared_ptr<Board> board):board{board}{};

@@ -7,7 +7,12 @@
 
 #include "block.h"
 #include "game.h"
+#include "model.h"
+#include "controller.h"
+#include "view.h"
 
+
+/**
 Game::Game(): Fl_Window(500, 500, 500, 500, "Sokoban") {
   resizable(this);
 }
@@ -53,4 +58,29 @@ void Game::init_game() {
   board_matrix.push_back(line1);
   board_matrix.push_back(line2);
   board_matrix.push_back(line3);
+}
+**/
+
+
+//Game::Game(bool play):play{play}{}
+
+bool Game::getPlay(){
+  return play;
+}
+
+void Game::setPlay(bool new_play){
+  play = new_play;
+}
+
+void Game::game(shared_ptr<Board> board){
+  Controller ctrl{board};
+  Rules rules{board};
+  Display_board db{board};
+  while (!rules.check_end()){// boucle tant que pas fini (toutes les caisses sur une cibles ou les caisses bloquées)
+    ctrl.move_request(); // demande un mouvement (avec cin ou keys ou autre ??) active move,...
+  };
+}
+
+void Game::edit_map(){
+
 }
