@@ -1,0 +1,1 @@
+// controller du MVC : donne les mouvements au model en fct des entrées de l'utilisateur
