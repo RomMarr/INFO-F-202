@@ -8,7 +8,7 @@
 // ainsi que la gestion des règles (dans un autre fichier) -> coup possible ou non.
 
 
-// The next function come from https://stackoverflow.com/a/46931770/7905936
+// The following function come from https://stackoverflow.com/a/46931770/7905936
 vector<string> split (string s, string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     string token;
@@ -51,9 +51,10 @@ void Block::setType(BlockType new_type){
     type = new_type;
 }
 
-void Block::setPos(int new_posX, int new_posY){
-    get<0>(pos) = new_posX;
-    get<1>(pos)= new_posY;
+void Block::setPos(tuple<int, int> new_position){
+    // get<0>(pos) = new_posX;
+    // get<1>(pos)= new_posY;
+    pos = new_position;
 }
 
 tuple<int, int> Block::getPos(){
@@ -88,6 +89,7 @@ Board::Board(const string &level_file) {
 
 void Board::create_matrix_from_file(const string &file_name){
     int width = 0, height = 0, line_index = 0;
+    bool next_is_player_coord = false;
     string line;
     ifstream file(file_name);
 
@@ -104,7 +106,18 @@ void Board::create_matrix_from_file(const string &file_name){
                     block_this_line.push_back(make_shared<Block>(grid_int_block_type.at(stoi(block_type_index))));
                 }
                 this->board.push_back(block_this_line);
-            } 
+            } else {
+                if (line == "-") {
+                    next_is_player_coord = true;
+                } else if (next_is_player_coord) {
+                    cout << "player: " << line << endl;
+                } else {
+                    vector<string> xy = split(line, " ");
+                    shared_ptr<Block> box = make_shared<Block>(Block::BlockType::box);
+                    (*box).setPos(make_tuple(stoi(xy.at(0)), stoi(xy.at(1))));
+                    boxes.push_back(box);
+                }
+            }
 
             line_index += 1;
         }
@@ -112,11 +125,11 @@ void Board::create_matrix_from_file(const string &file_name){
     }
 }
 
-bool Board::box_on_pos(tuple<int, int> pos_actual){
+shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
     for (auto i: boxes){
-        if (i.getPos() == pos_actual) return true;
+        if ((*i).getPos() == pos_actual) return i;
     }
-    return false;
+    return nullptr;
 }
 
 int Board::get_width() {

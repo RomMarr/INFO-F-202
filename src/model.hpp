@@ -29,7 +29,7 @@ public:
     void setWeight(int weight);
     void setColor(Fl_Color color);
     void setType(BlockType new_type);
-    void setPos(int new_posX, int new_posY);
+    void setPos(tuple<int, int> new_position);
     tuple<int, int> getPos();
     int getWeight();
     int getWidth();
@@ -56,11 +56,12 @@ public:
 class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target};
     vector<vector<shared_ptr<Block>>> board;
-    vector<Block> boxes;
+    vector<shared_ptr<Block>> boxes;
+    shared_ptr<Player> player;
     void create_matrix_from_file(const string &file_name);
 public:
     Board(const string &level_file);
-    bool box_on_pos(tuple <int, int>);
+    shared_ptr<Block> get_box_on_pos(tuple <int, int>);
     int get_width();
     int get_height();
     shared_ptr<Block> get_block(tuple<int, int> coord);
