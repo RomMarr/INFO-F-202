@@ -95,14 +95,13 @@ void Board::create_matrix_from_file(const string &file_name){
 
     if (file.is_open()) {
         while (getline(file, line)) {
+            vector<string> line_splitted = split(line, " ");
             if (line_index == 0) {
-                vector<string> hw = split(line, " ");
-                height = stoi(hw.at(0));
-                width = stoi(hw.at(1));
+                height = stoi(line_splitted.at(0));
+                width = stoi(line_splitted.at(1));
             } else if (line_index <= height) {
-                vector<string> this_line = split(line, " ");
                 vector<shared_ptr<Block>> block_this_line;
-                for (auto block_type_index: this_line) {
+                for (auto block_type_index: line_splitted) {
                     block_this_line.push_back(make_shared<Block>(grid_int_block_type.at(stoi(block_type_index))));
                 }
                 this->board.push_back(block_this_line);
@@ -110,11 +109,10 @@ void Board::create_matrix_from_file(const string &file_name){
                 if (line == "-") {
                     next_is_player_coord = true;
                 } else if (next_is_player_coord) {
-                    cout << "player: " << line << endl;
+                    player = make_shared<Player>(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
                 } else {
-                    vector<string> xy = split(line, " ");
                     shared_ptr<Block> box = make_shared<Block>(Block::BlockType::box);
-                    (*box).setPos(make_tuple(stoi(xy.at(0)), stoi(xy.at(1))));
+                    (*box).setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
                     boxes.push_back(box);
                 }
             }
@@ -125,9 +123,20 @@ void Board::create_matrix_from_file(const string &file_name){
     }
 }
 
+shared_ptr<Player> Board::get_player() {
+    return player;
+}
+
 shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
     for (auto i: boxes){
         if ((*i).getPos() == pos_actual) return i;
+    }
+    return nullptr;
+}
+
+shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
+    if ((*player).getX() == get<0>(pos_actual) && (*player).getY() == get<1>(pos_actual)) {
+        return player;
     }
     return nullptr;
 }
@@ -155,22 +164,22 @@ bool Rules::check_end(){
 
 }
 
-Player::Player(int posX, int posY): posX{posX}, posY{posY}{};
+Player::Player(tuple<int, int> position): position{position} {};
 
 void Player::setX(int new_X){
-    posX = new_X;
+    get<0>(position) = new_X;
 }
 
 void Player::setY(int new_Y){
-    posY = new_Y;
+    get<1>(position) = new_Y;
 }
 
 int Player::getX(){
-    return posX;
+    return get<0>(position);
 }
 
 int Player::getY(){
-    return posY;
+    return get<1>(position);
 }
 
 int Player::getSteps(){

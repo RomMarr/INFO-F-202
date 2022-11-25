@@ -39,6 +39,7 @@ public:
     MainWindow();
     void set_board(shared_ptr<Board> new_board);
     void draw() override;
+    int handle(int event) override;
     void display_menu();
     void display_board();
     static void timer_CB(void *userdata);

@@ -44,9 +44,12 @@ MainWindow::MainWindow(): Fl_Window(500, 500, 500, 500, "Sokoban") {
 void MainWindow::draw_board() {
     for (size_t y = 0; y < (*board).get_height(); y++) {
         for (size_t x = 0; x < (*board).get_width(); x++) {
+            shared_ptr<Player> player_here = (*board).get_player_on_pos(make_tuple(x, y));
             shared_ptr<Block> box_here = (*board).get_box_on_pos(make_tuple(x, y));
-            
-            if (box_here) {
+
+            if (player_here) {
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, fl_rgb_color(0, 0, 255));
+            } else if (box_here) {
                 fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, (*box_here).getColor());
             } else {
                 shared_ptr<Block> cell = (*board).get_block(make_tuple(x, y));
@@ -69,6 +72,34 @@ void MainWindow::draw() {
     
     default:
         break;
+    }
+}
+
+int MainWindow::handle(int event) {
+    // Doit pas être ici à terme, je voulais juste test, mais c'est cette fonction qui est call à chaque keyevent (souris ou clavier)
+    if (event == FL_KEYDOWN) {
+        shared_ptr<Player> player = (*board).get_player();
+        switch (Fl::event_key()) {
+             // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
+            case FL_Up:
+                (*player).setY((*player).getY() - 1);
+                break;
+            
+            case FL_Down:
+                (*player).setY((*player).getY() + 1);
+                break;
+        
+            case FL_Right:
+                (*player).setX((*player).getX() + 1);
+                break;
+
+            case FL_Left:
+                (*player).setX((*player).getX() - 1);
+                break;
+        
+        default:
+            break;
+        }
     }
 }
 

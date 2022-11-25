@@ -41,10 +41,10 @@ public:
 
 
 class Player{
-    int posX, posY;  // position in the matrix
+    tuple<int, int> position;  // position in the matrix
     int steps = 0;
 public:
-    Player(int posX, int posY);
+    Player(tuple<int, int> position);
     void setX(int new_X);
     void setY(int new_Y);
     int getX();
@@ -61,7 +61,9 @@ class Board{
     void create_matrix_from_file(const string &file_name);
 public:
     Board(const string &level_file);
+    shared_ptr<Player> get_player();
     shared_ptr<Block> get_box_on_pos(tuple <int, int>);
+    shared_ptr<Player> get_player_on_pos(tuple <int, int>);
     int get_width();
     int get_height();
     shared_ptr<Block> get_block(tuple<int, int> coord);
