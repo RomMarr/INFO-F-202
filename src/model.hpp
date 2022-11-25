@@ -13,19 +13,18 @@ using namespace std;
 // le model en MVC : a une représentation du plateau, 
 // ainsi que la gestion des règles (dans un autre fichier) -> coup possible ou non.
 
-
 class Block {
 public:
-    enum BlockType {wall, floor, target, box, light_box, teleporter}; // peut ajouter Block pour extérieur si on veut
+    enum BlockType { wall, floor, target, box, light_box, teleporter }; // peut ajouter Block pour extérieur si on veut
 private:
-    int weight;            // poids du Block
-    Fl_Color color;        // couleur du Block 
     const int width = 50;  // largeur du Block
     const int height = 50; // hauteur du Block 
     BlockType type;
+    int weight = -1;       // poids du Block
+    Fl_Color color;        // couleur du Block 
     tuple<int,int> pos;
 public:
-    Block(int weight, Fl_Color color, BlockType type) ;
+    Block(BlockType type) ;
     void draw(int x, int y);
     void setWeight(int weight);
     void setColor(Fl_Color color);
@@ -55,12 +54,16 @@ public:
 
 
 class Board{
-    vector<vector<int>> board;
-    vector<Block> pos_box;
+    static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target};
+    vector<vector<shared_ptr<Block>>> board;
+    vector<Block> boxes;
+    void create_matrix_from_file(const string &file_name);
 public:
     Board(const string &level_file);
-    void read_file(const string &fileName);
     bool box_on_pos(tuple <int, int>);
+    int get_width();
+    int get_height();
+    shared_ptr<Block> get_block(tuple<int, int> coord);
 };
 
 

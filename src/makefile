@@ -10,12 +10,6 @@ LDFLAGS  += -lfltk
 main: main.cpp game.o block.o controller.o model.o view.o
 	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o block.o controller.o model.o view.o ${LDFLAGS}
 
-# game.o: game.cpp game.h
-# 	${COMPILER} ${CXXFLAGS} -c game.cpp ${LDFLAGS}
-
-# block.o: block.cpp block.h
-# 	${COMPILER} ${CXXFLAGS} -c block.cpp ${LDFLAGS}
-
 %.o: %.cpp %.hpp
 	${COMPILER} ${CXXFLAGS} -o $@ -c $< $(LDFLAGS)
 

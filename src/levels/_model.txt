@@ -1,0 +1,6 @@
+height width
+grid with
+- 0: floor
+- 1: wall
+- 2: target
+box positions (x, y) (0,0 is the top left corner)
