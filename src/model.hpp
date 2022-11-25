@@ -2,12 +2,16 @@
 #define _MODEL_H
 
 #include "stdio.h"
+
+#include <FL/Fl.H>
 #include <string>
 #include <vector>
+
+
 using namespace std;
+
 // le model en MVC : a une représentation du plateau, 
 // ainsi que la gestion des règles (dans un autre fichier) -> coup possible ou non.
-
 
 
 class Block {
@@ -54,7 +58,8 @@ class Board{
     vector<vector<int>> board;
     vector<Block> pos_box;
 public:
-    void read_file(string fileName);
+    Board(const string &level_file);
+    void read_file(const string &fileName);
     bool box_on_pos(tuple <int, int>);
 };
 

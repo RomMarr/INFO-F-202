@@ -1,4 +1,4 @@
-#include "view.h"
+#include "view.hpp"
 
 void Display_menus::display_homepage(){
 

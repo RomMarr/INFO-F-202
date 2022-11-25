@@ -1,5 +1,6 @@
-#include "controller.h"
-#include "model.h"
+#include "controller.hpp"
+
+#include "model.hpp"
 
 
 void Controller::move_request(){

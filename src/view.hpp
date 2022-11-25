@@ -1,8 +1,7 @@
 #ifndef _VIEW_H
 #define _VIEW_H
 
-#include "model.h"
-using namespace std;
+#include "model.hpp"
 
 
 // la vue en MVC : s'occupe d'afficher le board et les déplacements

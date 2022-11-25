@@ -1,4 +1,5 @@
-#include "model.h"
+#include "model.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <FL/Fl.H>
@@ -56,9 +57,12 @@ Block::BlockType Block::getType(){
 
 
 
+Board::Board(const string &level_file) {
+
+}
 
 // fct incomplete voir ci dessous
-void Board::read_file(string fileName){
+void Board::read_file(const string &fileName){
     string line;
     ifstream file(fileName);
     if (file.is_open()) {  // ouvre le fichier txt contenant le board
