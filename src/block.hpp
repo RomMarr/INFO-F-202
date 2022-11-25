@@ -1,7 +1,6 @@
 #ifndef _BLOCK_H
 #define _BLOCK_H
 
-#include "stdio.h"
 #include <string>
 #include <FL/Fl.H>
 

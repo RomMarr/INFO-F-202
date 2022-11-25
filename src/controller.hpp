@@ -1,7 +1,7 @@
 #ifndef _CONTROLLER_H
 #define _CONTROLLER_H
 
-#include "model.h"
+#include "model.hpp"
 // controller du MVC : donne les mouvements au model en fct des entrées de l'utilisateur
 
 

@@ -1,12 +1,15 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+#include "block.hpp"
+#include "model.hpp"
+
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Box.H>
+#include <memory>
 #include <vector>
 
-#include "block.h"
 
 /**
 class Game: public Fl_Window {
@@ -27,7 +30,7 @@ public:
   //Game(bool play);
   bool getPlay();
   void setPlay(bool new_play);
-  void game(shared_ptr<Board> board);
+  void game(std::shared_ptr<Board> board);
   void edit_map();
 
 };

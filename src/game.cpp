@@ -1,16 +1,15 @@
+#include "game.hpp"
+
+#include "block.hpp"
+#include "model.hpp"
+#include "controller.hpp"
+#include "view.hpp"
+
 #include <vector>
 #include <iostream>
-
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Box.H>
-
-#include "block.h"
-#include "game.h"
-#include "model.h"
-#include "controller.h"
-#include "view.h"
-
 
 /**
 Game::Game(): Fl_Window(500, 500, 500, 500, "Sokoban") {
@@ -75,7 +74,7 @@ void Game::setPlay(bool new_play){
 void Game::game(shared_ptr<Board> board){
   Controller ctrl{board};
   Rules rules{board};
-  Display_board db{board};
+  // Display_board db{board};
   while (!rules.check_end()){// boucle tant que pas fini (toutes les caisses sur une cibles ou les caisses bloquées)
     ctrl.move_request(); // demande un mouvement (avec cin ou keys ou autre ??) active move,...
   };
