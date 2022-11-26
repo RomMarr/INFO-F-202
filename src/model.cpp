@@ -28,12 +28,17 @@ vector<string> split (string s, string delimiter) {
 Block::Block(BlockType type): type{type} {
     if (type == BlockType::box) {
         this->setColor(fl_rgb_color(255, 128, 0));
-        this->setWeight(3);
+        this->setWeight(6);
     } else if (type == BlockType::floor) {
         this->setColor(fl_rgb_color(224, 224, 224));
     } else if (type == BlockType::target) {
         this->setColor(fl_rgb_color(255, 204, 153));
-    }
+    } else if (type == BlockType::light_box){
+        //this->setColor(fl_rgb_color(?, ?, ?));
+        this->setWeight(3);
+    } else if (type == BlockType::teleporter) {
+        //this->setColor(fl_rgb_color(?, ?, ?));
+    } 
 }
 
 void Block::draw(int x, int y) {
