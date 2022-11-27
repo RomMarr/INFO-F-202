@@ -46,14 +46,14 @@ void Controller::key_handler(int key_event){
 
 
 bool Controller::check_move(tuple<int, int> move){
-    std::cout<<"ici ? "<< get<0>(move)<< get<1>(move)<<endl;
     tuple<int, int> posPlayer = (*board).get_player()->getPos();
-    std::cout<<get<0>(posPlayer)<< get<1>(posPlayer)<<endl;
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move));
-    cout<< get<0>(new_pos)<<get<1>(new_pos)<<endl;
-    std::cout << board->get_box_on_pos <<endl;
-    if (board->get_box_on_pos(new_pos)->getType() == Block::BlockType::wall){return false;}
-    else {return true;}
+
+    if (board->get_block(new_pos)->getType() == Block::BlockType::wall) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 bool Controller::check_end(){
