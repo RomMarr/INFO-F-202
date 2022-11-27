@@ -28,6 +28,8 @@ vector<string> split (string s, string delimiter) {
 Block::Block(BlockType type): type{type} {
     if (type == BlockType::box) {
         this->setWeight(6);
+    } else if (type == BlockType::light_box) {
+        this->setWeight(3);
     }
 }
 
