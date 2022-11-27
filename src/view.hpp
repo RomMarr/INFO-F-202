@@ -29,12 +29,17 @@
 //     void display_move();  // display blocks moving
 //  }; 
 
+class LoadingScreen {
+public:
+    static void Draw();
+};
+
 class MainWindow: public Fl_Window {
     shared_ptr<Board> board;
     shared_ptr<Controller> controller;
     static constexpr inline double refreshPerSecond = 60;
-    enum ScreenType { menu_screen, board_screen };
-    ScreenType current_screen = menu_screen;
+    enum ScreenType { loading_screen, menu_screen, board_screen };
+    ScreenType current_screen = loading_screen;
     void draw_board();
     void draw_menu();
 public:

@@ -5,37 +5,15 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
+#include <FL/Fl_JPEG_Image.H>
 #include <FL/fl_draw.H>
 
-// void Display_menus::display_homepage(){
-
-// }; 
-
-
-// void Display_menus::display_menu(){
-
-// };  
-
-
-// Display_board::Display_board(shared_ptr<Board> board): board{board}{};
-
-
-// void Display_board::display_board(){
-    
-// };  
-
-
-// void Display_board::display_move(){
-
-// };
-
-// class MainWindow: public Fl_Window {
-//     shared_ptr<Board> board;
-// public:
-//     void set_board(shared_ptr board);
-//     void display_menu();
-//     void display_board();
-// }
+void LoadingScreen::Draw() {
+    Fl_JPEG_Image* myimage = new Fl_JPEG_Image("assets/loading-screen.jpg");
+    Fl_Box* mypicturebox = new Fl_Box(0, 0, 500, 500);
+    mypicturebox->image(myimage);
+    mypicturebox->redraw();
+}
 
 MainWindow::MainWindow(): Fl_Window(500, 500, 500, 500, "Sokoban") {
     Fl::add_timeout(1.0/refreshPerSecond, timer_CB, this);
@@ -72,11 +50,11 @@ void MainWindow::draw() {
     Fl_Window::draw();
     
     switch (current_screen) {
-    case menu_screen: draw_menu(); break;
-    case board_screen: draw_board(); break;
+        case loading_screen: LoadingScreen::Draw(); break;
+        case menu_screen: draw_menu(); break;
+        case board_screen: draw_board(); break;
     
-    default:
-        break;
+        default: break;
     }
 }
 
@@ -100,7 +78,7 @@ void MainWindow::display_menu() {
 
 void MainWindow::display_board() {
     if (board) {
-        current_screen = board_screen;
+        // current_screen = board_screen;
     }
 }
 
