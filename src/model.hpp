@@ -21,13 +21,11 @@ private:
     const int height = 50; // hauteur du Block 
     BlockType type;
     int weight = -1;       // poids du Block
-    Fl_Color color;        // couleur du Block 
     tuple<int,int> pos;
 public:
     Block(BlockType type) ;
     void draw(int x, int y);
     void setWeight(int weight);
-    void setColor(Fl_Color color);
     void setType(BlockType new_type);
     void setPos(tuple<int, int> new_position);
     tuple<int, int> getPos();
