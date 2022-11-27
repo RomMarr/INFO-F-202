@@ -5,7 +5,9 @@
 
 #include <FL/Fl.H>
 #include <string>
+#include <memory>
 #include <vector>
+#include <tuple>
 
 
 using namespace std;

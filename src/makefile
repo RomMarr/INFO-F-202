@@ -11,7 +11,7 @@ main: main.cpp game.o block.o controller.o model.o view.o
 	${COMPILER} ${CXXFLAGS}  -o projet main.cpp game.o block.o controller.o model.o view.o ${LDFLAGS}
 
 %.o: %.cpp %.hpp
-	${COMPILER} ${CXXFLAGS} -o $@ -c $< $(LDFLAGS)
+	${COMPILER} ${CXXFLAGS} -o $@ -c $< ${LDFLAGS}
 
 .PHONY: clean
 clean:

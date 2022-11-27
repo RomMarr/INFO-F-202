@@ -5,11 +5,12 @@
 #include "controller.hpp"
 #include "view.hpp"
 
-#include <vector>
-#include <iostream>
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Box.H>
+#include <memory>
+#include <vector>
+#include <iostream>
 
 /**
 Game::Game(): Fl_Window(500, 500, 500, 500, "Sokoban") {
