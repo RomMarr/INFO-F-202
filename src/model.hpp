@@ -45,10 +45,8 @@ class Player{
     int steps = 0;
 public:
     Player(tuple<int, int> position);
-    void setX(int new_X);
-    void setY(int new_Y);
-    int getX();
-    int getY();
+    void setPos(tuple<int, int> new_pos);
+    tuple<int, int> getPos();
     int getSteps();
 };
 

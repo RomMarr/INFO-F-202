@@ -136,7 +136,7 @@ shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
 }
 
 shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
-    if ((*player).getX() == get<0>(pos_actual) && (*player).getY() == get<1>(pos_actual)) {
+    if ((*player).getPos() == pos_actual) {
         return player;
     }
     return nullptr;
@@ -158,8 +158,8 @@ shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
 Rules::Rules(shared_ptr<Board> board):board{board}{};
 
 bool Rules::check_move(){
-
-};
+    tuple<int, int> posPlayer = (*board).get_player()->getPos();
+}
 
 bool Rules::check_end(){
 
@@ -167,21 +167,15 @@ bool Rules::check_end(){
 
 Player::Player(tuple<int, int> position): position{position} {};
 
-void Player::setX(int new_X){
-    get<0>(position) = new_X;
+void Player::setPos(tuple<int, int> new_pos){
+    position = new_pos;
 }
 
-void Player::setY(int new_Y){
-    get<1>(position) = new_Y;
+
+tuple<int, int> Player::getPos(){
+    return position;
 }
 
-int Player::getX(){
-    return get<0>(position);
-}
-
-int Player::getY(){
-    return get<1>(position);
-}
 
 int Player::getSteps(){
     return steps;

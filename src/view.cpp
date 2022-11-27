@@ -1,4 +1,5 @@
 #include "view.hpp"
+#include "controller.hpp"
 
 #include <iostream>
 #include <FL/Fl.H>
@@ -78,23 +79,25 @@ void MainWindow::draw() {
 int MainWindow::handle(int event) {
     // Doit pas être ici à terme, je voulais juste test, mais c'est cette fonction qui est call à chaque keyevent (souris ou clavier)
     if (event == FL_KEYDOWN) {
+        //key_handler(Fl::event_key());
         shared_ptr<Player> player = (*board).get_player();
         switch (Fl::event_key()) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
+            tuple<int, int>actual_pos = (*player).getPos();
             case FL_Up:
-                (*player).setY((*player).getY() - 1);
+                (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) - 1));
                 break;
             
             case FL_Down:
-                (*player).setY((*player).getY() + 1);
+                (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) + 1));
                 break;
         
             case FL_Right:
-                (*player).setX((*player).getX() + 1);
+                (*player).setPos(make_tuple(get<0>(actual_pos) + 1,get<1>(actual_pos)));
                 break;
 
             case FL_Left:
-                (*player).setX((*player).getX() - 1);
+                (*player).setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
                 break;
         
         default:
