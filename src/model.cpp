@@ -155,16 +155,6 @@ shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
 }
 
 
-Rules::Rules(shared_ptr<Board> board):board{board}{};
-
-bool Rules::check_move(){
-    tuple<int, int> posPlayer = (*board).get_player()->getPos();
-}
-
-bool Rules::check_end(){
-
-}
-
 Player::Player(tuple<int, int> position): position{position} {};
 
 void Player::setPos(tuple<int, int> new_pos){

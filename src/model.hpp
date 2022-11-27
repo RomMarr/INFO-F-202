@@ -69,12 +69,4 @@ public:
 
 
 
-class Rules{
-    shared_ptr<Board> board;
-public:
-    Rules(shared_ptr<Board> board);
-    bool check_move();
-    bool check_end();
-};
-
 #endif

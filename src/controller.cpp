@@ -40,3 +40,14 @@ void Controller::key_handler(int key_event){
             break;
     }
 }
+
+
+Rules::Rules(shared_ptr<Board> board):board{board}{};
+
+bool Rules::check_move(){
+    tuple<int, int> posPlayer = (*board).get_player()->getPos();
+}
+
+bool Rules::check_end(){
+
+}
