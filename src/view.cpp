@@ -42,6 +42,10 @@ MainWindow::MainWindow(): Fl_Window(500, 500, 500, 500, "Sokoban") {
     resizable(this);
 }
 
+void MainWindow::set_controller(shared_ptr<Controller> new_controller) {
+    controller = new_controller;
+}
+
 void MainWindow::draw_board() {
     for (size_t y = 0; y < (*board).get_height(); y++) {
         for (size_t x = 0; x < (*board).get_width(); x++) {
@@ -80,29 +84,9 @@ int MainWindow::handle(int event) {
     // Doit pas être ici à terme, je voulais juste test, mais c'est cette fonction qui est call à chaque keyevent (souris ou clavier)
     if (event == FL_KEYDOWN) {
         //key_handler(Fl::event_key());
-        shared_ptr<Player> player = (*board).get_player();
-        switch (Fl::event_key()) {
-             // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
-            tuple<int, int>actual_pos = (*player).getPos();
-            case FL_Up:
-                (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) - 1));
-                break;
-            
-            case FL_Down:
-                (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) + 1));
-                break;
+       
+        controller->key_handler(Fl::event_key());
         
-            case FL_Right:
-                (*player).setPos(make_tuple(get<0>(actual_pos) + 1,get<1>(actual_pos)));
-                break;
-
-            case FL_Left:
-                (*player).setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
-                break;
-        
-        default:
-            break;
-        }
     }
 }
 

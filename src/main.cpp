@@ -29,6 +29,8 @@ void levelEdit(){
 int main(int argc, char *argv[]) {
   string level_file = "levels/0.txt";
 
+  
+
   // Display_menus db_m;
   // Game game;
   // db_m.display_homepage(); // affichage ecran d'accueil   
@@ -37,7 +39,10 @@ int main(int argc, char *argv[]) {
   // if (game.getPlay()) game.game(board);
   // else game.edit_map();
 
+  shared_ptr<Controller> controller = make_shared<Controller>(board);
+
   MainWindow window;
+  window.set_controller(controller);
   window.set_board(board);
   window.display_board();
   window.show(argc, argv);

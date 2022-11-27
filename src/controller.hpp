@@ -11,7 +11,7 @@ class Controller{
 public:
     Controller(shared_ptr<Board> board);
     void move_request();
-    //static void key_handler(int key_event);
+    void key_handler(int key_event);
 };
 
 

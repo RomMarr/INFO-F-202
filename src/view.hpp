@@ -2,6 +2,7 @@
 #define _VIEW_H
 
 #include "model.hpp"
+#include "controller.hpp"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
@@ -29,14 +30,16 @@
 //  }; 
 
 class MainWindow: public Fl_Window {
+    shared_ptr<Board> board;
+    shared_ptr<Controller> controller;
     static constexpr inline double refreshPerSecond = 60;
     enum ScreenType { menu_screen, board_screen };
-    shared_ptr<Board> board;
     ScreenType current_screen = menu_screen;
     void draw_board();
     void draw_menu();
 public:
     MainWindow();
+    void set_controller(shared_ptr<Controller> controller);
     void set_board(shared_ptr<Board> new_board);
     void draw() override;
     int handle(int event) override;
