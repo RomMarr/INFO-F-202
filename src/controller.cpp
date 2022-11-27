@@ -23,22 +23,24 @@ void Controller::key_handler(int key_event){
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
             if (check_move(make_tuple(0,-1))){
-                std::cout << "coucou"<<endl;
                 (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) - 1));
                 break;
-            };
+            }; break;
         case FL_Down:
-            (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) + 1));
-            break;
-
+            if (check_move(make_tuple(0,1))){
+                (*player).setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) + 1));
+                break;
+            }; break;
         case FL_Right:
-            (*player).setPos(make_tuple(get<0>(actual_pos) + 1,get<1>(actual_pos)));
-            break;
-
+            if (check_move(make_tuple(1,0))){
+                (*player).setPos(make_tuple(get<0>(actual_pos) + 1,get<1>(actual_pos)));
+                break;
+            }; break;
         case FL_Left:
-            (*player).setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
-            break;
-        
+            if (check_move(make_tuple(-1,0))){
+                (*player).setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
+                break;
+            }; break;
         default:
             break;
     }
