@@ -9,7 +9,7 @@ Jeu Sokoban
 
 Les tâches de bases :
 - [ ] Déplacement personnage
-- [ ] Murs infranchissables
+- [X] Murs infranchissables
 - [ ] Eléments (boites) à pousser
 - [ ] Cases cibles
 - [ ] Moyen de reset le niveau
