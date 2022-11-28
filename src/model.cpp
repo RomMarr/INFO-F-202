@@ -150,6 +150,10 @@ int Board::get_height() {
     return board.size();
 }
 
+int Board::getMaxSteps(){
+    return max_steps;
+}
+
 shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
     return board.at(get<1>(coord)).at(get<0>(coord));
 }
@@ -167,6 +171,10 @@ void Player::setWeight(int new_weight){
 
 void Player::setMoveAsked(tuple<int, int> new_move_asked){
     move_asked = new_move_asked;
+}
+
+void Player::addStep(){
+    steps += 1;
 }
 
 tuple<int, int> Player::getPos(){
