@@ -51,6 +51,9 @@ bool Controller::check_move(tuple<int, int> move){
     tuple<int, int> posPlayer = (*board).get_player()->getPos();
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move));
 
+    // if (!(get<0>(new_pos)<0)&&(get<0>(new_pos)<0 || (get<0>(new_pos)<0){
+    //     retu f
+    // }
     if (board->get_block(new_pos)->getType() == Block::BlockType::wall) {
         return false;
     } else {
