@@ -42,7 +42,7 @@ void Controller::key_handler(int key_event){
         case FL_Left:
             player->setMoveAsked(make_tuple(-1,0));
             if (check_move(make_tuple(-1,0))){
-                (*player).setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
+                player->setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
                 break;
             }; break;
         default:
@@ -55,7 +55,7 @@ bool Controller::check_move(tuple<int, int> move){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
     tuple<int, int> posPlayer = player->getPos();  // position of the player
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
-    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(move),get<1>(new_pos)+get<1>(move)); // new possible position of the box (not checked yet)
+    //tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(move),get<1>(new_pos)+get<1>(move)); // new possible position of the box (not checked yet)
 
     if ((get<0>(new_pos)<0 || get<0>(new_pos)>= board->get_width()) || (get<1>(new_pos)<0 || get<1>(new_pos)>= board->get_height())) {
         // check if the player will not leave the board with its movement
@@ -79,13 +79,12 @@ bool Controller::check_move(tuple<int, int> move){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
                 cout << "rec"<<endl;
                 if (player->getWeight()>= 10) return false; // too much weight for the player
-                else {//cout << board->get_block(new_pos)->getPos()<<endl;
+                else {//cout << (board->get_box_on_pos(new_pos_box)== nullptr)<< endl;
                     //board->get_block(new_pos)->setPos(new_pos_box); // modifie la position de la box
                     return true; 
                 }
             }else return false;
-        }cout << "no ptr" << endl;
-        return true;
+        }return true;
 
     } else if (board->get_block(new_pos)->getType()== Block::BlockType::teleporter){ // if the block of arrival is a teleporter
 
