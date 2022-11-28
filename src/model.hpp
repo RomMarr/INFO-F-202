@@ -43,11 +43,17 @@ public:
 class Player{
     tuple<int, int> position;  // position in the matrix
     int steps = 0;
+    int weight = 0;
+    tuple<int, int> move_asked;
 public:
     Player(tuple<int, int> position);
     void setPos(tuple<int, int> new_pos);
+    void setWeight(int new_weight);
+    void setMoveAsked(tuple<int, int> new_move_asked);
     tuple<int, int> getPos();
     int getSteps();
+    int getWeight();
+    tuple<int, int> getMoveAsked();
 };
 
 

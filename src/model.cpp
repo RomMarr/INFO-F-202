@@ -161,13 +161,26 @@ void Player::setPos(tuple<int, int> new_pos){
     position = new_pos;
 }
 
+void Player::setWeight(int new_weight){
+    weight = new_weight;
+}
+
+void Player::setMoveAsked(tuple<int, int> new_move_asked){
+    move_asked = new_move_asked;
+}
 
 tuple<int, int> Player::getPos(){
     return position;
 }
 
+tuple<int, int> Player::getMoveAsked(){
+    return move_asked;
+}
 
 int Player::getSteps(){
     return steps;
 }
 
+int Player::getWeight(){
+    return weight;
+}
