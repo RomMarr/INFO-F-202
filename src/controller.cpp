@@ -25,29 +25,34 @@ void Controller::key_handler(int key_event){
             player->setMoveAsked(make_tuple(0,-1));
             if (check_move(make_tuple(0,-1))){
                 player->setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) - 1));
+                player->addStep();
                 break;
             }; break;
         case FL_Down:
             player->setMoveAsked(make_tuple(0,1));
             if (check_move(make_tuple(0,1))){
                 player->setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) + 1));
+                player->addStep();
                 break;
             }; break;
         case FL_Right:
             player->setMoveAsked(make_tuple(1,0));
             if (check_move(make_tuple(1,0))){
                 player->setPos(make_tuple(get<0>(actual_pos) + 1,get<1>(actual_pos)));
+                player->addStep();
                 break;
             }; break;
         case FL_Left:
             player->setMoveAsked(make_tuple(-1,0));
             if (check_move(make_tuple(-1,0))){
                 player->setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
+                player->addStep();
                 break;
             }; break;
         default:
             break;
     }player->setWeight(0);
+    cout << "pas : "<<player->getSteps()<<endl;
 }
 
 
