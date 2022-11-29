@@ -60,7 +60,7 @@ bool Controller::check_move(tuple<int, int> move){
 
     tuple<int, int> posPlayer = player->getPos();  // position of the player
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
-    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(move),get<1>(new_pos)+get<1>(move)); // new possible position of the box (not checked yet)
+    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(player->getMoveAsked()),get<1>(new_pos)+get<1>(player->getMoveAsked())); // new possible position of the box (not checked yet)
 
     Block::BlockType destination_type = board->get_block(new_pos)->getType();
 
