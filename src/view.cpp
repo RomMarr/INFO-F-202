@@ -7,40 +7,29 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Double_Window.H>
-#include <FL/Fl_PNG_Image.H>
 #include <FL/fl_draw.H>
 
-void LoadingScreen::Draw() {
-    Fl_PNG_Image myimage = Fl_PNG_Image("loading.png");
-    Fl_Box mypicturebox = Fl_Box(50, 50, 50, 50);
-    mypicturebox.box(Fl_Boxtype::FL_FLAT_BOX);
-    mypicturebox.color(fl_rgb_color(255, 0, 0));
-    // mypicturebox.image(myimage);
-    mypicturebox.redraw();
+void LoadingScreen::draw() {
+    std::string title = "SOKOBAN";
+    std::string authors = "Par Romain Markowitch & Pol Marnette";
 
-    // ->image(Fl_Shared_Image::get("/home/tim/Sources/Frontends/mac-attal/ico_attal-server.png"));
-
-    
-    // Fl_Box        box(Fl_Boxtype::FL_FLAT_BOX,0,0,500,500,"hello");     
-    // Fl_JPEG_Image  png("loading.jpg");      
-    // box.image(png);       
-
-    // CE QUI MARCH
-    // std::string teststring = "hello world";
-    // fl_draw(teststring.c_str(), 50,50);  
-
-    Fl_Box *box = new Fl_Box(20,40,300,100,"Hello, World!");
-    box->box(FL_UP_BOX);
-    box->labelfont(FL_BOLD+FL_ITALIC);
-    box->labelsize(36);
-    box->labeltype(FL_SHADOW_LABEL);   
-    box->redraw();              
-
-    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 200, 200, 50, 50, fl_rgb_color(255, 0, 0));
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_font(FL_HELVETICA, 24);
+    fl_draw(title.c_str(), 50, 100);
+    fl_font(FL_HELVETICA, 12);
+    fl_draw(authors.c_str(), 50,  120);
 }
 
-MainWindow::MainWindow(): Fl_Window(500, 500, 500, 500, "Sokoban") {
+void MainMenu::draw() {
+    // fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50, 50, 50, 50, fl_rgb_color(0, 0, 255));
+    // Fl_Button *button = new Fl_Button(10, 10, 100, 50, "label");
+    // button->type(FL_NORMAL_BUTTON);
+    // button->redraw();
+}
+
+MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 500, 500, "Sokoban"), menu(menu) {
     Fl::add_timeout(1.0/refreshPerSecond, timer_CB, this);
+    Fl::add_timeout(1.0, loading_screen_timeout, this);
     // resizable(this);
 }
 
@@ -66,16 +55,12 @@ void MainWindow::draw_board() {
     }
 }
 
-void MainWindow::draw_menu() {
-    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50, 50, 50, 50, fl_rgb_color(255, 128, 0));
-}
-
 void MainWindow::draw() {
     Fl_Window::draw();
     
     switch (current_screen) {
-        case loading_screen: LoadingScreen::Draw(); break;
-        case menu_screen: draw_menu(); break;
+        case loading_screen: LoadingScreen::draw(); break;
+        case menu_screen: menu.draw(); break;
         case board_screen: draw_board(); break;
     
         default: break;
@@ -110,4 +95,9 @@ void MainWindow::timer_CB(void *userdata) {
     MainWindow *o = static_cast<MainWindow*>(userdata);
     o->redraw();
     Fl::repeat_timeout(1.0/refreshPerSecond, timer_CB, userdata);
+}
+
+void MainWindow::loading_screen_timeout(void *userdata) {
+    MainWindow *o = static_cast<MainWindow*>(userdata);
+    o->display_menu();
 }

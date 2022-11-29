@@ -10,31 +10,18 @@
 #include <FL/fl_draw.H>
 
 
-// la vue en MVC : s'occupe d'afficher le board et les déplacements
-// ATTENTION : Les classes de dessin de base qui appellent les fonctions fltk doivent être séparées de votre
-//      code spécifique à Sokoban
-
-
-// class Display_menus{
-// public:
-//     void display_homepage();  // display the home page with both our names
-//     void display_menu();  
-// };
-
-// class Display_board{
-//     shared_ptr<Board> board;
-// public:
-//     Display_board(shared_ptr<Board> board);
-//     void display_board();  
-//     void display_move();  // display blocks moving
-//  }; 
-
 class LoadingScreen {
 public:
-    static void Draw();
+    static void draw();
+};
+
+class MainMenu {
+public:
+    void draw();
 };
 
 class MainWindow: public Fl_Window {
+    MainMenu menu;
     shared_ptr<Board> board;
     shared_ptr<Controller> controller;
     static constexpr inline double refreshPerSecond = 60;
@@ -43,7 +30,7 @@ class MainWindow: public Fl_Window {
     void draw_board();
     void draw_menu();
 public:
-    MainWindow();
+    MainWindow(MainMenu);
     void set_controller(shared_ptr<Controller> controller);
     void set_board(shared_ptr<Board> new_board);
     void draw() override;
@@ -51,6 +38,7 @@ public:
     void display_menu();
     void display_board();
     static void timer_CB(void *userdata);
+    static void loading_screen_timeout(void *userdata);
 };
 
 #endif

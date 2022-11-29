@@ -27,21 +27,19 @@ void levelEdit(){
 }
 
 int main(int argc, char *argv[]) {
-  string level_file = "levels/0.txt";
-
-  
-
   // Display_menus db_m;
   // Game game;
   // db_m.display_homepage(); // affichage ecran d'accueil   
   // db_m.display_menu(); // affichage choix niveau ou modif niveau  -> dans le controller qui gere une fois clické sur un des choix -> modifie game.play !
-  shared_ptr<Board> board = make_shared<Board>(level_file);  // ATTENTION A REMPLIR LA PARENTHESE !!!!!!!!!!!!!!!!!!!!!!!!!
   // if (game.getPlay()) game.game(board);
   // else game.edit_map();
+  string level_file = "levels/0.txt";
 
+  shared_ptr<Board> board = make_shared<Board>(level_file);  // ATTENTION A REMPLIR LA PARENTHESE !!!!!!!!!!!!!!!!!!!!!!!!!
   shared_ptr<Controller> controller = make_shared<Controller>(board);
 
-  MainWindow window;
+  MainMenu menu;
+  MainWindow window{menu};
   window.set_controller(controller);
   window.set_board(board);
   window.display_board();
