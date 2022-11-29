@@ -14,6 +14,8 @@ Controller::Controller(shared_ptr<Board> board): board{board} {};
 void Controller::key_handler(int key_event){
     shared_ptr<Player> player = board->get_player();
     tuple<int, int>actual_pos = player->getPos();
+
+    if (key_event == FL_Escape) board->reset_level();
     
     if (check_lose() || check_win()) return;
 
@@ -47,8 +49,6 @@ void Controller::key_handler(int key_event){
                 player->addStep();
                 break;
             }; break;
-
-        case FL_Escape: board->reset_level(); break;
         default:
             break;
     }player->setWeight(0);
