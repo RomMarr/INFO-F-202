@@ -22,8 +22,8 @@ private:
     const int width = 50;  // largeur du Block
     const int height = 50; // hauteur du Block 
     BlockType type;
-    int weight = -1;       // poids du Block
-    tuple<int,int> pos;
+    int weight;       // poids du Block
+    tuple<int,int> pos;    // position du Block
 public:
     Block(BlockType type) ;
     void draw(int x, int y);
@@ -43,11 +43,18 @@ public:
 class Player{
     tuple<int, int> position;  // position in the matrix
     int steps = 0;
+    int weight = 0;
+    tuple<int, int> move_asked;
 public:
     Player(tuple<int, int> position);
     void setPos(tuple<int, int> new_pos);
+    void setWeight(int new_weight);
+    void setMoveAsked(tuple<int, int> new_move_asked);
+    void addStep();
     tuple<int, int> getPos();
     int getSteps();
+    int getWeight();
+    tuple<int, int> getMoveAsked();
 };
 
 
@@ -57,6 +64,7 @@ class Board{
     vector<shared_ptr<Block>> boxes;
     shared_ptr<Player> player;
     void create_matrix_from_file(const string &file_name);
+    int max_steps;
 public:
     Board(const string &level_file);
     shared_ptr<Player> get_player();
@@ -64,6 +72,7 @@ public:
     shared_ptr<Player> get_player_on_pos(tuple <int, int>);
     int get_width();
     int get_height();
+    int getMaxSteps();
     shared_ptr<Block> get_block(tuple<int, int> coord);
 };
 

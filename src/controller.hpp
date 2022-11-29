@@ -12,13 +12,7 @@ public:
     Controller(shared_ptr<Board> board);
     void move_request();
     void key_handler(int key_event);
-};
-
-class Rules{
-    shared_ptr<Board> board;
-public:
-    Rules(shared_ptr<Board> board);
-    bool check_move();
+    bool check_move(tuple<int,int> move);
     bool check_end();
 };
 
