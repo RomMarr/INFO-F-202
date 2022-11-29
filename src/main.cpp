@@ -27,7 +27,7 @@ void levelEdit(){
 }
 
 int main(int argc, char *argv[]) {
-  string level_file = "levels/0.txt";
+  string level_file = "levels/1.txt";
 
   
 
@@ -38,6 +38,11 @@ int main(int argc, char *argv[]) {
   shared_ptr<Board> board = make_shared<Board>(level_file);  // ATTENTION A REMPLIR LA PARENTHESE !!!!!!!!!!!!!!!!!!!!!!!!!
   // if (game.getPlay()) game.game(board);
   // else game.edit_map();
+
+  // cout << board->get_boxes().size() << endl;
+  // for (shared_ptr<Block> box: board->get_boxes()) {
+  //   cout << get<0>(box->getPos())<<endl;
+  // }
 
   shared_ptr<Controller> controller = make_shared<Controller>(board);
 

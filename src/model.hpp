@@ -68,12 +68,13 @@ class Board{
 public:
     Board(const string &level_file);
     shared_ptr<Player> get_player();
+    shared_ptr<Block> get_block(tuple<int, int> coord);
+    vector<shared_ptr<Block>> get_boxes();
     shared_ptr<Block> get_box_on_pos(tuple <int, int>);
     shared_ptr<Player> get_player_on_pos(tuple <int, int>);
     int get_width();
     int get_height();
     int getMaxSteps();
-    shared_ptr<Block> get_block(tuple<int, int> coord);
 };
 
 
