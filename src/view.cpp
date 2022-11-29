@@ -2,22 +2,46 @@
 #include "controller.hpp"
 
 #include <iostream>
+#include <string>
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Widget.H>
 #include <FL/Fl_Double_Window.H>
-#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_PNG_Image.H>
 #include <FL/fl_draw.H>
 
 void LoadingScreen::Draw() {
-    Fl_JPEG_Image* myimage = new Fl_JPEG_Image("assets/loading-screen.jpg");
-    Fl_Box* mypicturebox = new Fl_Box(0, 0, 500, 500);
-    mypicturebox->image(myimage);
-    mypicturebox->redraw();
+    Fl_PNG_Image myimage = Fl_PNG_Image("loading.png");
+    Fl_Box mypicturebox = Fl_Box(50, 50, 50, 50);
+    mypicturebox.box(Fl_Boxtype::FL_FLAT_BOX);
+    mypicturebox.color(fl_rgb_color(255, 0, 0));
+    // mypicturebox.image(myimage);
+    mypicturebox.redraw();
+
+    // ->image(Fl_Shared_Image::get("/home/tim/Sources/Frontends/mac-attal/ico_attal-server.png"));
+
+    
+    // Fl_Box        box(Fl_Boxtype::FL_FLAT_BOX,0,0,500,500,"hello");     
+    // Fl_JPEG_Image  png("loading.jpg");      
+    // box.image(png);       
+
+    // CE QUI MARCH
+    // std::string teststring = "hello world";
+    // fl_draw(teststring.c_str(), 50,50);  
+
+    Fl_Box *box = new Fl_Box(20,40,300,100,"Hello, World!");
+    box->box(FL_UP_BOX);
+    box->labelfont(FL_BOLD+FL_ITALIC);
+    box->labelsize(36);
+    box->labeltype(FL_SHADOW_LABEL);   
+    box->redraw();              
+
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 200, 200, 50, 50, fl_rgb_color(255, 0, 0));
 }
 
 MainWindow::MainWindow(): Fl_Window(500, 500, 500, 500, "Sokoban") {
     Fl::add_timeout(1.0/refreshPerSecond, timer_CB, this);
-    resizable(this);
+    // resizable(this);
 }
 
 void MainWindow::set_controller(shared_ptr<Controller> new_controller) {
