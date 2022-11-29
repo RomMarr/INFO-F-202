@@ -27,7 +27,7 @@ void levelEdit(){
 }
 
 int main(int argc, char *argv[]) {
-  string level_file = "levels/1.txt";
+  string level_file = "levels/0.txt";
 
   
 

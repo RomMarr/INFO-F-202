@@ -64,15 +64,18 @@ bool Controller::check_move(tuple<int, int> move){
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
     tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(player->getMoveAsked()),get<1>(new_pos)+get<1>(player->getMoveAsked())); // new possible position of the box (not checked yet)
 
-    Block::BlockType destination_type = board->get_block(new_pos)->getType();
 
-    if ((get<0>(new_pos)<0 || get<0>(new_pos)>= board->get_width()) || (get<1>(new_pos)<0 || get<1>(new_pos)>= board->get_height())) {
+    if ((get<0>(new_pos)<0 || get<0>(new_pos) >= board->get_width()) || (get<1>(new_pos) < 0 || get<1>(new_pos) >= board->get_height())) {
         // check if the player will not leave the board with its movement
         return false;
     }
+
     if (player->getWeight()> 10) {  // A player can push max a weight lesser than 10
         return false;
     }
+
+    Block::BlockType destination_type = board->get_block(new_pos)->getType();
+    
     if (destination_type == Block::BlockType::wall) { // if the block of arrival is a wall
         return false;
     } else if (destination_type == Block::BlockType::floor || destination_type == Block::BlockType::target){
