@@ -52,46 +52,42 @@ void Controller::key_handler(int key_event){
         default:
             break;
     }player->setWeight(0);
-    cout << "pas : "<<player->getSteps()<<endl;
 }
 
 
 bool Controller::check_move(tuple<int, int> move){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
+
     tuple<int, int> posPlayer = player->getPos();  // position of the player
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
-    //tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(move),get<1>(new_pos)+get<1>(move)); // new possible position of the box (not checked yet)
+    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(move),get<1>(new_pos)+get<1>(move)); // new possible position of the box (not checked yet)
+
+    Block::BlockType destination_type = board->get_block(new_pos)->getType();
 
     if ((get<0>(new_pos)<0 || get<0>(new_pos)>= board->get_width()) || (get<1>(new_pos)<0 || get<1>(new_pos)>= board->get_height())) {
         // check if the player will not leave the board with its movement
         return false;
     }
     if (player->getWeight()> 10) {  // A player can push max a weight lesser than 10
-        cout << "trop lourd"<<endl;
         return false;
     }
-    if (board->get_block(new_pos)->getType() == Block::BlockType::wall) { // if the block of arrival is a wall
-        cout << "mur"<<endl;
+    if (destination_type == Block::BlockType::wall) { // if the block of arrival is a wall
         return false;
-    } else if (board->get_block(new_pos)->getType()== Block::BlockType::floor || board->get_block(new_pos)->getType()== Block::BlockType::target){
+    } else if (destination_type == Block::BlockType::floor || destination_type == Block::BlockType::target){
         // if the block of arrival is a floor or a target
         shared_ptr<Block> block_on_move = board->get_box_on_pos(new_pos);  // ptr to the box if there is one, nullptr if not
        if (block_on_move){  // check if ptr != nullptr
-            cout << "a ptr" <<endl;
             player->setWeight(player->getWeight()+block_on_move->getWeight()); // add the weight of the box pushed by the player
-            cout << "nv poids : "<<player->getWeight()<<endl;
             if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
-                cout << "rec"<<endl;
                 if (player->getWeight()>= 10) return false; // too much weight for the player
-                else {//cout << (board->get_box_on_pos(new_pos_box)== nullptr)<< endl;
-                    //board->get_block(new_pos)->setPos(new_pos_box); // modifie la position de la box
+                else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
                     return true; 
                 }
             }else return false;
         }return true;
 
-    } else if (board->get_block(new_pos)->getType()== Block::BlockType::teleporter){ // if the block of arrival is a teleporter
+    } else if (destination_type == Block::BlockType::teleporter){ // if the block of arrival is a teleporter
 
     } else return false;
 }
