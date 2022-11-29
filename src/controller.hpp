@@ -10,10 +10,10 @@ class Controller{
     shared_ptr<Board> board;
 public:
     Controller(shared_ptr<Board> board);
-    void move_request();
     void key_handler(int key_event);
     bool check_move(tuple<int,int> move);
-    bool check_end();
+    bool check_lose();
+    bool check_win();
 };
 
 #endif

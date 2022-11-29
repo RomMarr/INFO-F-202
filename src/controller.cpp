@@ -10,15 +10,13 @@ using namespace std;
 
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
-void Controller::move_request(){
-
-};
-
 
 void Controller::key_handler(int key_event){
     shared_ptr<Player> player = board->get_player();
     tuple<int, int>actual_pos = player->getPos();
     
+    if (check_lose() || check_win()) return;
+
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
@@ -52,6 +50,8 @@ void Controller::key_handler(int key_event){
         default:
             break;
     }player->setWeight(0);
+    check_win();
+    if (check_lose()) cout << "LOOOOOOSE"<<endl;;
 }
 
 
@@ -92,8 +92,15 @@ bool Controller::check_move(tuple<int, int> move){
     } else return false;
 }
 
-bool Controller::check_end(){
-    //shared_ptr<Player> player = board->get_player();  // get the ptr to the player
-    //return (player->getSteps() == board->getMaxSteps() || )
+bool Controller::check_lose(){
+    shared_ptr<Player> player = board->get_player();  // get the ptr to the player
+    return (player->getSteps() >= board->getMaxSteps());
 
+}bool Controller::check_win(){
+    for (shared_ptr<Block> box: board->get_boxes()) {
+        if (board->get_block(box->getPos())->getType() != Block::BlockType::target){
+            return false;
+        }
+     } cout << "WINNNNNNNN" <<endl;
+     return true;
 }
