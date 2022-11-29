@@ -49,6 +49,8 @@ void Controller::key_handler(int key_event){
                 player->addStep();
                 break;
             }; break;
+
+        case FL_Escape: board->reset_level(); break;
         default:
             break;
     }player->setWeight(0);

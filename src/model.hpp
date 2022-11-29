@@ -66,6 +66,7 @@ class Board{
     string current_board_file;
     void create_matrix_from_file(const string &file_name);
     int max_steps;
+    void reset_level_states();
 public:
     Board(const string &level_file);
     shared_ptr<Player> get_player();
@@ -75,6 +76,7 @@ public:
     int get_height();
     int getMaxSteps();
     shared_ptr<Block> get_block(tuple<int, int> coord);
+    void reset_level();
 };
 
 

@@ -82,14 +82,22 @@ Block::BlockType Block::getType(){
     return type;
 }
 
-
-
 Board::Board(const string &level_file) {
     this->create_matrix_from_file(level_file);
 }
 
+void Board::reset_level_states() {
+    board.clear();
+    boxes.clear();
+    player = nullptr;
+}
+
 void Board::create_matrix_from_file(const string &file_name){
+    // Save in memory the current level being played
     current_board_file = file_name;
+
+    // Reset the board matrix
+    reset_level_states();
 
     int width = 0, height = 0, line_index = 0;
     bool next_is_player_coord = false;
@@ -158,6 +166,10 @@ int Board::getMaxSteps(){
 
 shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
     return board.at(get<1>(coord)).at(get<0>(coord));
+}
+
+void Board::reset_level() {
+    create_matrix_from_file(current_board_file);
 }
 
 
