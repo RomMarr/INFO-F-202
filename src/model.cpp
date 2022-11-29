@@ -124,7 +124,7 @@ void Board::create_matrix_from_file(const string &file_name){
                     max_steps = stoi(line_splitted.at(2));
                 } else {
                     shared_ptr<Block> box = make_shared<Block>((stoi(line_splitted.at(2)) ? Block::BlockType::light_box : Block::BlockType::box));
-                    (*box).setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    box->setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
                     boxes.push_back(box);
                 }
             }
@@ -141,7 +141,7 @@ shared_ptr<Player> Board::get_player() {
 
 shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
     for (auto i: boxes){
-        if ((*i).getPos() == pos_actual) return i;
+        if (i->getPos() == pos_actual) return i;
     }
     return nullptr;
 }
@@ -151,7 +151,7 @@ vector<shared_ptr<Block>> Board::get_boxes() {
 }
 
 shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
-    if ((*player).getPos() == pos_actual) {
+    if (player->getPos() == pos_actual) {
         return player;
     }
     return nullptr;
