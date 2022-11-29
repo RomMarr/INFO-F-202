@@ -39,11 +39,6 @@ int main(int argc, char *argv[]) {
   // if (game.getPlay()) game.game(board);
   // else game.edit_map();
 
-  // cout << board->get_boxes().size() << endl;
-  // for (shared_ptr<Block> box: board->get_boxes()) {
-  //   cout << get<0>(box->getPos())<<endl;
-  // }
-
   shared_ptr<Controller> controller = make_shared<Controller>(board);
 
   MainWindow window;
