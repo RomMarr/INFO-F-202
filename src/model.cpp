@@ -121,6 +121,7 @@ void Board::create_matrix_from_file(const string &file_name){
                     next_is_player_coord = true;
                 } else if (next_is_player_coord) {
                     player = make_shared<Player>(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    max_steps = stoi(line_splitted.at(2));
                 } else {
                     shared_ptr<Block> box = make_shared<Block>(Block::BlockType::box);
                     (*box).setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));

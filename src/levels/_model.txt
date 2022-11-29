@@ -5,4 +5,4 @@ grid with
 - 2: target
 box positions [x y] (0,0 is the top left corner)
 -
-player position [x y]
+player position & nb pas [x y nb_pas]
