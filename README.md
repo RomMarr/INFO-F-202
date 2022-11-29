@@ -12,7 +12,7 @@ Les tâches de bases :
 - [X] Murs infranchissables
 - [X] Eléments (boites) à pousser
 - [ ] Cases cibles
-- [ ] Moyen de reset le niveau
+- [X] Moyen de reset le niveau
 
 Les tâches additionnelles :
 - [ ] Animation des éléments en cours de déplacement
