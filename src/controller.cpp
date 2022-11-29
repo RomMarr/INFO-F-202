@@ -60,7 +60,7 @@ bool Controller::check_move(tuple<int, int> move){
 
     tuple<int, int> posPlayer = player->getPos();  // position of the player
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
-    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(move),get<1>(new_pos)+get<1>(move)); // new possible position of the box (not checked yet)
+    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(player->getMoveAsked()),get<1>(new_pos)+get<1>(player->getMoveAsked())); // new possible position of the box (not checked yet)
 
     Block::BlockType destination_type = board->get_block(new_pos)->getType();
 
@@ -80,7 +80,7 @@ bool Controller::check_move(tuple<int, int> move){
             player->setWeight(player->getWeight()+block_on_move->getWeight()); // add the weight of the box pushed by the player
             if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
-                if (player->getWeight()>= 10) return false; // too much weight for the player
+                if (player->getWeight() > 10) return false; // too much weight for the player
                 else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
                     return true; 
                 }

@@ -135,6 +135,10 @@ shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
     return nullptr;
 }
 
+vector<shared_ptr<Block>> Board::get_boxes() {
+    return boxes;
+}
+
 shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
     if ((*player).getPos() == pos_actual) {
         return player;
@@ -157,7 +161,6 @@ int Board::getMaxSteps(){
 shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
     return board.at(get<1>(coord)).at(get<0>(coord));
 }
-
 
 Player::Player(tuple<int, int> position): position{position} {};
 
