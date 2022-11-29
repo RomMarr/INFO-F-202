@@ -80,7 +80,7 @@ bool Controller::check_move(tuple<int, int> move){
             player->setWeight(player->getWeight()+block_on_move->getWeight()); // add the weight of the box pushed by the player
             if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
-                if (player->getWeight()>= 10) return false; // too much weight for the player
+                if (player->getWeight() > 10) return false; // too much weight for the player
                 else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
                     return true; 
                 }
