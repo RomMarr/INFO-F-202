@@ -89,6 +89,8 @@ Board::Board(const string &level_file) {
 }
 
 void Board::create_matrix_from_file(const string &file_name){
+    current_board_file = file_name;
+
     int width = 0, height = 0, line_index = 0;
     bool next_is_player_coord = false;
     string line;

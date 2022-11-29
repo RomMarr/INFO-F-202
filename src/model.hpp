@@ -63,6 +63,7 @@ class Board{
     vector<vector<shared_ptr<Block>>> board;
     vector<shared_ptr<Block>> boxes;
     shared_ptr<Player> player;
+    string current_board_file;
     void create_matrix_from_file(const string &file_name);
     int max_steps;
 public:
