@@ -11,7 +11,7 @@ Les tâches de bases :
 - [X] Déplacement personnage
 - [X] Murs infranchissables
 - [X] Eléments (boites) à pousser
-- [ ] Cases cibles
+- [X] Cases cibles
 - [X] Moyen de reset le niveau
 
 Les tâches additionnelles :
