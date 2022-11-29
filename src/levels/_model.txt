@@ -3,6 +3,6 @@ grid with
 - 0: floor
 - 1: wall
 - 2: target
-box positions [x y] (0,0 is the top left corner)
+box positions & is light box [x y weight] (0 0 is the top left corner)
 -
 player position & nb pas [x y nb_pas]
