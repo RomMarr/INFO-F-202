@@ -45,10 +45,12 @@ class MainWindow: public Fl_Window {
     MainMenu menu;
     shared_ptr<Board> board;
     shared_ptr<Controller> controller;
+    shared_ptr<RectangleButton> reset_btn;
+    shared_ptr<RectangleButton> back_to_menu_btn;
     static constexpr inline double refreshPerSecond = 60;
-    enum ScreenType { loading_screen, menu_screen };
-    ScreenType current_screen = loading_screen;
+    bool show_loading = true;
     void draw_board();
+    void draw_board_informations();
     void draw_menu();
 public:
     MainWindow(MainMenu);
@@ -56,7 +58,7 @@ public:
     void set_board(shared_ptr<Board> new_board);
     void draw() override;
     int handle(int event) override;
-    void display_menu();
+    void hide_loading();
     static void timer_CB(void *userdata);
     static void loading_screen_timeout(void *userdata);
 };

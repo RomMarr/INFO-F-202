@@ -53,7 +53,7 @@ bool RectangleButton::get_is_active() {
 
 void LoadingScreen::draw() {
     std::string title = "SOKOBAN";
-    std::string authors = "Par Romain Markowitch & Pol Marnette";
+    std::string authors = "By Romain Markowitch & Pol Marnette";
 
     fl_color(fl_rgb_color(0, 0, 0));
     fl_font(FL_HELVETICA, 24);
@@ -140,26 +140,60 @@ void MainWindow::draw_board() {
     }
 
     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->get_width(), 0, 1, 500, fl_rgb_color(0, 0, 0));
+
+    draw_board_informations();
+}
+
+void MainWindow::draw_board_informations() {
+    int pos_x = 525;
+
+    std::string title = "Level " /* TODO: get level */;
+    std::string steps_information = "Steps " + to_string(board->get_player()->getSteps()) + "/" + to_string(board->getMaxSteps());
+    std::string best_steps = "Best : TODO" + to_string(0);
+    std::string box_on_pos = "Box : TODO";
+
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_font(FL_HELVETICA, 24);
+    fl_draw(title.c_str(), pos_x, 120);
+
+    fl_color((board->get_player()->getSteps() >= board->getMaxSteps() ?  fl_rgb_color(255, 0, 0) : fl_rgb_color(0, 0, 0)));
+    fl_font(FL_HELVETICA, 14);
+    fl_draw(steps_information.c_str(), pos_x, 150);
+
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_draw(best_steps.c_str(), pos_x, 170);
+
+    fl_draw(box_on_pos.c_str(), pos_x, 190);
+
+    if (!reset_btn) reset_btn = make_shared<RectangleButton>(pos_x, 220, 200, 30, "Reset level");
+    if (!back_to_menu_btn) back_to_menu_btn = make_shared<RectangleButton>(pos_x, 270, 200, 30, "Change level");
+
+    reset_btn->draw();
+    back_to_menu_btn->draw();
 }
 
 void MainWindow::draw() {
     Fl_Window::draw();
 
-    if (board->should_show_board()) {
+    if (show_loading) {
+        LoadingScreen::draw();
+    } else if (board->should_show_board()) {
         draw_board();
     } else {
-        switch (current_screen) {
-            case loading_screen: LoadingScreen::draw(); break;
-            case menu_screen: menu.draw(); break;
-         
-            default: break;
-        }
-    }    
-    
+        menu.draw();
+    }
 }
 
 int MainWindow::handle(int event) {
-    if (event == FL_PUSH && current_screen == menu_screen) menu.onWindowClicked(Fl::event_x(), Fl::event_y());
+    if (event == FL_PUSH) {
+        if (board->should_show_board()) {
+            std::cout << "hzhed" << std::endl;
+            if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->reset_level();
+            if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->set_show_board(false);
+        } else if (!show_loading) {
+            menu.onWindowClicked(Fl::event_x(), Fl::event_y());
+        } 
+    }
     if (event == FL_KEYDOWN && board->should_show_board()) controller->key_handler(Fl::event_key());
 }
 
@@ -167,8 +201,8 @@ void MainWindow::set_board(shared_ptr<Board> new_board) {
     board = new_board;
 }
 
-void MainWindow::display_menu() {
-    current_screen = menu_screen;
+void MainWindow::hide_loading() {
+    show_loading = false;
 }
 
 void MainWindow::timer_CB(void *userdata) {
@@ -179,5 +213,5 @@ void MainWindow::timer_CB(void *userdata) {
 
 void MainWindow::loading_screen_timeout(void *userdata) {
     MainWindow *o = static_cast<MainWindow*>(userdata);
-    o->display_menu();
+    o->hide_loading();
 }
