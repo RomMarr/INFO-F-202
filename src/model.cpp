@@ -5,9 +5,6 @@
 #include <fstream>
 #include <FL/Fl.H>
 
-// le model en MVC : a une représentation du plateau, 
-// ainsi que la gestion des règles (dans un autre fichier) -> coup possible ou non.
-
 
 // The following function come from https://stackoverflow.com/a/46931770/7905936
 vector<string> split (string s, string delimiter) {
@@ -90,29 +87,28 @@ void Board::set_level(const string &level_file) {
     }  else { // if level between 10 and 99
         lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48;
     }
-    
     create_matrix_from_file(level_file);
     set_show_board(true);
 }
 
 shared_ptr<Player> Board::get_player() {
-    return player;
+    return player; // shared ptr to the player
 }
 
 shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
-    for (auto i: boxes){
-        if (i->getPos() == pos_actual) return i;
+    for (auto box: boxes){  // go through all the boxes
+        if (box->getPos() == pos_actual) return box;  // shared ptr to the box
     }
     return nullptr;
 }
 
 vector<shared_ptr<Block>> Board::get_boxes() {
-    return boxes;
+    return boxes;  // vector of all the boxes of the board
 }
 
 shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
-    if (player->getPos() == pos_actual) {
-        return player;
+    if (player->getPos() == pos_actual) { // if the player is on the position given
+        return player;  // shared ptr to the player 
     }
     return nullptr;
 }
@@ -135,13 +131,13 @@ int Board::getLvl() {
 
 bool Board::isInBoard(tuple<int, int> pos){
     if ((get<0>(pos)<0 || get<0>(pos) >= get_width()) || (get<1>(pos) < 0 || get<1>(pos) >= get_height())) {
-        // check if it will not leave the board with its movement
+        // check if it will leave the board with its movement
         return false;
     } else return true;
 }
 
 shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
-    return board.at(get<1>(coord)).at(get<0>(coord));
+    return board.at(get<1>(coord)).at(get<0>(coord));  // shared ptr to the block at the position given
 }
 
 void Board::reset_level() {
@@ -149,20 +145,20 @@ void Board::reset_level() {
 }
 
 void Board::teleport(tuple<int, int> pos_teleporter){
-    int posX =0;
-    for (auto line: board){
-        int posY = 0;
-        for (auto block: line){
-            if (block->getType() == Block::BlockType::teleporter){
-                 tuple<int,int> pos_block_teleporter = make_tuple(posY,posX);
-                 if(pos_block_teleporter != pos_teleporter) {
-                    get_player()->setPos(pos_block_teleporter);
-                    return;
+    int posY =0;
+    for (auto line: board){  // go through teh board
+        int posX = 0;
+        for (auto block: line){ // go through teh board
+            if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
+                 tuple<int,int> pos_block_teleporter = make_tuple(posX,posY);  
+                 if(pos_block_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
+                    get_player()->setPos(pos_block_teleporter); // teleport (change position) the player
+                    return;  // leave the loop
                  }
              }
-            posY++;
+            posX++;
         }
-        posX++;
+        posY++;
     }
 }
 
@@ -175,46 +171,42 @@ int Board::read_bestSteps(){
     int bestSteps = 9999;
     string line;
     ifstream file("bestSteps.txt");
-    if (file.is_open()) {
-        while (getline(file, line)) {
-            if (index_line == getLvl()) bestSteps = stoi(line);
+    if (file.is_open()) {  // open the bestSteps file
+        while (getline(file, line)) {  // go through all the lines
+            if (index_line == getLvl()) bestSteps = stoi(line);  // get the best score of the level
             index_line++;
         }
-    file.close();
-    }
-
+        file.close();  // close the file
+    } 
     best_steps = bestSteps;
 }
 
 void Board::write_bestSteps(){
-    int index_line = 0;
+    int index_line = 0; // matches the levels (lvl = 0 -> index_line = 0 )
     string line;
     ofstream file_write("tmp.txt");
-    if (file_write.is_open()) {  // ouvre le fichier d'écriture du message décodé
+    if (file_write.is_open()) {  // open the temporary file
         ifstream file_read("bestSteps.txt");
-        if (file_read.is_open()) {
-            while (getline(file_read, line)) {
-                if (index_line == getLvl()) file_write << player->getSteps() << endl;  // écrit le message codé dans le fichier txt;
-                else file_write << line << endl;  // écrit le message codé dans le fichier txt
+        if (file_read.is_open()) { // open the bestSteps file 
+            while (getline(file_read, line)) {  // go through all the lines of the bestSteps file
+                if (index_line == getLvl()) file_write << player->getSteps() << endl;  // change the line where the best record has been brocken
+                else file_write << line << endl;  // copy each line in the temporary file
                 index_line++;
-            } file_read.close();
-        } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "bestSteps.txt" << endl;
-        file_write.close();  //  ferme le fichier txt contenant le message codé
-        remove("bestSteps.txt");
-        rename("tmp.txt", "bestSteps.txt");
-    } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "tmp.txt" << endl;
+            } file_read.close();  // close the bestSteps file
+        } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "bestSteps.txt" << endl;  // if bestSteps file can not be opened
+        file_write.close();  //  close  the temporary file 
+        remove("bestSteps.txt"); // delete the bestSteps file 
+        rename("tmp.txt", "bestSteps.txt");  // rename de temporary file to the bestSteps file
+    } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "tmp.txt" << endl; // if temporary file can not be opened
 }
 
 int Board::nb_box_on_target() {
-    int i = 0;
-    
-    for (shared_ptr<Block> box: get_boxes()) {
-        if (get_block(box->getPos())->getType() == Block::BlockType::target) {
-            i += 1;
+    int nb_box = 0;
+    for (shared_ptr<Block> box: get_boxes()) {  // go through all the boxes 
+        if (get_block(box->getPos())->getType() == Block::BlockType::target) {  // true if the box is on a target
+            nb_box += 1;
         }
-     }
-
-     return i;
+     } return nb_box;
 }
 
 Player::Player(tuple<int, int> position): position{position} {};
