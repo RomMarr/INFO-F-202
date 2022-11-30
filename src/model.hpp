@@ -43,6 +43,7 @@ class Board{
     shared_ptr<Player> player;
     string current_board_file;
     void create_matrix_from_file(const string &file_name);
+    int lvl;
     int max_steps;
     void reset_level_states();
 public:
@@ -55,9 +56,12 @@ public:
     int get_width();
     int get_height();
     int getMaxSteps();
+    int getLvl();
     bool isInBoard(tuple<int, int> pos_block);
     void reset_level();
     void teleport(tuple<int, int> pos_teleporter);
+    int read_bestSteps();
+    void write_bestSteps();
 };
 
 

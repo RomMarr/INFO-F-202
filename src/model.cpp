@@ -28,7 +28,9 @@ vector<string> split (string s, string delimiter) {
 
 
 Board::Board(const string &level_file) {
-    this->create_matrix_from_file(level_file);
+    create_matrix_from_file(level_file);
+    if (level_file.size()== 12) lvl = static_cast<int>(level_file[7]) -48;  // if level between 0 and 9
+    else lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48; // if level between 10 and 99
 }
 
 void Board::reset_level_states() {
@@ -60,7 +62,7 @@ void Board::create_matrix_from_file(const string &file_name){
                 for (auto block_type_index: line_splitted) {
                     block_this_line.push_back(make_shared<Block>(grid_int_block_type.at(stoi(block_type_index))));
                 }
-                this->board.push_back(block_this_line);
+                board.push_back(block_this_line);
             } else {
                 if (line == "-") {
                     next_is_player_coord = true;
@@ -103,7 +105,7 @@ shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
 }
 
 int Board::get_width() {
-    return this->get_height() > 0 ? board.at(0).size() : 0;
+    return get_height() > 0 ? board.at(0).size() : 0;
 }
 
 int Board::get_height() {
@@ -112,6 +114,10 @@ int Board::get_height() {
 
 int Board::getMaxSteps(){
     return max_steps;
+}
+
+int Board::getLvl() {
+    return lvl;
 }
 
 bool Board::isInBoard(tuple<int, int> pos){
@@ -147,6 +153,40 @@ void Board::teleport(tuple<int, int> pos_teleporter){
     }
 }
 
+int Board::read_bestSteps(){
+    int index_line = 0;
+    int bestSteps = 9999;
+    string line;
+    ifstream file("bestSteps.txt");
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            if (index_line == getLvl()) bestSteps = stoi(line);
+            index_line++;
+        }
+    file.close();
+    }
+    if (bestSteps == -1) return 9999;
+    else return bestSteps;
+}
+
+void Board::write_bestSteps(){
+    int index_line = 0;
+    string line;
+    ofstream file_write("tmp.txt");
+    if (file_write.is_open()) {  // ouvre le fichier d'écriture du message décodé
+        ifstream file_read("bestSteps.txt");
+        if (file_read.is_open()) {
+            while (getline(file_read, line)) {
+                if (index_line == getLvl()) file_write << player->getSteps() << endl;  // écrit le message codé dans le fichier txt;
+                else file_write << line << endl;  // écrit le message codé dans le fichier txt
+                index_line++;
+            } file_read.close();
+        } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "bestSteps.txt" << endl;
+        file_write.close();  //  ferme le fichier txt contenant le message codé
+        remove("bestSteps.txt");
+        rename("tmp.txt", "bestSteps.txt");
+    } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "tmp.txt" << endl;
+}
 
 
 Player::Player(tuple<int, int> position): position{position} {};
@@ -170,6 +210,7 @@ void Player::addStep(){
 void Player::changeTeleported(){
     teleported = (!teleported);
 }
+
 
 tuple<int, int> Player::getPos(){
     return position;
