@@ -152,7 +152,7 @@ void MainWindow::draw_board_informations() {
 
     std::string title = "Level " + to_string(board->getLvl());
     std::string steps_information = "Steps " + to_string(board->get_player()->getSteps()) + "/" + to_string(board->getMaxSteps());
-    std::string best_steps = "Best : " + to_string(board->get_best_steps());
+    std::string best_steps = board->get_best_steps() == -1 ? "No best score" : "Best : " + to_string(board->get_best_steps());
     std::string box_on_pos = "Box : TODO";
 
     fl_font(FL_HELVETICA_BOLD, 32);

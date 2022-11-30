@@ -183,7 +183,7 @@ int Board::read_bestSteps(){
     file.close();
     }
 
-    best_steps = bestSteps == -1 ? 9999 : bestSteps;
+    best_steps = bestSteps;
 }
 
 void Board::write_bestSteps(){
