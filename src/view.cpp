@@ -1,13 +1,42 @@
 #include "view.hpp"
+#include "model.hpp"
 #include "controller.hpp"
 
 #include <iostream>
 #include <string>
+#include <memory>
+#include <cassert>
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
+
+
+RectangleButton::RectangleButton(int x, int y, int width, int height, std::string buttonTitle, int button_id): 
+    x{x}, y{y}, width{width}, height{height}, buttonTitle{buttonTitle}, button_id{button_id} {
+    
+    // -1 is reserved for button not found on getButtonId function
+    assert(button_id != -1);
+}
+
+void RectangleButton::draw() {
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, x, y, width, height, fl_rgb_color(255, 255, 255));
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_font(FL_HELVETICA, 12);
+    fl_draw(buttonTitle.c_str(), x + 5,  (y + height / 2) + 3);
+}
+
+int RectangleButton::getButtonId(int click_x, int click_y) {
+    // check horizontaly if in rectangle
+    if (click_x > x && click_x < x + width) {
+        if (click_y > y && click_y < y + height) {
+            return button_id;
+        }
+    }
+
+    return -1;
+}
 
 void LoadingScreen::draw() {
     std::string title = "SOKOBAN";
@@ -20,11 +49,26 @@ void LoadingScreen::draw() {
     fl_draw(authors.c_str(), 50,  120);
 }
 
+MainMenu::MainMenu(shared_ptr<Controller> controller): controller{controller} {};
+
 void MainMenu::draw() {
-    // fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50, 50, 50, 50, fl_rgb_color(0, 0, 255));
-    // Fl_Button *button = new Fl_Button(10, 10, 100, 50, "label");
-    // button->type(FL_NORMAL_BUTTON);
-    // button->redraw();
+    if (buttons.size() == 0) {
+        buttons.push_back(make_shared<RectangleButton>(50, 50, 30, 30, "0"));
+        buttons.push_back(make_shared<RectangleButton>(100, 50, 30, 30, "1", 1));
+    }
+
+    for (shared_ptr<RectangleButton> btn: buttons) {
+        btn->draw();
+    }
+}
+
+void MainMenu::onWindowClicked(int x, int y) {
+    for (shared_ptr<RectangleButton> btn: buttons) {
+        int btn_id = btn->getButtonId(x, y);
+        if (btn_id != -1) {
+            std::cout << btn_id << endl;
+        }
+    }
 }
 
 MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 500, 500, "Sokoban"), menu(menu) {
@@ -68,13 +112,8 @@ void MainWindow::draw() {
 }
 
 int MainWindow::handle(int event) {
-    // Doit pas être ici à terme, je voulais juste test, mais c'est cette fonction qui est call à chaque keyevent (souris ou clavier)
-    if (event == FL_KEYDOWN) {
-        //key_handler(Fl::event_key());
-       
-        controller->key_handler(Fl::event_key());
-        
-    }
+    if (event == FL_PUSH && current_screen == menu_screen) menu.onWindowClicked(Fl::event_x(), Fl::event_y());
+    if (event == FL_KEYDOWN && current_screen == board_screen) controller->key_handler(Fl::event_key());
 }
 
 void MainWindow::set_board(shared_ptr<Board> new_board) {

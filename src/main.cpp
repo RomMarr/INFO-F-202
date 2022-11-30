@@ -1,7 +1,6 @@
-#include "game.hpp"
-#include "model.hpp"
-#include "view.hpp"
 #include "controller.hpp"
+#include "view.hpp"
+#include "model.hpp"
 
 #include <tuple>
 #include <memory>
@@ -11,39 +10,21 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
 
-
 using namespace std;
 
-//int main(int argc, char *argv[]) {
-  //Game game;
-  //game.show(argc, argv);
-  //return Fl::run();
-//}
-
-
-
-void levelEdit(){
-
-}
-
 int main(int argc, char *argv[]) {
-  // Display_menus db_m;
-  // Game game;
-  // db_m.display_homepage(); // affichage ecran d'accueil   
-  // db_m.display_menu(); // affichage choix niveau ou modif niveau  -> dans le controller qui gere une fois clické sur un des choix -> modifie game.play !
-  // if (game.getPlay()) game.game(board);
-  // else game.edit_map();
-  string level_file = "levels/0.txt";
-
-  shared_ptr<Board> board = make_shared<Board>(level_file);  // ATTENTION A REMPLIR LA PARENTHESE !!!!!!!!!!!!!!!!!!!!!!!!!
+  shared_ptr<Board> board = make_shared<Board>(); 
   shared_ptr<Controller> controller = make_shared<Controller>(board);
 
-  MainMenu menu;
-  MainWindow window{menu};
-  window.set_controller(controller);
-  window.set_board(board);
-  window.display_board();
-  window.show(argc, argv);
+  MainMenu menu(controller);
+  shared_ptr<MainWindow> window = make_shared<MainWindow>(menu);
+
+  window->set_controller(controller);
+  window->set_board(board);
+
+  board->set_view(window);
+
+  window->show(argc, argv);
 
   return Fl::run();
 }

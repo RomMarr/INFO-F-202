@@ -10,6 +10,9 @@ using namespace std;
 
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
+void Controller::select_level(int level_id) {
+    board->set_level("levels/" + to_string(level_id) + ".txt");
+}
 
 void Controller::key_handler(int key_event){
     shared_ptr<Player> player = board->get_player();

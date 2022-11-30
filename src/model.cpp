@@ -25,12 +25,6 @@ vector<string> split (string s, string delimiter) {
     return res;
 }
 
-
-
-Board::Board(const string &level_file) {
-    this->create_matrix_from_file(level_file);
-}
-
 void Board::reset_level_states() {
     board.clear();
     boxes.clear();
@@ -78,6 +72,16 @@ void Board::create_matrix_from_file(const string &file_name){
         }
         file.close(); 
     }
+}
+
+void Board::set_view(shared_ptr<MainWindow> new_view) {
+    view = new_view;
+}
+
+
+void Board::set_level(const string &level_file) {
+    create_matrix_from_file(level_file);
+    view->display_board();
 }
 
 shared_ptr<Player> Board::get_player() {

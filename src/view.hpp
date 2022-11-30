@@ -1,15 +1,25 @@
 #ifndef _VIEW_H
 #define _VIEW_H
 
-#include "model.hpp"
 #include "controller.hpp"
+#include "model.hpp"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
 #include <memory>
+#include <string>
+#include <vector>
 
+class RectangleButton {
+    int x, y, width, height, button_id;
+    std::string buttonTitle;
+public:
+    RectangleButton(int x, int y, int width, int height, std::string buttonTitle, int button_id = 0);
+    void draw();
+    int getButtonId(int x, int y);
+};
 
 class LoadingScreen {
 public:
@@ -17,8 +27,13 @@ public:
 };
 
 class MainMenu {
+    shared_ptr<Controller> controller;
+    vector<shared_ptr<RectangleButton>> buttons;
 public:
+    MainMenu(shared_ptr<Controller> controller);
+    static void select_level(shared_ptr<Controller> controller, int id);
     void draw();
+    void onWindowClicked(int x, int y);
 };
 
 class MainWindow: public Fl_Window {
