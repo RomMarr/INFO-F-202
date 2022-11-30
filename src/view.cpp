@@ -147,10 +147,22 @@ void MainWindow::draw_board() {
 void MainWindow::draw_board_informations() {
     int pos_x = 525;
 
+    std::string won_title = "Gagné";
+    std::string lose_title = "Perdu";
+
     std::string title = "Level " /* TODO: get level */;
     std::string steps_information = "Steps " + to_string(board->get_player()->getSteps()) + "/" + to_string(board->getMaxSteps());
     std::string best_steps = "Best : TODO" + to_string(0);
     std::string box_on_pos = "Box : TODO";
+
+    fl_font(FL_HELVETICA_BOLD, 32);
+    if (controller->check_win()) {
+        fl_color(fl_rgb_color(0, 102, 0));
+        fl_draw(won_title.c_str(), pos_x, 50);
+    } else if (controller->check_lose()) {
+        fl_color(fl_rgb_color(204, 0, 0));
+        fl_draw(lose_title.c_str(), pos_x, 50);
+    }
 
     fl_color(fl_rgb_color(0, 0, 0));
     fl_font(FL_HELVETICA, 24);
