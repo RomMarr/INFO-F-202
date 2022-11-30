@@ -1,9 +1,9 @@
 # INFO-F-202
 Jeu Sokoban
 
-- [ ] 5 tâches de base
+- [X] 5 tâches de base
 - [ ] 10/12 tâches additionnelles
-- [ ] Makefile
+- [X] Makefile
 - [ ] Rapport
 
 
@@ -16,9 +16,9 @@ Les tâches de bases :
 
 Les tâches additionnelles :
 - [ ] Animation des éléments en cours de déplacement
-- [ ] Cases de téléportation
+- [X] Cases de téléportation
 - [ ] Boites de couleur
-- [ ] Boîtes légères
+- [X] Boîtes légères
 - [ ] Compteur de pas
 - [ ] Meilleur score de pas
 - [ ] Écran d’accueil
@@ -29,21 +29,11 @@ Les tâches additionnelles :
 - [ ] Détection d’échec
 
 NOTES : 
-- Déconseiller de faire d el'héritage d'après Léopold (?)
+- Déconseiller de faire de l'héritage d'après Léopold (?)
 - Faire le projet en MVC
 
 
 Idées :
-Crée une matrice pour tout ce qui est déplacement puis d’un autre côté faire le graphisme basé sur la matrice 
-- Class objet (abstraite):
-  - class mur
-  - class boite (différents poids) 
-  - class cible 
-  - class sol
-  - class sol vide (dehors)
-  - class teleportation
-- Class personnage :
-  - compteur de pas, meilleur pas
 - Main :
   - bouton (ou autre) pour reset le niveau 
 - Changement de terrain :
