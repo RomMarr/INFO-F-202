@@ -187,7 +187,6 @@ void MainWindow::draw() {
 int MainWindow::handle(int event) {
     if (event == FL_PUSH) {
         if (board->should_show_board()) {
-            std::cout << "hzhed" << std::endl;
             if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->reset_level();
             if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->set_show_board(false);
         } else if (!show_loading) {
