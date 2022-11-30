@@ -74,9 +74,11 @@ bool Controller::check_move(tuple<int, int> move){
             if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
                 if (player->getWeight() > 10) return false; // too much weight for the player
-                else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
-                    return true; 
-                    }
+                else { 
+                    if (board->get_block(new_pos_box)->getType()==Block::BlockType::teleporter) {cout <<"ici"<<endl; return false;}
+                    else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
+                    return true; } 
+                }
             }else return false;
         }return true;
     } else if (destination_type == Block::BlockType::teleporter){ // if the block of arrival is a teleporter
@@ -108,17 +110,19 @@ bool Controller::check_move(tuple<int, int> move){
 //     return ((blocked.pop_back()||blocked.pop_back()) && (blocked.pop_back()||blocked.pop_back()));
 //  }
 
-// bool Controller::failure_detection(){
-//     for (shared_ptr<Block> box: board->get_boxes()) {
-//         if (!isBlocked(box)) return false;
-//     }return true;
-// }
+ bool Controller::failure_detection(){
+    for (shared_ptr<Block> box: board->get_boxes()) {
+        //if (!isBlocked(box)) return false;
+    }return true;
+ }
 
 bool Controller::check_lose(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
     return (player->getSteps() >= board->getMaxSteps()); // || failure_detection());
 
-}bool Controller::check_win(){
+}
+
+bool Controller::check_win(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
     for (shared_ptr<Block> box: board->get_boxes()) {
         if (board->get_block(box->getPos())->getType() != Block::BlockType::target){
