@@ -69,6 +69,7 @@ public:
     void reset_level();
     void teleport(tuple<int, int> pos_teleporter);
     void write_bestSteps();
+    int nb_box_on_target();
 };
 
 

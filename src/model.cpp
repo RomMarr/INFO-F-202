@@ -205,6 +205,17 @@ void Board::write_bestSteps(){
     } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "tmp.txt" << endl;
 }
 
+int Board::nb_box_on_target() {
+    int i = 0;
+    
+    for (shared_ptr<Block> box: get_boxes()) {
+        if (get_block(box->getPos())->getType() == Block::BlockType::target) {
+            i += 1;
+        }
+     }
+
+     return i;
+}
 
 Player::Player(tuple<int, int> position): position{position} {};
 
