@@ -21,9 +21,9 @@ Les tâches additionnelles :
 - [X] Boîtes légères
 - [ ] Compteur de pas
 - [ ] Meilleur score de pas
-- [ ] Écran d’accueil
-- [ ] Niveaux et sélection de niveau
-- [ ] Limite de pas
+- [X] Écran d’accueil
+- [X] Niveaux et sélection de niveau
+- [X] Limite de pas
 - [ ] Déplacement automatique à la souris
 - [ ] Éditeur de niveau
 - [ ] Détection d’échec
