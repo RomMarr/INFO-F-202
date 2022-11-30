@@ -64,23 +64,22 @@ void Game::init_game() {
 
 //Game::Game(bool play):play{play}{}
 
-bool Game::getPlay(){
-  return play;
-}
+// bool Game::getPlay(){
+//   return play;
+// }
 
-void Game::setPlay(bool new_play){
-  play = new_play;
-}
+// void Game::setPlay(bool new_play){
+//   play = new_play;
+// }
 
-void Game::game(shared_ptr<Board> board){
-  Controller ctrl{board};
-  Rules rules{board};
+// void Game::game(shared_ptr<Board> board){
+  //Controller ctrl{board};
   // Display_board db{board};
-  while (!rules.check_end()){// boucle tant que pas fini (toutes les caisses sur une cibles ou les caisses bloquées)
-    ctrl.move_request(); // demande un mouvement (avec cin ou keys ou autre ??) active move,...
-  };
-}
+  //while (!ctrl.check_end()){// boucle tant que pas fini (toutes les caisses sur une cibles ou les caisses bloquées)
+    //ctrl.move_request(); // demande un mouvement (avec cin ou keys ou autre ??) active move,...
+  //};
+//}
 
-void Game::edit_map(){
+// void Game::edit_map(){
 
-}
+// }

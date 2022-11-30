@@ -1,4 +1,5 @@
 #include "model.hpp"
+#include "block.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -25,70 +26,24 @@ vector<string> split (string s, string delimiter) {
 }
 
 
-Block::Block(BlockType type): type{type} {
-    if (type == BlockType::box) {
-        this->setWeight(6);
-    } else if (type == BlockType::light_box) {
-        this->setWeight(3);
-    }
-}
-
-void Block::draw(int x, int y) {
-}
-
-void Block::setWeight(int new_weight){
-    weight = new_weight; 
-}
-
-void Block::setType(BlockType new_type){
-    type = new_type;
-}
-
-void Block::setPos(tuple<int, int> new_position){
-    // get<0>(pos) = new_posX;
-    // get<1>(pos)= new_posY;
-    pos = new_position;
-}
-
-tuple<int, int> Block::getPos(){
-    return pos;
-}
-
-int Block::getWeight(){
-    return weight;
-}
-
-int Block::getWidth(){
-    return width;
-}
-
-int Block::getHeight(){
-    return height;
-}
-
-Fl_Color Block::getColor(){
-    switch (type) {
-        case (BlockType::wall): return fl_rgb_color(0, 0, 0); break;
-        case (BlockType::box): return fl_rgb_color(255, 128, 0); break;
-        case (BlockType::light_box): return fl_rgb_color(255, 128, 0); break;
-        case (BlockType::floor): return fl_rgb_color(224, 224, 224);  break;
-        case (BlockType::target): return fl_rgb_color(255, 204, 153); break;
-        case (BlockType::teleporter): return fl_rgb_color(153, 0, 153); break;
-        default: return fl_rgb_color(100, 100, 100); break;
-    }
-}
-
-Block::BlockType Block::getType(){
-    return type;
-}
-
-
 
 Board::Board(const string &level_file) {
     this->create_matrix_from_file(level_file);
 }
 
+void Board::reset_level_states() {
+    board.clear();
+    boxes.clear();
+    player = nullptr;
+}
+
 void Board::create_matrix_from_file(const string &file_name){
+    // Save in memory the current level being played
+    current_board_file = file_name;
+
+    // Reset the board matrix
+    reset_level_states();
+
     int width = 0, height = 0, line_index = 0;
     bool next_is_player_coord = false;
     string line;
@@ -111,9 +66,10 @@ void Board::create_matrix_from_file(const string &file_name){
                     next_is_player_coord = true;
                 } else if (next_is_player_coord) {
                     player = make_shared<Player>(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    max_steps = stoi(line_splitted.at(2));
                 } else {
-                    shared_ptr<Block> box = make_shared<Block>(Block::BlockType::box);
-                    (*box).setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    shared_ptr<Block> box = make_shared<Block>((stoi(line_splitted.at(2)) ? Block::BlockType::light_box : Block::BlockType::box));
+                    box->setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
                     boxes.push_back(box);
                 }
             }
@@ -130,13 +86,17 @@ shared_ptr<Player> Board::get_player() {
 
 shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
     for (auto i: boxes){
-        if ((*i).getPos() == pos_actual) return i;
+        if (i->getPos() == pos_actual) return i;
     }
     return nullptr;
 }
 
+vector<shared_ptr<Block>> Board::get_boxes() {
+    return boxes;
+}
+
 shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
-    if ((*player).getPos() == pos_actual) {
+    if (player->getPos() == pos_actual) {
         return player;
     }
     return nullptr;
@@ -150,9 +110,43 @@ int Board::get_height() {
     return board.size();
 }
 
+int Board::getMaxSteps(){
+    return max_steps;
+}
+
+bool Board::isInBoard(tuple<int, int> pos){
+    if ((get<0>(pos)<0 || get<0>(pos) >= get_width()) || (get<1>(pos) < 0 || get<1>(pos) >= get_height())) {
+        // check if it will not leave the board with its movement
+        return false;
+    } else return true;
+}
+
 shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
     return board.at(get<1>(coord)).at(get<0>(coord));
 }
+
+void Board::reset_level() {
+    create_matrix_from_file(current_board_file);
+}
+
+void Board::teleport(tuple<int, int> pos_teleporter){
+    int posX =0;
+    for (auto line: board){
+        int posY = 0;
+        for (auto block: line){
+            if (block->getType() == Block::BlockType::teleporter){
+                 tuple<int,int> pos_block_teleporter = make_tuple(posY,posX);
+                 if(pos_block_teleporter != pos_teleporter) {
+                    get_player()->setPos(pos_block_teleporter);
+                    return;
+                 }
+             }
+            posY++;
+        }
+        posX++;
+    }
+}
+
 
 
 Player::Player(tuple<int, int> position): position{position} {};
@@ -161,13 +155,38 @@ void Player::setPos(tuple<int, int> new_pos){
     position = new_pos;
 }
 
+void Player::setWeight(int new_weight){
+    weight = new_weight;
+}
+
+void Player::setMoveAsked(tuple<int, int> new_move_asked){
+    move_asked = new_move_asked;
+}
+
+void Player::addStep(){
+    steps += 1;
+}
+
+void Player::changeTeleported(){
+    teleported = (!teleported);
+}
 
 tuple<int, int> Player::getPos(){
     return position;
 }
 
+tuple<int, int> Player::getMoveAsked(){
+    return move_asked;
+}
 
 int Player::getSteps(){
     return steps;
 }
 
+int Player::getWeight(){
+    return weight;
+}
+
+bool Player::isTeleported(){
+    return teleported;
+}

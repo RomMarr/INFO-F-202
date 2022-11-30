@@ -24,15 +24,15 @@ public:
 };
 **/
 
-class Game{
-  bool play;  // true if play, false if edit_map
-public:
-  //Game(bool play);
-  bool getPlay();
-  void setPlay(bool new_play);
-  void game(std::shared_ptr<Board> board);
-  void edit_map();
+// class Game{
+//   bool play;  // true if play, false if edit_map
+// public:
+//   //Game(bool play);
+//   bool getPlay();
+//   void setPlay(bool new_play);
+//   void game(std::shared_ptr<Board> board);
+//   void edit_map();
 
-};
+// };
 
 #endif
