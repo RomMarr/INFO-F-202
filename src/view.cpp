@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <cassert>
+#include <algorithm>
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Widget.H>
@@ -101,7 +102,7 @@ void MainMenu::onWindowClicked(int x, int y) {
     }
 }
 
-MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 500, 500, "Sokoban"), menu(menu) {
+MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, "Sokoban"), menu(menu) {
     Fl::add_timeout(1.0/refreshPerSecond, timer_CB, this);
     Fl::add_timeout(1.0, loading_screen_timeout, this);
 }
@@ -111,21 +112,34 @@ void MainWindow::set_controller(shared_ptr<Controller> new_controller) {
 }
 
 void MainWindow::draw_board() {
+    int block_size = std::min(500 / board->get_width(), 500 / board->get_height());
+
+    int y_offset = (500 - (block_size * board->get_height())) / 2;
+
     for (size_t y = 0; y < board->get_height(); y++) {
         for (size_t x = 0; x < board->get_width(); x++) {
             shared_ptr<Player> player_here = board->get_player_on_pos(make_tuple(x, y));
             shared_ptr<Block> box_here = board->get_box_on_pos(make_tuple(x, y));
 
+            int pos_x = block_size * x;
+            int pos_y = y_offset + block_size * y;
+
             if (player_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, fl_rgb_color(0, 0, 255));
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 255));
             } else if (box_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, box_here->getColor());
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, box_here->getColor());
             } else {
                 shared_ptr<Block> cell = board->get_block(make_tuple(x, y));
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, cell->getColor());
+                if (cell->getType() == Block::BlockType::target) {
+                    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x  + (block_size / 4), pos_y  + (block_size / 4), block_size / 2, block_size / 2, cell->getColor());
+                } else {
+                    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, cell->getColor());
+                }
             }
         }
     }
+
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->get_width(), 0, 1, 500, fl_rgb_color(0, 0, 0));
 }
 
 void MainWindow::draw() {
