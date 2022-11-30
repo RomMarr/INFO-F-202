@@ -73,7 +73,7 @@ void Game::setPlay(bool new_play){
 }
 
 void Game::game(shared_ptr<Board> board){
-  Controller ctrl{board};
+  //Controller ctrl{board};
   // Display_board db{board};
   //while (!ctrl.check_end()){// boucle tant que pas fini (toutes les caisses sur une cibles ou les caisses bloquées)
     //ctrl.move_request(); // demande un mouvement (avec cin ou keys ou autre ??) active move,...
