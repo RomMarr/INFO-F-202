@@ -8,6 +8,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
+#include <memory>
 
 
 // la vue en MVC : s'occupe d'afficher le board et les déplacements
