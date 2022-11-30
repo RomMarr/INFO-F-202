@@ -22,8 +22,6 @@ int main(int argc, char *argv[]) {
   window->set_controller(controller);
   window->set_board(board);
 
-  board->set_view(window);
-
   window->show(argc, argv);
 
   return Fl::run();

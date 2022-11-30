@@ -11,6 +11,9 @@ main: main.cpp block.o controller.o model.o view.o
 	${COMPILER} ${CXXFLAGS} -o projet main.cpp block.o controller.o model.o view.o ${LDFLAGS}
 
 %.o: %.cpp %.hpp
+	$(info ************)
+	$(info ** Compiling $(@) $(<))
+	$(info ************)
 	${COMPILER} ${CXXFLAGS} -o $@ -c $< ${LDFLAGS}
 
 .PHONY: clean

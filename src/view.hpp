@@ -41,7 +41,7 @@ class MainWindow: public Fl_Window {
     shared_ptr<Board> board;
     shared_ptr<Controller> controller;
     static constexpr inline double refreshPerSecond = 60;
-    enum ScreenType { loading_screen, menu_screen, board_screen };
+    enum ScreenType { loading_screen, menu_screen };
     ScreenType current_screen = loading_screen;
     void draw_board();
     void draw_menu();
@@ -52,7 +52,6 @@ public:
     void draw() override;
     int handle(int event) override;
     void display_menu();
-    void display_board();
     static void timer_CB(void *userdata);
     static void loading_screen_timeout(void *userdata);
 };

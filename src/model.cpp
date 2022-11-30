@@ -74,14 +74,22 @@ void Board::create_matrix_from_file(const string &file_name){
     }
 }
 
-void Board::set_view(shared_ptr<MainWindow> new_view) {
-    view = new_view;
+// void Board::set_view(shared_ptr<MainWindow> new_view) {
+//     view = new_view;
+// }
+
+void Board::set_show_board(bool value) {
+    show_board = value;
+}
+
+bool Board::should_show_board() {
+    return show_board;
 }
 
 
 void Board::set_level(const string &level_file) {
     create_matrix_from_file(level_file);
-    view->display_board();
+    set_show_board(true);
 }
 
 shared_ptr<Player> Board::get_player() {

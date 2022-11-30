@@ -66,7 +66,7 @@ void MainMenu::onWindowClicked(int x, int y) {
     for (shared_ptr<RectangleButton> btn: buttons) {
         int btn_id = btn->getButtonId(x, y);
         if (btn_id != -1) {
-            std::cout << btn_id << endl;
+            controller->select_level(btn_id);
         }
     }
 }
@@ -101,19 +101,23 @@ void MainWindow::draw_board() {
 
 void MainWindow::draw() {
     Fl_Window::draw();
+
+    if (board->should_show_board()) {
+        draw_board();
+    } else {
+        switch (current_screen) {
+            case loading_screen: LoadingScreen::draw(); break;
+            case menu_screen: menu.draw(); break;
+         
+            default: break;
+        }
+    }    
     
-    switch (current_screen) {
-        case loading_screen: LoadingScreen::draw(); break;
-        case menu_screen: menu.draw(); break;
-        case board_screen: draw_board(); break;
-    
-        default: break;
-    }
 }
 
 int MainWindow::handle(int event) {
     if (event == FL_PUSH && current_screen == menu_screen) menu.onWindowClicked(Fl::event_x(), Fl::event_y());
-    if (event == FL_KEYDOWN && current_screen == board_screen) controller->key_handler(Fl::event_key());
+    if (event == FL_KEYDOWN && board->should_show_board()) controller->key_handler(Fl::event_key());
 }
 
 void MainWindow::set_board(shared_ptr<Board> new_board) {
@@ -122,12 +126,6 @@ void MainWindow::set_board(shared_ptr<Board> new_board) {
 
 void MainWindow::display_menu() {
     current_screen = menu_screen;
-}
-
-void MainWindow::display_board() {
-    if (board) {
-        // current_screen = board_screen;
-    }
 }
 
 void MainWindow::timer_CB(void *userdata) {

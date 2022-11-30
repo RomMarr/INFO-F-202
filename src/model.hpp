@@ -2,7 +2,7 @@
 #define _MODEL_H
 
 #include "block.hpp"
-#include "view.hpp"
+// #include "view.hpp"
 
 #include <FL/Fl.H>
 #include "stdio.h"
@@ -41,12 +41,13 @@ public:
 
 class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target, Block::BlockType::teleporter};
-    shared_ptr<MainWindow> view;
+    // shared_ptr<MainWindow> view;
     vector<vector<shared_ptr<Block>>> board;
     vector<shared_ptr<Block>> boxes;
     shared_ptr<Player> player;
     string current_board_file;
     int max_steps;
+    bool show_board = false;
     void create_matrix_from_file(const string &file_name);
     void reset_level_states();
 public:
@@ -55,7 +56,9 @@ public:
     vector<shared_ptr<Block>> get_boxes();
     shared_ptr<Block> get_box_on_pos(tuple <int, int>);
     shared_ptr<Player> get_player_on_pos(tuple <int, int>);
-    void set_view(shared_ptr<MainWindow> new_view);
+    // void set_view(shared_ptr<MainWindow> new_view);
+    void set_show_board(bool value);
+    bool should_show_board();
     void set_level(const string &level_file);
     int get_width();
     int get_height();

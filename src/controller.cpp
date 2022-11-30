@@ -1,10 +1,13 @@
 #include "controller.hpp"
+
 #include "model.hpp"
+#include "block.hpp"
 
 #include <FL/Fl.H>
 #include <memory>
 #include <tuple>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
