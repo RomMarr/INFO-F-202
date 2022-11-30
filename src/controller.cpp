@@ -124,13 +124,15 @@ bool Controller::check_lose(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
     return (player->getSteps() >= board->getMaxSteps()); // || failure_detection());
 
-}bool Controller::check_win(){
+}
+
+bool Controller::check_win(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
     for (shared_ptr<Block> box: board->get_boxes()) {
         if (board->get_block(box->getPos())->getType() != Block::BlockType::target){
             return false;
         }
      } cout << "WINNNNNNNN" <<endl;
-     if (board->read_bestSteps()> player->getSteps()) board->write_bestSteps();
+     if (board->get_best_steps()> player->getSteps()) board->write_bestSteps();
      return true;
 }

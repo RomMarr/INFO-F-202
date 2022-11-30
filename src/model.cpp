@@ -38,6 +38,8 @@ void Board::create_matrix_from_file(const string &file_name){
     // Reset the board matrix
     reset_level_states();
 
+    read_bestSteps();
+
     int width = 0, height = 0, line_index = 0;
     bool next_is_player_coord = false;
     string line;
@@ -74,10 +76,6 @@ void Board::create_matrix_from_file(const string &file_name){
     }
 }
 
-// void Board::set_view(shared_ptr<MainWindow> new_view) {
-//     view = new_view;
-// }
-
 void Board::set_show_board(bool value) {
     show_board = value;
 }
@@ -86,10 +84,12 @@ bool Board::should_show_board() {
     return show_board;
 }
 
-
 void Board::set_level(const string &level_file) {
-    if (level_file.size()== 12) lvl = static_cast<int>(level_file[7]) -48;  // if level between 0 and 9
-    else lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48; // if level between 10 and 99
+    if (level_file.size()== 12) { // if level between 0 and 9 
+        lvl = static_cast<int>(level_file[7]) -48;
+    }  else { // if level between 10 and 99
+        lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48;
+    }
     
     create_matrix_from_file(level_file);
     set_show_board(true);
@@ -166,6 +166,10 @@ void Board::teleport(tuple<int, int> pos_teleporter){
     }
 }
 
+int Board::get_best_steps() {
+    return best_steps;
+}
+
 int Board::read_bestSteps(){
     int index_line = 0;
     int bestSteps = 9999;
@@ -178,8 +182,8 @@ int Board::read_bestSteps(){
         }
     file.close();
     }
-    if (bestSteps == -1) return 9999;
-    else return bestSteps;
+
+    best_steps = bestSteps == -1 ? 9999 : bestSteps;
 }
 
 void Board::write_bestSteps(){
