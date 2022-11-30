@@ -45,6 +45,7 @@ class Board{
     vector<shared_ptr<Block>> boxes;
     shared_ptr<Player> player;
     string current_board_file;
+    int lvl;
     int max_steps;
     bool show_board = false;
     void create_matrix_from_file(const string &file_name);
@@ -61,9 +62,12 @@ public:
     int get_width();
     int get_height();
     int getMaxSteps();
+    int getLvl();
     bool isInBoard(tuple<int, int> pos_block);
     void reset_level();
     void teleport(tuple<int, int> pos_teleporter);
+    int read_bestSteps();
+    void write_bestSteps();
 };
 
 
