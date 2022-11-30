@@ -15,10 +15,14 @@
 class RectangleButton {
     int x, y, width, height, button_id;
     std::string buttonTitle;
+    bool is_active = false;
 public:
     RectangleButton(int x, int y, int width, int height, std::string buttonTitle, int button_id = 0);
     void draw();
-    int getButtonId(int x, int y);
+    bool contains(int x, int y);
+    int get_button_id();
+    void set_is_active(bool value);
+    bool get_is_active();
 };
 
 class LoadingScreen {
@@ -28,7 +32,8 @@ public:
 
 class MainMenu {
     shared_ptr<Controller> controller;
-    vector<shared_ptr<RectangleButton>> buttons;
+    vector<shared_ptr<RectangleButton>> level_selection_btn;
+    shared_ptr<RectangleButton> play_btn;
 public:
     MainMenu(shared_ptr<Controller> controller);
     static void select_level(shared_ptr<Controller> controller, int id);
