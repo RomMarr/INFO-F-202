@@ -13,10 +13,8 @@ Controller::Controller(shared_ptr<Board> board): board{board} {};
 
 void Controller::key_handler(int key_event){
     shared_ptr<Player> player = board->get_player();
-    if (key_event == FL_Escape) board->reset_level();
-
+    if (key_event == 32) board->reset_level(); // key_event 32 is the space bar
     if (check_lose() || check_win()) return;
-
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
