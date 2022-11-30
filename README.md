@@ -15,7 +15,7 @@ Les tâches de bases :
 - [X] Moyen de reset le niveau
 
 Les tâches additionnelles :
-- [ ] Animation des éléments en cours de déplacement
+- [~] Animation des éléments en cours de déplacement
 - [X] Cases de téléportation
 - [ ] Boites de couleur
 - [X] Boîtes légères
