@@ -2,7 +2,6 @@
 #define _BLOCK_H
 
 #include "stdio.h"
-
 #include <FL/Fl.H>
 #include <string>
 #include <memory>

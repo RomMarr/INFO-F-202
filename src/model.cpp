@@ -25,14 +25,6 @@ vector<string> split (string s, string delimiter) {
     return res;
 }
 
-
-
-Board::Board(const string &level_file) {
-    create_matrix_from_file(level_file);
-    if (level_file.size()== 12) lvl = static_cast<int>(level_file[7]) -48;  // if level between 0 and 9
-    else lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48; // if level between 10 and 99
-}
-
 void Board::reset_level_states() {
     board.clear();
     boxes.clear();
@@ -80,6 +72,27 @@ void Board::create_matrix_from_file(const string &file_name){
         }
         file.close(); 
     }
+}
+
+// void Board::set_view(shared_ptr<MainWindow> new_view) {
+//     view = new_view;
+// }
+
+void Board::set_show_board(bool value) {
+    show_board = value;
+}
+
+bool Board::should_show_board() {
+    return show_board;
+}
+
+
+void Board::set_level(const string &level_file) {
+    if (level_file.size()== 12) lvl = static_cast<int>(level_file[7]) -48;  // if level between 0 and 9
+    else lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48; // if level between 10 and 99
+    
+    create_matrix_from_file(level_file);
+    set_show_board(true);
 }
 
 shared_ptr<Player> Board::get_player() {
