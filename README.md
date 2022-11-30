@@ -26,7 +26,7 @@ Les tâches additionnelles :
 - [X] Limite de pas
 - [ ] Déplacement automatique à la souris
 - [ ] Éditeur de niveau
-- [ ] Détection d’échec
+- [X] Détection d’échec
 
 NOTES : 
 - Déconseiller de faire de l'héritage d'après Léopold (?)
