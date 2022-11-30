@@ -19,8 +19,8 @@ Les tâches additionnelles :
 - [X] Cases de téléportation
 - [ ] Boites de couleur
 - [X] Boîtes légères
-- [ ] Compteur de pas
-- [ ] Meilleur score de pas
+- [X] Compteur de pas
+- [X] Meilleur score de pas
 - [X] Écran d’accueil
 - [X] Niveaux et sélection de niveau
 - [X] Limite de pas
@@ -34,8 +34,6 @@ NOTES :
 
 
 Idées :
-- Main :
-  - bouton (ou autre) pour reset le niveau 
 - Changement de terrain :
   - on clique sur un bloc ça passe au type suivant en boucle
   - limité aux classes descendantes de objet
