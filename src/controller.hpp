@@ -11,6 +11,7 @@ class Controller{
 public:
     Controller(shared_ptr<Board> board);
     void key_handler(int key_event);
+    void move_handler(tuple<int, int> move);
     bool check_move(tuple<int,int> move);
     bool check_lose();
     bool check_win();

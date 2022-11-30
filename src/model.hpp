@@ -19,6 +19,7 @@ class Player{
     tuple<int, int> position;  // position in the matrix
     int steps = 0;
     int weight = 0;
+    bool teleported = false;
     tuple<int, int> move_asked;
 public:
     Player(tuple<int, int> position);
@@ -26,9 +27,11 @@ public:
     void setWeight(int new_weight);
     void setMoveAsked(tuple<int, int> new_move_asked);
     void addStep();
+    void changeTeleported();
     tuple<int, int> getPos();
     int getSteps();
     int getWeight();
+    bool isTeleported();
     tuple<int, int> getMoveAsked();
 };
 
@@ -53,6 +56,7 @@ public:
     int get_height();
     int getMaxSteps();
     void reset_level();
+    void teleport(tuple<int, int> pos_teleporter);
 };
 
 

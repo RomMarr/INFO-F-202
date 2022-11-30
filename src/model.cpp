@@ -58,7 +58,6 @@ void Board::create_matrix_from_file(const string &file_name){
             } else if (line_index <= height) {
                 vector<shared_ptr<Block>> block_this_line;
                 for (auto block_type_index: line_splitted) {
-                    cout << block_type_index<<endl;
                     block_this_line.push_back(make_shared<Block>(grid_int_block_type.at(stoi(block_type_index))));
                 }
                 this->board.push_back(block_this_line);
@@ -123,6 +122,26 @@ void Board::reset_level() {
     create_matrix_from_file(current_board_file);
 }
 
+void Board::teleport(tuple<int, int> pos_teleporter){
+    int posX =0;
+    for (auto line: board){
+        int posY = 0;
+        for (auto block: line){
+            if (block->getType() == Block::BlockType::teleporter){
+                 tuple<int,int> pos_block_teleporter = make_tuple(posY,posX);
+                 if(pos_block_teleporter != pos_teleporter) {
+                    get_player()->setPos(pos_block_teleporter);
+                    return;
+                 }
+             }
+            posY++;
+        }
+        posX++;
+    }
+}
+
+
+
 Player::Player(tuple<int, int> position): position{position} {};
 
 void Player::setPos(tuple<int, int> new_pos){
@@ -141,6 +160,10 @@ void Player::addStep(){
     steps += 1;
 }
 
+void Player::changeTeleported(){
+    teleported = (!teleported);
+}
+
 tuple<int, int> Player::getPos(){
     return position;
 }
@@ -155,4 +178,8 @@ int Player::getSteps(){
 
 int Player::getWeight(){
     return weight;
+}
+
+bool Player::isTeleported(){
+    return teleported;
 }
