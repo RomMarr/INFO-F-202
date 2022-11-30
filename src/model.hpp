@@ -55,6 +55,7 @@ public:
     int get_width();
     int get_height();
     int getMaxSteps();
+    bool isInBoard(tuple<int, int> pos_block);
     void reset_level();
     void teleport(tuple<int, int> pos_teleporter);
 };

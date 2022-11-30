@@ -18,6 +18,8 @@ public:
     bool check_move(tuple<int,int> move);
     bool check_lose();
     bool check_win();
+    bool isBlocked(shared_ptr<Block> box);
+    bool failure_detection();
 };
 
 #endif

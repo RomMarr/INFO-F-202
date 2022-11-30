@@ -114,6 +114,13 @@ int Board::getMaxSteps(){
     return max_steps;
 }
 
+bool Board::isInBoard(tuple<int, int> pos){
+    if ((get<0>(pos)<0 || get<0>(pos) >= get_width()) || (get<1>(pos) < 0 || get<1>(pos) >= get_height())) {
+        // check if it will not leave the board with its movement
+        return false;
+    } else return true;
+}
+
 shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
     return board.at(get<1>(coord)).at(get<0>(coord));
 }

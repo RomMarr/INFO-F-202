@@ -57,11 +57,9 @@ bool Controller::check_move(tuple<int, int> move){
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
     tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(player->getMoveAsked()),get<1>(new_pos)+get<1>(player->getMoveAsked())); // new possible position of the box (not checked yet)
 
-    if ((get<0>(new_pos)<0 || get<0>(new_pos) >= board->get_width()) || (get<1>(new_pos) < 0 || get<1>(new_pos) >= board->get_height())) {
-        // check if the player will not leave the board with its movement
+    if (!board->isInBoard(new_pos)) { // check if the player will not leave the board with its movement
         return false;
-    }
-
+    } 
     if (player->getWeight()> 10) {  // A player can push max a weight lesser than 10
         return false;
     }
@@ -88,9 +86,37 @@ bool Controller::check_move(tuple<int, int> move){
     } else return false;
 }
 
+//  bool Controller::isBlocked(shared_ptr<Block> box){
+//     tuple<int, int> pos_box = box->getPos();
+//     vector<tuple<int,int>> next;
+//     vector<bool> blocked;
+//     next.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)+1));
+//     next.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)-1));
+//     next.push_back(make_tuple(get<0>(pos_box)+1,get<1>(pos_box)));
+//     next.push_back(make_tuple(get<0>(pos_box)-1,get<1>(pos_box)));
+//     for (auto i: next){
+//         bool a;
+//         if (board->isInBoard(i)){
+//             shared_ptr<Block> test = board->get_box_on_pos(i);
+//             if (test) if (test->getWeight()==6) a= true;
+//             else if (board->get_block(i)->getType()==Block::BlockType::wall) a= true;
+//             else if (board->get_block(i)->getType()==Block::BlockType::teleporter) a=true;
+//             else a = false;
+//         } else a= true;
+//     blocked.push_back(a);
+//     }
+//     return ((blocked.pop_back()||blocked.pop_back()) && (blocked.pop_back()||blocked.pop_back()));
+//  }
+
+// bool Controller::failure_detection(){
+//     for (shared_ptr<Block> box: board->get_boxes()) {
+//         if (!isBlocked(box)) return false;
+//     }return true;
+// }
+
 bool Controller::check_lose(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
-    return (player->getSteps() >= board->getMaxSteps());
+    return (player->getSteps() >= board->getMaxSteps()); // || failure_detection());
 
 }bool Controller::check_win(){
     for (shared_ptr<Block> box: board->get_boxes()) {
