@@ -6,15 +6,16 @@
 
 using namespace std;
 
-const char * WINDOW_TITLE = "Sokoban";
+const string WINDOW_TITLE = "Sokoban";
+const int REFRESH_RATE = 60; // Frames per seconds
 
 // LOADING SCREEN
-// const string LOADING_TITLE = "SOKOBAN";
-// const string LOADING_AUTHORS = "By Romain Markowitch & Pol Marnette";
+const double LOADING_SCREEN_TIMEOUT = 1.0; // seconds
+const string LOADING_TITLE = "SOKOBAN";
+const string LOADING_AUTHORS = "By Romain Markowitch & Pol Marnette";
 
 // LEVEL SELECTOR
 const string PLAY_BUTTON_TITLE = "Change level";
-
 
 // IN GAME
 const string WIN_TITLE = "Gagné";
@@ -24,5 +25,11 @@ const string CHANGE_LEVEL_BUTTON_TITLE = "Change level";
 
 // COLORS
 const Fl_Color PLAYER_COLOR = fl_rgb_color(0, 0, 255);
+const Fl_Color BLOCK_WALL_COLOR = fl_rgb_color(0, 0, 0);
+const Fl_Color BLOCK_BOX_COLOR = fl_rgb_color(102, 51, 0);
+const Fl_Color BLOCK_LIGHT_BOX_COLOR = fl_rgb_color(204, 102, 0);
+const Fl_Color BLOCK_FLOOR_COLOR = fl_rgb_color(224, 224, 224);
+const Fl_Color BLOCK_TARGET_COLOR = fl_rgb_color(255, 204, 153);
+const Fl_Color BLOCK_TELEPORTER_COLOR = fl_rgb_color(153, 0, 153);
 
 #endif

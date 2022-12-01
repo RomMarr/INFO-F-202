@@ -47,7 +47,6 @@ class MainWindow: public Fl_Window {
     shared_ptr<Controller> controller;
     shared_ptr<RectangleButton> reset_btn;
     shared_ptr<RectangleButton> back_to_menu_btn;
-    static constexpr inline double refreshPerSecond = 60;
     bool show_loading = true;
     void drawBoard();
     void drawBoardInformations();

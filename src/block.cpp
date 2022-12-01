@@ -1,4 +1,6 @@
 #include "block.hpp"
+#include "constants.hpp"
+
 #include <FL/Fl.H>
 
 
@@ -45,11 +47,11 @@ int Block::getHeight(){
 
 Fl_Color Block::getColor(){
     switch (type) {
-        case (BlockType::wall): return fl_rgb_color(0, 0, 0); break;
-        case (BlockType::box): return fl_rgb_color(102, 51, 0); break;
-        case (BlockType::light_box): return fl_rgb_color(204, 102, 0); break;
-        case (BlockType::floor): return fl_rgb_color(224, 224, 224);  break;
-        case (BlockType::target): return fl_rgb_color(255, 204, 153); break;
+        case (BlockType::wall): return BLOCK_WALL_COLOR; break;
+        case (BlockType::box): return BLOCK_BOX_COLOR; break;
+        case (BlockType::light_box): return BLOCK_LIGHT_BOX_COLOR; break;
+        case (BlockType::floor): return BLOCK_FLOOR_COLOR;  break;
+        case (BlockType::target): return BLOCK_TARGET_COLOR; break;
         case (BlockType::teleporter): return fl_rgb_color(153, 0, 153); break;
         default: return fl_rgb_color(100, 100, 100); break;
     }
