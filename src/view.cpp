@@ -53,14 +53,11 @@ bool RectangleButton::getIsActive() {
 }
 
 void LoadingScreen::draw() {
-    std::string title = "SOKOBAN";
-    std::string authors = "By Romain Markowitch & Pol Marnette";
-
     fl_color(fl_rgb_color(0, 0, 0));
     fl_font(FL_HELVETICA, 24);
-    fl_draw(title.c_str(), 50, 100);
+    fl_draw(LOADING_TITLE.c_str(), 50, 100);
     fl_font(FL_HELVETICA, 12);
-    fl_draw(authors.c_str(), 50,  120);
+    fl_draw(LOADING_AUTHORS.c_str(), 50,  120);
 }
 
 MainMenu::MainMenu(shared_ptr<Controller> controller): controller{controller} {};
@@ -105,9 +102,9 @@ void MainMenu::onWindowClicked(int x, int y) {
     }
 }
 
-MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, WINDOW_TITLE), menu(menu) {
-    Fl::add_timeout(1.0/refreshPerSecond, timerCB, this);
-    Fl::add_timeout(1.0, loadingScreenTimeout, this);
+MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, WINDOW_TITLE.c_str()), menu(menu) {
+    Fl::add_timeout(1.0 / REFRESH_RATE, timerCB, this);
+    Fl::add_timeout(LOADING_SCREEN_TIMEOUT, loadingScreenTimeout, this);
 }
 
 void MainWindow::setController(shared_ptr<Controller> new_controller) {
@@ -220,7 +217,7 @@ void MainWindow::hideLoading() {
 void MainWindow::timerCB(void *userdata) {
     MainWindow *window = static_cast<MainWindow*>(userdata);
     window->redraw();
-    Fl::repeat_timeout(1.0/refreshPerSecond, timerCB, userdata);
+    Fl::repeat_timeout(1.0 / REFRESH_RATE, timerCB, userdata);
 }
 
 void MainWindow::loadingScreenTimeout(void *userdata) {
