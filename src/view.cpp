@@ -89,7 +89,7 @@ void MainMenu::onWindowClicked(int x, int y) {
         // Get btn active and play level associate
         for (shared_ptr<RectangleButton> btn: level_selection_btn) {
             if (btn->getIsActive()) {
-                controller->select_level(btn->getButtonId());
+                controller->selectLevel(btn->getButtonId());
                 break;
             }
         }
@@ -158,10 +158,10 @@ void MainWindow::drawBoardInformations() {
     std::string box_on_pos = "Box : " + to_string(board->nbBoxOnTarget()) + "/" + to_string(board->getBoxes().size());
 
     fl_font(FL_HELVETICA_BOLD, 32);
-    if (controller->check_win()) {
+    if (controller->checkWin()) {
         fl_color(fl_rgb_color(0, 102, 0));
         fl_draw(won_title.c_str(), pos_x, 50);
-    } else if (controller->check_lose()) {
+    } else if (controller->checkLose()) {
         fl_color(fl_rgb_color(204, 0, 0));
         fl_draw(lose_title.c_str(), pos_x, 50);
     }
@@ -207,7 +207,7 @@ int MainWindow::handle(int event) {
             menu.onWindowClicked(Fl::event_x(), Fl::event_y());
         } 
     }
-    if (event == FL_KEYDOWN && board->shouldShowBoard()) controller->key_handler(Fl::event_key());
+    if (event == FL_KEYDOWN && board->shouldShowBoard()) controller->keyHandler(Fl::event_key());
 }
 
 void MainWindow::setBoard(shared_ptr<Board> new_board) {

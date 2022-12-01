@@ -13,42 +13,45 @@ using namespace std;
 
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
-void Controller::select_level(int level_id) {
+void Controller::selectLevel(int level_id) {
     board->setLevel("levels/" + to_string(level_id) + ".txt");
 }
 
-void Controller::key_handler(int key_event){
+void Controller::keyHandler(int key_event){
     shared_ptr<Player> player = board->getPlayer();
     if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
-    if (check_lose() || check_win()) return;
+    if (checkLose() || checkWin()) return;
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
-            move_handler(make_tuple(0,-1));
+            moveHandler(make_tuple(0,-1));
             break;
         case FL_Down:
-            move_handler(make_tuple(0,1));
+            moveHandler(make_tuple(0,1));
             break;
         case FL_Right:
-            move_handler(make_tuple(1,0));
+            moveHandler(make_tuple(1,0));
             break;
         case FL_Left:
-            move_handler(make_tuple(-1,0));
+            moveHandler(make_tuple(-1,0));
             break;
         default:
             break;
     }player->setWeight(0);
-    check_win();
-    check_lose();
+    checkWin();
+    checkLose();
 }
 
-void Controller::move_handler(tuple<int, int> move){
+void Controller::moveHandler(tuple<int, int> move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
     tuple<int, int> posPlayer = player->getPos();  // position of the player
     player->setMoveAsked(move);
-    if (check_move(move)){
-        if (!player->isTeleported()) player->setPos(make_tuple(get<0>(posPlayer)+get<0>(player->getMoveAsked()),get<1>(posPlayer)+get<1>(player->getMoveAsked())));
-        else {tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
+    if (checkMove(move)){
+        if (!player->isTeleported()) {
+            player->setPos(make_tuple(get<0>(posPlayer)+get<0>(player->getMoveAsked()),get<1>(posPlayer)+get<1>(player->getMoveAsked())));
+        } else {
+            // new possible position of the player (not checked yet)
+            tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); 
             board->teleport(new_pos);
             player->changeTeleported();
         }
@@ -57,7 +60,7 @@ void Controller::move_handler(tuple<int, int> move){
 }
 
 
-bool Controller::check_move(tuple<int, int> move){
+bool Controller::checkMove(tuple<int, int> move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
     tuple<int, int> posPlayer = player->getPos();  // position of the player
     tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
@@ -77,7 +80,7 @@ bool Controller::check_move(tuple<int, int> move){
         // if the block of arrival is a floor or a target
         if (block_on_move){  // check if ptr != nullptr
             player->setWeight(player->getWeight()+block_on_move->getWeight()); // add the weight of the box pushed by the player
-            if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
+            if (checkMove(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
                 if (player->getWeight() > 10) return false; // too much weight for the player
                 else { 
@@ -116,7 +119,7 @@ bool Controller::check_move(tuple<int, int> move){
     } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3));  // true if blocked at least once horizontally and once vertically
  }
 
- bool Controller::failure_detection(){
+ bool Controller::failureDetection(){
     bool all_blocked = true;  // true if all boxes are blocked
     bool box_blocked;  // test each box at a time
     for (shared_ptr<Block> box: board->getBoxes()) {  // go through all the boxes of the board 
@@ -126,13 +129,13 @@ bool Controller::check_move(tuple<int, int> move){
     else return false;
  }
 
-bool Controller::check_lose(){
+bool Controller::checkLose(){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    return (player->getSteps() >= board->getMaxSteps() || failure_detection()); // true if game over
+    return (player->getSteps() >= board->getMaxSteps() || failureDetection()); // true if game over
 
 }
 
-bool Controller::check_win(){
+bool Controller::checkWin(){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
     if (board->nbBoxOnTarget() != board->getBoxes().size()) return false; // if not all boxes are on a target
     if (board->getBestSteps() == -1 || board->getBestSteps() > player->getSteps()) board->writeBestSteps(); // if best steps has been beaten
