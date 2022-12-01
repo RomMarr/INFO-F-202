@@ -14,8 +14,8 @@
 #include <FL/fl_draw.H>
 
 
-RectangleButton::RectangleButton(int x, int y, int width, int height, std::string buttonTitle, int button_id): 
-    x{x}, y{y}, width{width}, height{height}, buttonTitle{buttonTitle}, button_id{button_id} {
+RectangleButton::RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id): 
+    x{x}, y{y}, width{width}, height{height}, button_title{button_title}, button_id{button_id} {
     
     // -1 is reserved for button not found on getButtonId function
     assert(button_id != -1);
@@ -25,7 +25,7 @@ void RectangleButton::draw() {
     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, x, y, width, height, (is_active ? fl_rgb_color(153, 204, 255) : fl_rgb_color(255, 255, 255)));
     fl_color(fl_rgb_color(0, 0, 0));
     fl_font(FL_HELVETICA, 12);
-    fl_draw(buttonTitle.c_str(), x + 5,  (y + height / 2) + 3);
+    fl_draw(button_title.c_str(), x + 5,  (y + height / 2) + 3);
 }
 
 bool RectangleButton::contains(int click_x, int click_y) {
@@ -39,15 +39,15 @@ bool RectangleButton::contains(int click_x, int click_y) {
     return false;
 }
 
-int RectangleButton::get_button_id() {
+int RectangleButton::getButtonId() {
     return button_id;
 }
 
-void RectangleButton::set_is_active(bool value) {
+void RectangleButton::setIsActive(bool value) {
     is_active = value;
 }
 
-bool RectangleButton::get_is_active() {
+bool RectangleButton::getIsActive() {
     return is_active;
 }
 
@@ -88,8 +88,8 @@ void MainMenu::onWindowClicked(int x, int y) {
     if (play_btn->contains(x, y)) {
         // Get btn active and play level associate
         for (shared_ptr<RectangleButton> btn: level_selection_btn) {
-            if (btn->get_is_active()) {
-                controller->select_level(btn->get_button_id());
+            if (btn->getIsActive()) {
+                controller->select_level(btn->getButtonId());
                 break;
             }
         }
@@ -97,23 +97,23 @@ void MainMenu::onWindowClicked(int x, int y) {
 
     for (shared_ptr<RectangleButton> btn: level_selection_btn) {
         if (btn->contains(x, y)) {
-            btn->set_is_active(true);
+            btn->setIsActive(true);
         } else {
-            btn->set_is_active(false);
+            btn->setIsActive(false);
         }
     }
 }
 
 MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, "Sokoban"), menu(menu) {
-    Fl::add_timeout(1.0/refreshPerSecond, timer_CB, this);
-    Fl::add_timeout(1.0, loading_screen_timeout, this);
+    Fl::add_timeout(1.0/refreshPerSecond, timerCB, this);
+    Fl::add_timeout(1.0, loadingScreenTimeout, this);
 }
 
-void MainWindow::set_controller(shared_ptr<Controller> new_controller) {
+void MainWindow::setController(shared_ptr<Controller> new_controller) {
     controller = new_controller;
 }
 
-void MainWindow::draw_board() {
+void MainWindow::drawBoard() {
     int block_size = std::min(500 / board->get_width(), 500 / board->get_height());
 
     int y_offset = (500 - (block_size * board->get_height())) / 2;
@@ -143,10 +143,10 @@ void MainWindow::draw_board() {
 
     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->get_width(), 0, 1, 500, fl_rgb_color(0, 0, 0));
 
-    draw_board_informations();
+    drawBoardInformations();
 }
 
-void MainWindow::draw_board_informations() {
+void MainWindow::drawBoardInformations() {
     int pos_x = 525;
 
     std::string won_title = "Gagné";
@@ -192,7 +192,7 @@ void MainWindow::draw() {
     if (show_loading) {
         LoadingScreen::draw();
     } else if (board->should_show_board()) {
-        draw_board();
+        drawBoard();
     } else {
         menu.draw();
     }
@@ -210,21 +210,21 @@ int MainWindow::handle(int event) {
     if (event == FL_KEYDOWN && board->should_show_board()) controller->key_handler(Fl::event_key());
 }
 
-void MainWindow::set_board(shared_ptr<Board> new_board) {
+void MainWindow::setBoard(shared_ptr<Board> new_board) {
     board = new_board;
 }
 
-void MainWindow::hide_loading() {
+void MainWindow::hideLoading() {
     show_loading = false;
 }
 
-void MainWindow::timer_CB(void *userdata) {
-    MainWindow *o = static_cast<MainWindow*>(userdata);
-    o->redraw();
-    Fl::repeat_timeout(1.0/refreshPerSecond, timer_CB, userdata);
+void MainWindow::timerCB(void *userdata) {
+    MainWindow *window = static_cast<MainWindow*>(userdata);
+    window->redraw();
+    Fl::repeat_timeout(1.0/refreshPerSecond, timerCB, userdata);
 }
 
-void MainWindow::loading_screen_timeout(void *userdata) {
-    MainWindow *o = static_cast<MainWindow*>(userdata);
-    o->hide_loading();
+void MainWindow::loadingScreenTimeout(void *userdata) {
+    MainWindow *window = static_cast<MainWindow*>(userdata);
+    window->hideLoading();
 }

@@ -14,15 +14,15 @@
 
 class RectangleButton {
     int x, y, width, height, button_id;
-    std::string buttonTitle;
+    std::string button_title;
     bool is_active = false;
 public:
-    RectangleButton(int x, int y, int width, int height, std::string buttonTitle, int button_id = 0);
+    RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id = 0);
     void draw();
     bool contains(int x, int y);
-    int get_button_id();
-    void set_is_active(bool value);
-    bool get_is_active();
+    int getButtonId();
+    void setIsActive(bool value);
+    bool getIsActive();
 };
 
 class LoadingScreen {
@@ -36,7 +36,7 @@ class MainMenu {
     shared_ptr<RectangleButton> play_btn;
 public:
     MainMenu(shared_ptr<Controller> controller);
-    static void select_level(shared_ptr<Controller> controller, int id);
+    static void selectLevel(shared_ptr<Controller> controller, int id);
     void draw();
     void onWindowClicked(int x, int y);
 };
@@ -49,18 +49,18 @@ class MainWindow: public Fl_Window {
     shared_ptr<RectangleButton> back_to_menu_btn;
     static constexpr inline double refreshPerSecond = 60;
     bool show_loading = true;
-    void draw_board();
-    void draw_board_informations();
-    void draw_menu();
+    void drawBoard();
+    void drawBoardInformations();
+    void drawMenu();
 public:
     MainWindow(MainMenu);
-    void set_controller(shared_ptr<Controller> controller);
-    void set_board(shared_ptr<Board> new_board);
+    void setController(shared_ptr<Controller> controller);
+    void setBoard(shared_ptr<Board> new_board);
     void draw() override;
     int handle(int event) override;
-    void hide_loading();
-    static void timer_CB(void *userdata);
-    static void loading_screen_timeout(void *userdata);
+    void hideLoading();
+    static void timerCB(void *userdata);
+    static void loadingScreenTimeout(void *userdata);
 };
 
 #endif

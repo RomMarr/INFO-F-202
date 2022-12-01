@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
   MainMenu menu(controller);
   shared_ptr<MainWindow> window = make_shared<MainWindow>(menu);
 
-  window->set_controller(controller);
-  window->set_board(board);
+  window->setController(controller);
+  window->setBoard(board);
 
   window->show(argc, argv);
 
