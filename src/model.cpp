@@ -36,7 +36,7 @@ void Board::createMatrixFromFile(const string &file_name){
 
     readBestSteps();
 
-    int width = 0, height = 0, line_index = 0;
+    int height = 0, line_index = 0;
     bool next_is_player_coord = false;
     string line;
     ifstream file(file_name);
@@ -46,7 +46,6 @@ void Board::createMatrixFromFile(const string &file_name){
             vector<string> line_splitted = split(line, " ");
             if (line_index == 0) {
                 height = stoi(line_splitted.at(0));
-                width = stoi(line_splitted.at(1));
             } else if (line_index <= height) {
                 vector<shared_ptr<Block>> block_this_line;
                 for (auto block_type_index: line_splitted) {
