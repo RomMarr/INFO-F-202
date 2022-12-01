@@ -137,7 +137,7 @@ bool Controller::checkLose(){
 
 bool Controller::checkWin(){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    if (board->nbBoxOnTarget() != board->getBoxes().size()) return false; // if not all boxes are on a target
+    if (board->nbBoxOnTarget() != static_cast<int>(board->getBoxes().size())) return false; // if not all boxes are on a target
     if (board->getBestSteps() == -1 || board->getBestSteps() > player->getSteps()) board->writeBestSteps(); // if best steps has been beaten
     return true;
 }

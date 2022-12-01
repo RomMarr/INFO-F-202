@@ -16,7 +16,7 @@
 
 
 RectangleButton::RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id): 
-    x{x}, y{y}, width{width}, height{height}, button_title{button_title}, button_id{button_id} {
+    x{x}, y{y}, width{width}, height{height}, button_id{button_id}, button_title{button_title} {
     
     // -1 is reserved for button not found on getButtonId function
     assert(button_id != -1);
@@ -116,8 +116,8 @@ void MainWindow::drawBoard() {
 
     int y_offset = (500 - (block_size * board->getHeight())) / 2;
 
-    for (size_t y = 0; y < board->getHeight(); y++) {
-        for (size_t x = 0; x < board->getWidth(); x++) {
+    for (int y = 0; y < board->getHeight(); y++) {
+        for (int x = 0; x < board->getWidth(); x++) {
             shared_ptr<Player> player_here = board->getPlayer(make_tuple(x, y));
             shared_ptr<Block> box_here = board->getBox(make_tuple(x, y));
 
@@ -199,11 +199,18 @@ int MainWindow::handle(int event) {
         if (board->shouldShowBoard()) {
             if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->resetLevel();
             if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->setShowBoard(false);
+            return 1;    
         } else if (!show_loading) {
             menu.onWindowClicked(Fl::event_x(), Fl::event_y());
+            return 1;    
         } 
     }
-    if (event == FL_KEYDOWN && board->shouldShowBoard()) controller->keyHandler(Fl::event_key());
+    if (event == FL_KEYDOWN && board->shouldShowBoard()) {
+        controller->keyHandler(Fl::event_key());
+        return 1;    
+    }
+
+    return 0;
 }
 
 void MainWindow::setBoard(shared_ptr<Board> new_board) {
