@@ -95,9 +95,9 @@ shared_ptr<Player> Board::getPlayer() {
     return player; // shared ptr to the player
 }
 
-shared_ptr<Block> Board::getBox(tuple<int, int> pos_actual){
+shared_ptr<Block> Board::getBox(tuple<int, int> actual_pos){
     for (auto box: boxes){  // go through all the boxes
-        if (box->getPos() == pos_actual) return box;  // shared ptr to the box
+        if (box->getPos() == actual_pos) return box;  // shared ptr to the box
     }
     return nullptr;
 }

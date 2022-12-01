@@ -30,10 +30,10 @@ class Board{
     int readBestSteps();
 public:
     shared_ptr<Player> getPlayer(); // Get the player
-    shared_ptr<Player> getPlayer(tuple <int, int> position); // Get the player on position
-    shared_ptr<Block> getBlock(tuple<int, int> position);
-    vector<shared_ptr<Block>> getBoxes();
-    shared_ptr<Block> getBox(tuple <int, int>);
+    shared_ptr<Player> getPlayer(tuple <int, int> position); // get a ptr to the player on position or nullptr if the player isn't on that position
+    shared_ptr<Block> getBlock(tuple<int, int> position);  // get a ptr to the block of the position given 
+    vector<shared_ptr<Block>> getBoxes();  // get a list of ptr of all the boxes
+    shared_ptr<Block> getBox(tuple <int, int> position);  // get a ptr to the box on the position or nullptr if there is no box on it
     void setShowBoard(bool value);
     bool shouldShowBoard(); // Should the board be shown (is the board ready)
     void setLevel(const string &level_file);
