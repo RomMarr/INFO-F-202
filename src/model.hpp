@@ -14,6 +14,18 @@
 
 using namespace std;
 
+class Point{
+    int posX;
+    int posY;
+public:
+    Point(int posX, int posY);
+    Point sumPoints(Point a, Point b);
+    void setPosX(int new_posX);
+    void setPosY(int new_posY);
+    int getPosX();
+    int getPosY();
+};
+
 
 class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target, Block::BlockType::teleporter};

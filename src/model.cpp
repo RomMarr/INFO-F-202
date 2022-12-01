@@ -208,3 +208,28 @@ int Board::nbBoxOnTarget() {
         }
      } return nb_box;
 }
+
+Point::Point(int posX, int posY): posX{posX}, posY{posY} {};
+
+int Point::getPosX(){
+    return posX;
+}
+
+int Point::getPosY(){
+    return posY;
+}
+
+Point Point::sumPoints(Point a, Point b){
+    int new_posX = a.getPosX() + b.getPosX();
+    int new_posY = a.getPosY() + b.getPosY();
+    Point new_point(new_posX, new_posY);
+    return new_point;
+}
+
+void Point::setPosX(int new_posX){
+    posX = new_posX;
+}
+
+void Point::setPosY(int new_posY){
+    posY = new_posY;
+}
