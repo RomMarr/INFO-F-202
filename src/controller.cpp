@@ -1,15 +1,21 @@
 #include "controller.hpp"
+
 #include "model.hpp"
+#include "block.hpp"
 
 #include <FL/Fl.H>
 #include <memory>
 #include <tuple>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
+void Controller::select_level(int level_id) {
+    board->set_level("levels/" + to_string(level_id) + ".txt");
+}
 
 void Controller::key_handler(int key_event){
     shared_ptr<Player> player = board->get_player();
@@ -128,10 +134,7 @@ bool Controller::check_lose(){
 
 bool Controller::check_win(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
-    for (shared_ptr<Block> box: board->get_boxes()) {  // go through all the boxes
-        if (board->get_block(box->getPos())->getType() != Block::BlockType::target){  // if box not on target 
-            return false;
-        }
-     } if (board->read_bestSteps()> player->getSteps()) board->write_bestSteps();  // if number of steps is less than the limit given
-     return true;
+    if (board->nb_box_on_target() != board->get_boxes().size()) return false; // if not all boxes are on a target
+    if (board->get_best_steps() == -1 || board->get_best_steps() > player->getSteps()) board->write_bestSteps(); // if best steps has been beaten
+    return true;
 }
