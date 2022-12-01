@@ -106,7 +106,7 @@ bool Controller::check_move(tuple<int, int> move){
         if (board->isInBoard(i)){  // if position (checked) is in the board
             shared_ptr<Block> box_on_case = board->get_box_on_pos(i);  // ptr to a box or nullptr if no box on the case
             if (box_on_case) { // if box on case
-                if ((box->getWeight()==6) && (box_on_case->getWeight()==6)) blocked.push_back(true);  // heavy box blocked by another heavy box
+                if (box_on_case->getWeight()==6) blocked.push_back(true);  // heavy box blocked by another heavy box
                 else blocked.push_back(false);  // if it's a light box 
             }
             else if (board->get_block(i)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
