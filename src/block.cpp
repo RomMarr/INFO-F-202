@@ -4,7 +4,7 @@
 
 Block::Block(BlockType type): type{type} {
     if (type == BlockType::box) {
-        this->setWeight(6);
+        this->setWeight(9);
     } else if (type == BlockType::light_box) {
         this->setWeight(3);
     }
