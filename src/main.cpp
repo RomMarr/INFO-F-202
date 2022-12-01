@@ -12,6 +12,7 @@
 
 using namespace std;
 
+
 int main(int argc, char *argv[]) {
   string level_file = "levels/2.txt";
 

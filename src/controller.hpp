@@ -7,7 +7,6 @@
 #include <FL/Fl.H>
 #include <memory>
 #include <tuple>
-// controller du MVC : donne les mouvements au model en fct des entrées de l'utilisateur
 
 
 class Controller {

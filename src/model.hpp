@@ -12,8 +12,8 @@
 #include <vector>
 #include <tuple>
 
-
 using namespace std;
+
 
 class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target, Block::BlockType::teleporter};

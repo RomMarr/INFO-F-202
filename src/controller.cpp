@@ -12,6 +12,7 @@
 
 using namespace std;
 
+
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
 void Controller::selectLevel(int level_id) {

@@ -18,12 +18,12 @@ void Player::setMoveAsked(tuple<int, int> new_move_asked){
     move_asked = new_move_asked;
 }
 
-void Player::addStep(){
+void Player::addStep(){ 
     steps += 1;
 }
 
 void Player::changeTeleported(){
-    teleported = (!teleported);
+    teleported = (!teleported); // change the boolean of teleported
 }
 
 tuple<int, int> Player::getPos(){
