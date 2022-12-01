@@ -5,7 +5,6 @@
 #include <fstream>
 #include <FL/Fl.H>
 
-
 // The following function come from https://stackoverflow.com/a/46931770/7905936
 vector<string> split (string s, string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
@@ -22,20 +21,20 @@ vector<string> split (string s, string delimiter) {
     return res;
 }
 
-void Board::reset_level_states() {
+void Board::resetLevelStates() {
     board.clear();
     boxes.clear();
     player = nullptr;
 }
 
-void Board::create_matrix_from_file(const string &file_name){
+void Board::createMatrixFromFile(const string &file_name){
     // Save in memory the current level being played
     current_board_file = file_name;
 
     // Reset the board matrix
-    reset_level_states();
+    resetLevelStates();
 
-    read_bestSteps();
+    readBestSteps();
 
     int width = 0, height = 0, line_index = 0;
     bool next_is_player_coord = false;
@@ -73,51 +72,51 @@ void Board::create_matrix_from_file(const string &file_name){
     }
 }
 
-void Board::set_show_board(bool value) {
+void Board::setShowBoard(bool value) {
     show_board = value;
 }
 
-bool Board::should_show_board() {
+bool Board::shouldShowBoard() {
     return show_board;
 }
 
-void Board::set_level(const string &level_file) {
+void Board::setLevel(const string &level_file) {
     if (level_file.size()== 12) { // if level between 0 and 9 
         lvl = static_cast<int>(level_file[7]) -48;
     }  else { // if level between 10 and 99
         lvl = (static_cast<int>(level_file[7])-48)*10 + static_cast<int>(level_file[8])-48;
     }
-    create_matrix_from_file(level_file);
-    set_show_board(true);
+    createMatrixFromFile(level_file);
+    setShowBoard(true);
 }
 
-shared_ptr<Player> Board::get_player() {
+shared_ptr<Player> Board::getPlayer() {
     return player; // shared ptr to the player
 }
 
-shared_ptr<Block> Board::get_box_on_pos(tuple<int, int> pos_actual){
+shared_ptr<Block> Board::getBox(tuple<int, int> pos_actual){
     for (auto box: boxes){  // go through all the boxes
         if (box->getPos() == pos_actual) return box;  // shared ptr to the box
     }
     return nullptr;
 }
 
-vector<shared_ptr<Block>> Board::get_boxes() {
+vector<shared_ptr<Block>> Board::getBoxes() {
     return boxes;  // vector of all the boxes of the board
 }
 
-shared_ptr<Player> Board::get_player_on_pos(tuple<int, int> pos_actual){
+shared_ptr<Player> Board::getPlayer(tuple<int, int> pos_actual){
     if (player->getPos() == pos_actual) { // if the player is on the position given
         return player;  // shared ptr to the player 
     }
     return nullptr;
 }
 
-int Board::get_width() {
-    return get_height() > 0 ? board.at(0).size() : 0;
+int Board::getWidth() {
+    return getHeight() > 0 ? board.at(0).size() : 0;
 }
 
-int Board::get_height() {
+int Board::getHeight() {
     return board.size();
 }
 
@@ -130,29 +129,29 @@ int Board::getLvl() {
 }
 
 bool Board::isInBoard(tuple<int, int> pos){
-    if ((get<0>(pos)<0 || get<0>(pos) >= get_width()) || (get<1>(pos) < 0 || get<1>(pos) >= get_height())) {
+    if ((get<0>(pos)<0 || get<0>(pos) >= getWidth()) || (get<1>(pos) < 0 || get<1>(pos) >= getHeight())) {
         // check if it will leave the board with its movement
         return false;
     } else return true;
 }
 
-shared_ptr<Block> Board::get_block(tuple<int, int> coord) {
+shared_ptr<Block> Board::getBlock(tuple<int, int> coord) {
     return board.at(get<1>(coord)).at(get<0>(coord));  // shared ptr to the block at the position given
 }
 
-void Board::reset_level() {
-    create_matrix_from_file(current_board_file);
+void Board::resetLevel() {
+    createMatrixFromFile(current_board_file);
 }
 
 void Board::teleport(tuple<int, int> pos_teleporter){
     int posY =0;
-    for (auto line: board){  // go through teh board
+    for (auto line: board){  // go through the board
         int posX = 0;
-        for (auto block: line){ // go through teh board
+        for (auto block: line){ // go through the board
             if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
                  tuple<int,int> pos_block_teleporter = make_tuple(posX,posY);  
                  if(pos_block_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
-                    get_player()->setPos(pos_block_teleporter); // teleport (change position) the player
+                    getPlayer()->setPos(pos_block_teleporter); // teleport (change position) the player
                     return;  // leave the loop
                  }
              }
@@ -162,11 +161,11 @@ void Board::teleport(tuple<int, int> pos_teleporter){
     }
 }
 
-int Board::get_best_steps() {
+int Board::getBestSteps() {
     return best_steps;
 }
 
-int Board::read_bestSteps(){
+int Board::readBestSteps(){
     int index_line = 0;
     int bestSteps = 9999;
     string line;
@@ -181,7 +180,7 @@ int Board::read_bestSteps(){
     best_steps = bestSteps;
 }
 
-void Board::write_bestSteps(){
+void Board::writeBestSteps(){
     int index_line = 0; // matches the levels (lvl = 0 -> index_line = 0 )
     string line;
     ofstream file_write("tmp.txt");
@@ -200,10 +199,10 @@ void Board::write_bestSteps(){
     } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "tmp.txt" << endl; // if temporary file can not be opened
 }
 
-int Board::nb_box_on_target() {
+int Board::nbBoxOnTarget() {
     int nb_box = 0;
-    for (shared_ptr<Block> box: get_boxes()) {  // go through all the boxes 
-        if (get_block(box->getPos())->getType() == Block::BlockType::target) {  // true if the box is on a target
+    for (shared_ptr<Block> box: getBoxes()) {  // go through all the boxes 
+        if (getBlock(box->getPos())->getType() == Block::BlockType::target) {  // true if the box is on a target
             nb_box += 1;
         }
      } return nb_box;
@@ -230,7 +229,6 @@ void Player::addStep(){
 void Player::changeTeleported(){
     teleported = (!teleported);
 }
-
 
 tuple<int, int> Player::getPos(){
     return position;

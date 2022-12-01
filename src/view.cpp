@@ -114,14 +114,14 @@ void MainWindow::setController(shared_ptr<Controller> new_controller) {
 }
 
 void MainWindow::drawBoard() {
-    int block_size = std::min(500 / board->get_width(), 500 / board->get_height());
+    int block_size = std::min(500 / board->getWidth(), 500 / board->getHeight());
 
-    int y_offset = (500 - (block_size * board->get_height())) / 2;
+    int y_offset = (500 - (block_size * board->getHeight())) / 2;
 
-    for (size_t y = 0; y < board->get_height(); y++) {
-        for (size_t x = 0; x < board->get_width(); x++) {
-            shared_ptr<Player> player_here = board->get_player_on_pos(make_tuple(x, y));
-            shared_ptr<Block> box_here = board->get_box_on_pos(make_tuple(x, y));
+    for (size_t y = 0; y < board->getHeight(); y++) {
+        for (size_t x = 0; x < board->getWidth(); x++) {
+            shared_ptr<Player> player_here = board->getPlayer(make_tuple(x, y));
+            shared_ptr<Block> box_here = board->getBox(make_tuple(x, y));
 
             int pos_x = block_size * x;
             int pos_y = y_offset + block_size * y;
@@ -131,7 +131,7 @@ void MainWindow::drawBoard() {
             } else if (box_here) {
                 fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, box_here->getColor());
             } else {
-                shared_ptr<Block> cell = board->get_block(make_tuple(x, y));
+                shared_ptr<Block> cell = board->getBlock(make_tuple(x, y));
                 if (cell->getType() == Block::BlockType::target) {
                     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x  + (block_size / 4), pos_y  + (block_size / 4), block_size / 2, block_size / 2, cell->getColor());
                 } else {
@@ -141,7 +141,7 @@ void MainWindow::drawBoard() {
         }
     }
 
-    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->get_width(), 0, 1, 500, fl_rgb_color(0, 0, 0));
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->getWidth(), 0, 1, 500, fl_rgb_color(0, 0, 0));
 
     drawBoardInformations();
 }
@@ -153,9 +153,9 @@ void MainWindow::drawBoardInformations() {
     std::string lose_title = "Perdu";
 
     std::string title = "Level " + to_string(board->getLvl());
-    std::string steps_information = "Steps " + to_string(board->get_player()->getSteps()) + "/" + to_string(board->getMaxSteps());
-    std::string best_steps = board->get_best_steps() == -1 ? "No best score" : "Best : " + to_string(board->get_best_steps());
-    std::string box_on_pos = "Box : " + to_string(board->nb_box_on_target()) + "/" + to_string(board->get_boxes().size());
+    std::string steps_information = "Steps " + to_string(board->getPlayer()->getSteps()) + "/" + to_string(board->getMaxSteps());
+    std::string best_steps = board->getBestSteps() == -1 ? "No best score" : "Best : " + to_string(board->getBestSteps());
+    std::string box_on_pos = "Box : " + to_string(board->nbBoxOnTarget()) + "/" + to_string(board->getBoxes().size());
 
     fl_font(FL_HELVETICA_BOLD, 32);
     if (controller->check_win()) {
@@ -170,7 +170,7 @@ void MainWindow::drawBoardInformations() {
     fl_font(FL_HELVETICA, 24);
     fl_draw(title.c_str(), pos_x, 120);
 
-    fl_color((board->get_player()->getSteps() >= board->getMaxSteps() ?  fl_rgb_color(255, 0, 0) : fl_rgb_color(0, 0, 0)));
+    fl_color((board->getPlayer()->getSteps() >= board->getMaxSteps() ?  fl_rgb_color(255, 0, 0) : fl_rgb_color(0, 0, 0)));
     fl_font(FL_HELVETICA, 14);
     fl_draw(steps_information.c_str(), pos_x, 150);
 
@@ -191,7 +191,7 @@ void MainWindow::draw() {
 
     if (show_loading) {
         LoadingScreen::draw();
-    } else if (board->should_show_board()) {
+    } else if (board->shouldShowBoard()) {
         drawBoard();
     } else {
         menu.draw();
@@ -200,14 +200,14 @@ void MainWindow::draw() {
 
 int MainWindow::handle(int event) {
     if (event == FL_PUSH) {
-        if (board->should_show_board()) {
-            if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->reset_level();
-            if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->set_show_board(false);
+        if (board->shouldShowBoard()) {
+            if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->resetLevel();
+            if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->setShowBoard(false);
         } else if (!show_loading) {
             menu.onWindowClicked(Fl::event_x(), Fl::event_y());
         } 
     }
-    if (event == FL_KEYDOWN && board->should_show_board()) controller->key_handler(Fl::event_key());
+    if (event == FL_KEYDOWN && board->shouldShowBoard()) controller->key_handler(Fl::event_key());
 }
 
 void MainWindow::setBoard(shared_ptr<Board> new_board) {
