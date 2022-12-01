@@ -75,7 +75,7 @@ void MainMenu::draw() {
     }
 
     if (!play_btn) {
-        play_btn = make_shared<RectangleButton>(50, 100, 130, 30, "Play");
+        play_btn = make_shared<RectangleButton>(50, 100, 130, 30, PLAY_BUTTON_TITLE);
     }
 
     for (shared_ptr<RectangleButton> btn: level_selection_btn) {
@@ -105,7 +105,7 @@ void MainMenu::onWindowClicked(int x, int y) {
     }
 }
 
-MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, "Sokoban"), menu(menu) {
+MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, WINDOW_TITLE), menu(menu) {
     Fl::add_timeout(1.0/refreshPerSecond, timerCB, this);
     Fl::add_timeout(1.0, loadingScreenTimeout, this);
 }
@@ -151,9 +151,6 @@ void MainWindow::drawBoard() {
 void MainWindow::drawBoardInformations() {
     int pos_x = 525;
 
-    std::string won_title = "Gagné";
-    std::string lose_title = "Perdu";
-
     std::string title = "Level " + to_string(board->getLvl());
     std::string steps_information = "Steps " + to_string(board->getPlayer()->getSteps()) + "/" + to_string(board->getMaxSteps());
     std::string best_steps = board->getBestSteps() == -1 ? "No best score" : "Best : " + to_string(board->getBestSteps());
@@ -162,10 +159,10 @@ void MainWindow::drawBoardInformations() {
     fl_font(FL_HELVETICA_BOLD, 32);
     if (controller->checkWin()) {
         fl_color(fl_rgb_color(0, 102, 0));
-        fl_draw(won_title.c_str(), pos_x, 50);
+        fl_draw(WIN_TITLE.c_str(), pos_x, 50);
     } else if (controller->checkLose()) {
         fl_color(fl_rgb_color(204, 0, 0));
-        fl_draw(lose_title.c_str(), pos_x, 50);
+        fl_draw(LOST_TITLE.c_str(), pos_x, 50);
     }
 
     fl_color(fl_rgb_color(0, 0, 0));
@@ -181,8 +178,8 @@ void MainWindow::drawBoardInformations() {
 
     fl_draw(box_on_pos.c_str(), pos_x, 190);
 
-    if (!reset_btn) reset_btn = make_shared<RectangleButton>(pos_x, 220, 200, 30, "Reset level");
-    if (!back_to_menu_btn) back_to_menu_btn = make_shared<RectangleButton>(pos_x, 270, 200, 30, "Change level");
+    if (!reset_btn) reset_btn = make_shared<RectangleButton>(pos_x, 220, 200, 30, RESET_BUTTON_TITLE);
+    if (!back_to_menu_btn) back_to_menu_btn = make_shared<RectangleButton>(pos_x, 270, 200, 30, CHANGE_LEVEL_BUTTON_TITLE);
 
     reset_btn->draw();
     back_to_menu_btn->draw();
