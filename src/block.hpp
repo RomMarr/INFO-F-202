@@ -25,7 +25,6 @@ private:
     tuple<int,int> pos;    // position du Block
 public:
     Block(BlockType type) ;
-    void draw(int x, int y);
     void setWeight(int weight);
     void setType(BlockType new_type);
     void setPos(tuple<int, int> new_position);

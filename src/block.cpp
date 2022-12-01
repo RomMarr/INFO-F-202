@@ -12,9 +12,6 @@ Block::Block(BlockType type): type{type} {
     }
 }
 
-void Block::draw(int x, int y) {
-}
-
 void Block::setWeight(int new_weight){
     weight = new_weight; 
 }
