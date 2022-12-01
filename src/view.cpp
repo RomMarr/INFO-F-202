@@ -1,6 +1,7 @@
 #include "view.hpp"
 #include "model.hpp"
 #include "controller.hpp"
+#include "constants.hpp"
 
 #include <iostream>
 #include <string>
@@ -127,9 +128,10 @@ void MainWindow::drawBoard() {
             int pos_y = y_offset + block_size * y;
 
             if (player_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 255));
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, PLAYER_COLOR);
             } else if (box_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, box_here->getColor());
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 0));
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x + 1, pos_y + 1, block_size - 2, block_size - 2, box_here->getColor());
             } else {
                 shared_ptr<Block> cell = board->getBlock(make_tuple(x, y));
                 if (cell->getType() == Block::BlockType::target) {
