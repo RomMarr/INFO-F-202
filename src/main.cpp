@@ -13,6 +13,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
+  string level_file = "levels/2.txt";
+
   shared_ptr<Board> board = make_shared<Board>(); 
   shared_ptr<Controller> controller = make_shared<Controller>(board);
 

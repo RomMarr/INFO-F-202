@@ -39,7 +39,7 @@ void Controller::key_handler(int key_event){
             break;
     }player->setWeight(0);
     check_win();
-    if (check_lose()) cout << "LOOOOOOSE"<<endl;;
+    check_lose();
 }
 
 void Controller::move_handler(tuple<int, int> move){
@@ -80,9 +80,11 @@ bool Controller::check_move(tuple<int, int> move){
             if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
                 // recursive call to check the next block until we have a wall, a free block or too much weight
                 if (player->getWeight() > 10) return false; // too much weight for the player
-                else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
-                    return true; 
-                    }
+                else { 
+                    if (board->get_block(new_pos_box)->getType()==Block::BlockType::teleporter) {cout <<"ici"<<endl; return false;}
+                    else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
+                    return true; } 
+                }
             }else return false;
         }return true;
     } else if (destination_type == Block::BlockType::teleporter){ // if the block of arrival is a teleporter
@@ -92,37 +94,42 @@ bool Controller::check_move(tuple<int, int> move){
     } else return false;
 }
 
-//  bool Controller::isBlocked(shared_ptr<Block> box){
-//     tuple<int, int> pos_box = box->getPos();
-//     vector<tuple<int,int>> next;
-//     vector<bool> blocked;
-//     next.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)+1));
-//     next.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)-1));
-//     next.push_back(make_tuple(get<0>(pos_box)+1,get<1>(pos_box)));
-//     next.push_back(make_tuple(get<0>(pos_box)-1,get<1>(pos_box)));
-//     for (auto i: next){
-//         bool a;
-//         if (board->isInBoard(i)){
-//             shared_ptr<Block> test = board->get_box_on_pos(i);
-//             if (test) if (test->getWeight()==6) a= true;
-//             else if (board->get_block(i)->getType()==Block::BlockType::wall) a= true;
-//             else if (board->get_block(i)->getType()==Block::BlockType::teleporter) a=true;
-//             else a = false;
-//         } else a= true;
-//     blocked.push_back(a);
-//     }
-//     return ((blocked.pop_back()||blocked.pop_back()) && (blocked.pop_back()||blocked.pop_back()));
-//  }
+ bool Controller::isBlocked(shared_ptr<Block> box){
+    tuple<int, int> pos_box = box->getPos();  // position of the box to check
+    vector<tuple<int,int>> next_case;  // list of positions of cases to try to see if it's blocked
+    vector<bool> blocked;  // list of booleans (true if blocked, false if not)
+    next_case.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)+1));  // add position to try to the list
+    next_case.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)-1));
+    next_case.push_back(make_tuple(get<0>(pos_box)+1,get<1>(pos_box)));
+    next_case.push_back(make_tuple(get<0>(pos_box)-1,get<1>(pos_box)));
+    for (auto i: next_case){  // loop with all the elements of the liste next_case
+        if (board->isInBoard(i)){  // if position (checked) is in the board
+            shared_ptr<Block> box_on_case = board->get_box_on_pos(i);  // ptr to a box or nullptr if no box on the case
+            if (box_on_case) { // if box on case
+                if ((box->getWeight()==6) && (box_on_case->getWeight()==6)) blocked.push_back(true);  // heavy box blocked by another heavy box
+                else blocked.push_back(false);  // if it's a light box 
+            }
+            else if (board->get_block(i)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
+            else if (board->get_block(i)->getType()==Block::BlockType::teleporter)blocked.push_back(true); // box blocked by a teleporter
+            else blocked.push_back(false); // position does not block the box
+        } else blocked.push_back(true);  // position is not on the board
+    } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3));  // true if blocked at least once horizontally and once vertically
+ }
 
-// bool Controller::failure_detection(){
-//     for (shared_ptr<Block> box: board->get_boxes()) {
-//         if (!isBlocked(box)) return false;
-//     }return true;
-// }
+ bool Controller::failure_detection(){
+    bool all_blocked = true;  // true if all boxes are blocked
+    bool box_blocked;  // test each box at a time
+    for (shared_ptr<Block> box: board->get_boxes()) {  // go through all the boxes of the board 
+        box_blocked = isBlocked(box);  // test if box is blocked
+        all_blocked = (all_blocked && box_blocked);
+    }if (all_blocked) return true; // all boxes are blocked
+    else return false;
+ }
 
 bool Controller::check_lose(){
     shared_ptr<Player> player = board->get_player();  // get the ptr to the player
-    return (player->getSteps() >= board->getMaxSteps()); // || failure_detection());
+    return (player->getSteps() >= board->getMaxSteps() || failure_detection()); // true if game over
+
 }
 
 bool Controller::check_win(){
