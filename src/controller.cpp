@@ -26,16 +26,16 @@ void Controller::keyHandler(int key_event){
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
-            moveHandler(Point(0,-1));
+            moveHandler(Point{0,-1});
             break;
         case FL_Down:
-            moveHandler(Point(0,1));
+            moveHandler(Point{0,1});
             break;
         case FL_Right:
-            moveHandler(Point(1,0));
+            moveHandler(Point{1,0});
             break;
         case FL_Left:
-            moveHandler(Point(-1,0));
+            moveHandler(Point{-1,0});
             break;
         default:
             break;
@@ -105,10 +105,10 @@ bool Controller::checkMove(Point move){
     Point pos_box = box->getPos();  // position of the box to check
     vector<Point> next_case;  // list of positions of cases to try to see if it's blocked
     vector<bool> blocked;  // list of booleans (true if blocked, false if not)
-    next_case.push_back(pos_box + Point(0, 1)); // add position to try to the list
-    next_case.push_back(pos_box + Point(0, -1));
-    next_case.push_back(pos_box + Point(1, 0));
-    next_case.push_back(pos_box + Point(-1, 0));
+    next_case.push_back(pos_box + Point{0, 1}); // add position to try to the list
+    next_case.push_back(pos_box + Point{0, -1});
+    next_case.push_back(pos_box + Point{1, 0});
+    next_case.push_back(pos_box + Point{-1, 0});
     for (auto i: next_case){  // loop with all the elements of the liste next_case
         if (board->isInBoard(i)){  // if position (checked) is in the board
             shared_ptr<Block> box_on_case = board->getBox(i);  // ptr to a box or nullptr if no box on the case

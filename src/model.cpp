@@ -62,7 +62,7 @@ void Board::createMatrixFromFile(const string &file_name){
                     max_steps = stoi(line_splitted.at(2));
                 } else {
                     shared_ptr<Block> box = make_shared<Block>((stoi(line_splitted.at(2)) ? Block::BlockType::light_box : Block::BlockType::box));
-                    box->setPos(Point(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    box->setPos(Point{stoi(line_splitted.at(0)), stoi(line_splitted.at(1))});
                     boxes.push_back(box);
                 }
             }
@@ -150,7 +150,7 @@ void Board::teleport(Point pos_teleporter){
         int posX = 0;
         for (auto block: line){ // go through the board
             if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
-                 Point pos_block_teleporter = Point(posX,posY);  
+                 Point pos_block_teleporter = Point{posX,posY};  
                  if(pos_block_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
                     getPlayer()->setPos(pos_block_teleporter); // teleport (change position) the player
                     return;  // leave the loop
