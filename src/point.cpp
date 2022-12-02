@@ -25,7 +25,7 @@ bool Point::operator==(Point &other){
 }
 
 bool Point::operator!=(Point &other){
-    return (posX != other.posX && posY != other.posY);
+    return (posX != other.posX || posY != other.posY);
 }
 
 Point Point::operator+(Point &other){

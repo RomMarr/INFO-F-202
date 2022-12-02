@@ -45,6 +45,7 @@ void Board::createMatrixFromFile(const string &file_name){
     ifstream file(file_name);
 
     if (file.is_open()) {
+        int posX = 0, posY = 0;
         while (getline(file, line)) {
             vector<string> line_splitted = split(line, " ");
             if (line_index == 0) {
@@ -52,8 +53,14 @@ void Board::createMatrixFromFile(const string &file_name){
             } else if (line_index <= height) {
                 vector<shared_ptr<Block>> block_this_line;
                 for (auto block_type_index: line_splitted) {
-                    block_this_line.push_back(make_shared<Block>(grid_int_block_type.at(stoi(block_type_index))));
+                    shared_ptr block_here = make_shared<Block>(grid_int_block_type.at(stoi(block_type_index)));
+                    block_here->setPos(Point{posX, posY});
+                    block_this_line.push_back(block_here);
+
+                    posX++;
                 }
+                posX = 0;
+                posY ++;
                 board.push_back(block_this_line);
             } else {
                 if (line == "-") {
@@ -151,9 +158,9 @@ void Board::teleport(Point pos_teleporter){
         int posX = 0;
         for (auto block: line){ // go through the board
             if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
-                 Point pos_block_teleporter = Point{posX,posY};  
-                 if(pos_block_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
-                    getPlayer()->setPos(pos_block_teleporter); // teleport (change position) the player
+                Point pos_other_teleporter = Point{posX,posY};  
+                if(pos_other_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
+                    getPlayer()->setPos(pos_other_teleporter); // teleport (change position) the player
                     return;  // leave the loop
                  }
              }
