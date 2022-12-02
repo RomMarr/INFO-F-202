@@ -1,6 +1,8 @@
 #ifndef _BLOCK_H
 #define _BLOCK_H
 
+#include "model.hpp"
+
 #include "stdio.h"
 #include <FL/Fl.H>
 #include <string>
@@ -19,13 +21,13 @@ private:
     const int height = 50;  // height of the block 
     BlockType type;         // type of the block   
     int weight;             // weight du block
-    tuple<int,int> pos;     // position of the block
+    Point pos;     // position of the block
 public:
     Block(BlockType type) ;
     void setWeight(int weight);
     void setType(BlockType new_type);
-    void setPos(tuple<int, int> new_position);
-    tuple<int, int> getPos();
+    void setPos(Point new_position);
+    Point getPos();
     int getWeight();
     int getWidth();
     int getHeight();

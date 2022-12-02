@@ -1,6 +1,7 @@
 #include "block.hpp"
 
 #include "constants.hpp"
+#include "model.hpp"
 
 #include <FL/Fl.H>
 
@@ -21,13 +22,11 @@ void Block::setType(BlockType new_type){
     type = new_type;
 }
 
-void Block::setPos(tuple<int, int> new_position){
-    // get<0>(pos) = new_posX;
-    // get<1>(pos)= new_posY;
+void Block::setPos(Point new_position){
     pos = new_position;
 }
 
-tuple<int, int> Block::getPos(){
+Point Block::getPos(){
     return pos;
 }
 

@@ -26,16 +26,16 @@ void Controller::keyHandler(int key_event){
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
-            moveHandler(make_tuple(0,-1));
+            moveHandler(Point(0,-1));
             break;
         case FL_Down:
-            moveHandler(make_tuple(0,1));
+            moveHandler(Point(0,1));
             break;
         case FL_Right:
-            moveHandler(make_tuple(1,0));
+            moveHandler(Point(1,0));
             break;
         case FL_Left:
-            moveHandler(make_tuple(-1,0));
+            moveHandler(Point(-1,0));
             break;
         default:
             break;
@@ -44,16 +44,18 @@ void Controller::keyHandler(int key_event){
     checkLose();
 }
 
-void Controller::moveHandler(tuple<int, int> move){
+void Controller::moveHandler(Point move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    tuple<int, int> posPlayer = player->getPos();  // position of the player
+    Point posPlayer = player->getPos();  // position of the player
     player->setMoveAsked(move);
     if (checkMove(move)){
         if (!player->isTeleported()) {
-            player->setPos(make_tuple(get<0>(posPlayer)+get<0>(player->getMoveAsked()),get<1>(posPlayer)+get<1>(player->getMoveAsked())));
+            Point move_asked = player->getMoveAsked();
+            Point new_pos = posPlayer + move_asked;
+            player->setPos(new_pos);
         } else {
             // new possible position of the player (not checked yet)
-            tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); 
+            Point new_pos = posPlayer + move;
             board->teleport(new_pos);
             player->changeTeleported();
         }
@@ -62,11 +64,12 @@ void Controller::moveHandler(tuple<int, int> move){
 }
 
 
-bool Controller::checkMove(tuple<int, int> move){
+bool Controller::checkMove(Point move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    tuple<int, int> posPlayer = player->getPos();  // position of the player
-    tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
-    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(player->getMoveAsked()),get<1>(new_pos)+get<1>(player->getMoveAsked())); // new possible position of the box (not checked yet)
+    Point posPlayer = player->getPos();  // position of the player
+    Point new_pos = posPlayer + move; // new possible position of the player (not checked yet)
+    Point move_asked = player->getMoveAsked();
+    Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
 
     if (!board->isInBoard(new_pos)) { // check if the player will not leave the board with its movement
         return false;
@@ -81,9 +84,8 @@ bool Controller::checkMove(tuple<int, int> move){
     } else if (destination_type == Block::BlockType::floor || destination_type == Block::BlockType::target){
         // if the block of arrival is a floor or a target
         if (block_on_move){  // check if ptr != nullptr
-            player->setWeight(player->getWeight()+block_on_move->getWeight()); // add the weight of the box pushed by the player
-            if (checkMove(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
-                // recursive call to check the next block until we have a wall, a free block or too much weight
+            player->setWeight(player->getWeight()+ block_on_move->getWeight()); // add the weight of the box pushed by the player
+            if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
                 if (player->getWeight() > 10) return false; // too much weight for the player
                 else { 
                     if (board->getBlock(new_pos_box)->getType()==Block::BlockType::teleporter) {cout <<"ici"<<endl; return false;}
@@ -100,13 +102,13 @@ bool Controller::checkMove(tuple<int, int> move){
 }
 
  bool Controller::isBlocked(shared_ptr<Block> box){
-    tuple<int, int> pos_box = box->getPos();  // position of the box to check
-    vector<tuple<int,int>> next_case;  // list of positions of cases to try to see if it's blocked
+    Point pos_box = box->getPos();  // position of the box to check
+    vector<Point> next_case;  // list of positions of cases to try to see if it's blocked
     vector<bool> blocked;  // list of booleans (true if blocked, false if not)
-    next_case.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)+1));  // add position to try to the list
-    next_case.push_back(make_tuple(get<0>(pos_box),get<1>(pos_box)-1));
-    next_case.push_back(make_tuple(get<0>(pos_box)+1,get<1>(pos_box)));
-    next_case.push_back(make_tuple(get<0>(pos_box)-1,get<1>(pos_box)));
+    next_case.push_back(pos_box + Point(0, 1)); // add position to try to the list
+    next_case.push_back(pos_box + Point(0, -1));
+    next_case.push_back(pos_box + Point(1, 0));
+    next_case.push_back(pos_box + Point(-1, 0));
     for (auto i: next_case){  // loop with all the elements of the liste next_case
         if (board->isInBoard(i)){  // if position (checked) is in the board
             shared_ptr<Block> box_on_case = board->getBox(i);  // ptr to a box or nullptr if no box on the case

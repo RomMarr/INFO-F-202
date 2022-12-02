@@ -58,11 +58,11 @@ void Board::createMatrixFromFile(const string &file_name){
                 if (line == "-") {
                     next_is_player_coord = true;
                 } else if (next_is_player_coord) {
-                    player = make_shared<Player>(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    player = make_shared<Player>(Point(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
                     max_steps = stoi(line_splitted.at(2));
                 } else {
                     shared_ptr<Block> box = make_shared<Block>((stoi(line_splitted.at(2)) ? Block::BlockType::light_box : Block::BlockType::box));
-                    box->setPos(make_tuple(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
+                    box->setPos(Point(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
                     boxes.push_back(box);
                 }
             }
@@ -95,7 +95,7 @@ shared_ptr<Player> Board::getPlayer() {
     return player; // shared ptr to the player
 }
 
-shared_ptr<Block> Board::getBox(tuple<int, int> actual_pos){
+shared_ptr<Block> Board::getBox(Point actual_pos){
     for (auto box: boxes){  // go through all the boxes
         if (box->getPos() == actual_pos) return box;  // shared ptr to the box
     }
@@ -106,7 +106,7 @@ vector<shared_ptr<Block>> Board::getBoxes() {
     return boxes;  // vector of all the boxes of the board
 }
 
-shared_ptr<Player> Board::getPlayer(tuple<int, int> pos_actual){
+shared_ptr<Player> Board::getPlayer(Point pos_actual){
     if (player->getPos() == pos_actual) { // if the player is on the position given
         return player;  // shared ptr to the player 
     }
@@ -129,28 +129,28 @@ int Board::getLvl() {
     return lvl;
 }
 
-bool Board::isInBoard(tuple<int, int> pos){
-    if ((get<0>(pos)<0 || get<0>(pos) >= getWidth()) || (get<1>(pos) < 0 || get<1>(pos) >= getHeight())) {
+bool Board::isInBoard(Point pos){
+    if (pos.getPosX() < 0 || pos.getPosX() >= getWidth() || pos.getPosY() < 0 ||pos.getPosY() >= getHeight()) {
         // check if it will leave the board with its movement
         return false;
     } else return true;
 }
 
-shared_ptr<Block> Board::getBlock(tuple<int, int> coord) {
-    return board.at(get<1>(coord)).at(get<0>(coord));  // shared ptr to the block at the position given
+shared_ptr<Block> Board::getBlock(Point coord) {
+    return board.at(coord.getPosY()).at(coord.getPosX());  // shared ptr to the block at the position given
 }
 
 void Board::resetLevel() {
     createMatrixFromFile(current_board_file);
 }
 
-void Board::teleport(tuple<int, int> pos_teleporter){
+void Board::teleport(Point pos_teleporter){
     int posY =0;
     for (auto line: board){  // go through the board
         int posX = 0;
         for (auto block: line){ // go through the board
             if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
-                 tuple<int,int> pos_block_teleporter = make_tuple(posX,posY);  
+                 Point pos_block_teleporter = Point(posX,posY);  
                  if(pos_block_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
                     getPlayer()->setPos(pos_block_teleporter); // teleport (change position) the player
                     return;  // leave the loop
@@ -219,17 +219,25 @@ int Point::getPosY(){
     return posY;
 }
 
-Point Point::sumPoints(Point a, Point b){
-    int new_posX = a.getPosX() + b.getPosX();
-    int new_posY = a.getPosY() + b.getPosY();
-    Point new_point(new_posX, new_posY);
-    return new_point;
-}
-
 void Point::setPosX(int new_posX){
     posX = new_posX;
 }
 
 void Point::setPosY(int new_posY){
     posY = new_posY;
+}
+
+bool Point::operator==(Point &other){
+    return (posX == other.posX && posY == other.posY);
+}
+
+bool Point::operator!=(Point &other){
+    return (posX != other.posX && posY != other.posY);
+}
+
+Point Point::operator+(Point &other){
+    int new_posX = posX + other.posX;
+    int new_posY = posY + other.posY;
+    Point new_point(new_posX, new_posY);
+    return new_point;
 }
