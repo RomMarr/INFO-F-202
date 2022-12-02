@@ -17,7 +17,7 @@ const string LOADING_TITLE = "SOKOBAN";
 const string LOADING_AUTHORS = "By Romain Markowitch & Pol Marnette";
 
 // LEVEL SELECTOR
-const string PLAY_BUTTON_TITLE = "Change level";
+const string PLAY_BUTTON_TITLE = "Play";
 
 // IN GAME
 const string WIN_TITLE = "Gagné";

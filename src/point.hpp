@@ -13,7 +13,7 @@ public:
     int getPosY();
     bool operator==(Point &other);
     bool operator!=(Point &other);
-    Point operator+(Point &other);
+    Point operator-(Point &other);
     Point operator+(const Point &other);
 };
 
