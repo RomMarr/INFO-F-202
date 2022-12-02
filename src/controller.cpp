@@ -4,6 +4,7 @@
 #include "block.hpp"
 #include "player.hpp"
 #include "constants.hpp"
+#include "point.hpp"
 
 #include <FL/Fl.H>
 #include <memory>

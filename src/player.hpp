@@ -3,7 +3,9 @@
 
 #include "block.hpp"
 #include "model.hpp"
+#include "point.hpp"
 // #include "view.hpp"
+
 #include "stdio.h"
 #include <string>
 #include <memory>

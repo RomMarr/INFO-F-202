@@ -3,6 +3,7 @@
 
 #include "block.hpp"
 #include "player.hpp"
+#include "point.hpp"
 // #include "view.hpp"
 
 #include <FL/Fl.H>
@@ -13,21 +14,6 @@
 #include <tuple>
 
 using namespace std;
-
-class Point{
-    int posX;
-    int posY;
-public:
-    Point(int posX, int posY);
-    void setPosX(int new_posX);
-    void setPosY(int new_posY);
-    int getPosX();
-    int getPosY();
-    bool operator==(Point &other);
-    bool operator!=(Point &other);
-    Point operator+(Point &other);
-};
-
 
 class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target, Block::BlockType::teleporter};

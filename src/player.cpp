@@ -1,8 +1,8 @@
 #include "player.hpp"
+#include "point.hpp"
 
 #include <iostream>
 #include <fstream>
-
 
 Player::Player(Point position): position{position} {};
 

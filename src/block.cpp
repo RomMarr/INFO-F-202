@@ -2,6 +2,7 @@
 
 #include "constants.hpp"
 #include "model.hpp"
+#include "point.hpp"
 
 #include <FL/Fl.H>
 

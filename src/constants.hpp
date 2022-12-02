@@ -1,7 +1,8 @@
 #ifndef _CONSTANTS_H
 #define _CONSTANTS_H
 
-#include "model.hpp"
+#include "point.hpp"
+
 #include <FL/Fl.H>
 #include <string>
 

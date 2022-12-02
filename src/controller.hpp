@@ -3,6 +3,7 @@
 
 #include "model.hpp"
 #include "block.hpp"
+#include "point.hpp"
 
 #include <FL/Fl.H>
 #include <memory>

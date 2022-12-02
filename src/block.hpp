@@ -2,6 +2,7 @@
 #define _BLOCK_H
 
 #include "model.hpp"
+#include "point.hpp"
 
 #include "stdio.h"
 #include <FL/Fl.H>
