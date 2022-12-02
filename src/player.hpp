@@ -2,7 +2,6 @@
 #define _PLAYER_H
 
 #include "block.hpp"
-#include "model.hpp"
 #include "point.hpp"
 // #include "view.hpp"
 

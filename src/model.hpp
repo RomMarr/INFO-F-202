@@ -1,9 +1,9 @@
 #ifndef _MODEL_H
 #define _MODEL_H
 
+#include "point.hpp"
 #include "block.hpp"
 #include "player.hpp"
-#include "point.hpp"
 // #include "view.hpp"
 
 #include <FL/Fl.H>

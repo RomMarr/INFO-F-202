@@ -40,8 +40,8 @@ const int LIGHT_BOX_WEIGHT = 3;
 const int MAX_PLAYER_WEIGHT = 10;
 
 // POSSIBLE MOVES
-Point POSSIBLE_MOVE_RIGHT{1, 0};
-Point POSSIBLE_MOVE_LEFT{-1, 0};
-Point POSSIBLE_MOVE_UP{0, -1};
-Point POSSIBLE_MOVE_DOWN{0, 1};
+const Point POSSIBLE_MOVE_RIGHT{1, 0};
+const Point POSSIBLE_MOVE_LEFT{-1, 0};
+const Point POSSIBLE_MOVE_UP{0, -1};
+const Point POSSIBLE_MOVE_DOWN{0, 1};
 #endif

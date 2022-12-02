@@ -34,3 +34,10 @@ Point Point::operator+(Point &other){
     Point new_point(new_posX, new_posY);
     return new_point;
 }
+
+Point Point::operator+(const Point &other){
+    int new_posX = posX + other.posX;
+    int new_posY = posY + other.posY;
+    Point new_point(new_posX, new_posY);
+    return new_point;
+}

@@ -1,7 +1,6 @@
 #ifndef _BLOCK_H
 #define _BLOCK_H
 
-#include "model.hpp"
 #include "point.hpp"
 
 #include "stdio.h"
@@ -24,7 +23,7 @@ private:
     int weight;             // weight du block
     Point pos;     // position of the block
 public:
-    Block(BlockType type) ;
+    Block(BlockType type);
     void setWeight(int weight);
     void setType(BlockType new_type);
     void setPos(Point new_position);
