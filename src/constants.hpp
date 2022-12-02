@@ -36,6 +36,7 @@ const Fl_Color BLOCK_TELEPORTER_COLOR = fl_rgb_color(153, 0, 153);
 // WEIGHTS
 const int HEAVY_BOX_WEIGHT = 9;
 const int LIGHT_BOX_WEIGHT = 3;
+const int MAX_PLAYER_WEIGHT = 10;
 
 // POSSIBLE MOVES
 Point POSSIBLE_MOVE_RIGHT{1, 0};

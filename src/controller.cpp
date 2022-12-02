@@ -75,7 +75,7 @@ bool Controller::checkMove(Point move){
     if (!board->isInBoard(new_pos)) { // check if the player will not leave the board with its movement
         return false;
     } 
-    if (player->getWeight()> 10) {  // A player can push max a weight lesser than 10
+    if (player->getWeight()> MAX_PLAYER_WEIGHT) {  // A player can push max a weight lesser than 10
         return false;
     }
     Block::BlockType destination_type = board->getBlock(new_pos)->getType();
@@ -87,7 +87,7 @@ bool Controller::checkMove(Point move){
         if (block_on_move){  // check if ptr != nullptr
             player->setWeight(player->getWeight()+ block_on_move->getWeight()); // add the weight of the box pushed by the player
             if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
-                if (player->getWeight() > 10) return false; // too much weight for the player
+                if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
                 else { 
                     if (board->getBlock(new_pos_box)->getType()==Block::BlockType::teleporter) {cout <<"ici"<<endl; return false;}
                     else {board->getBox(new_pos)->setPos(new_pos_box); // modifie la position de la box
