@@ -8,9 +8,9 @@
 
 Block::Block(BlockType type): type{type} {
     if (type == BlockType::box) {
-        this->setWeight(9);
+        this->setWeight(HEAVY_BOX_WEIGHT);
     } else if (type == BlockType::light_box) {
-        this->setWeight(3);
+        this->setWeight(LIGHT_BOX_WEIGHT);
     }
 }
 
@@ -49,7 +49,7 @@ Fl_Color Block::getColor(){
         case (BlockType::light_box): return BLOCK_LIGHT_BOX_COLOR; break;
         case (BlockType::floor): return BLOCK_FLOOR_COLOR;  break;
         case (BlockType::target): return BLOCK_TARGET_COLOR; break;
-        case (BlockType::teleporter): return fl_rgb_color(153, 0, 153); break;
+        case (BlockType::teleporter): return BLOCK_TELEPORTER_COLOR; break;
         default: return fl_rgb_color(100, 100, 100); break;
     }
 }

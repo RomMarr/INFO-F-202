@@ -3,6 +3,7 @@
 #include "model.hpp"
 #include "block.hpp"
 #include "player.hpp"
+#include "constants.hpp"
 
 #include <FL/Fl.H>
 #include <memory>
@@ -26,20 +27,20 @@ void Controller::keyHandler(int key_event){
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
-            moveHandler(Point{0,-1});
+            moveHandler(POSSIBLE_MOVE_UP);
             break;
         case FL_Down:
-            moveHandler(Point{0,1});
+            moveHandler(POSSIBLE_MOVE_DOWN);
             break;
         case FL_Right:
-            moveHandler(Point{1,0});
+            moveHandler(POSSIBLE_MOVE_RIGHT);
             break;
         case FL_Left:
-            moveHandler(Point{-1,0});
+            moveHandler(POSSIBLE_MOVE_LEFT);
             break;
         default:
             break;
-    }player->setWeight(0);
+    }player->setWeight(0);  // player doesn't push boxes anymore
     checkWin();
     checkLose();
 }
@@ -103,21 +104,21 @@ bool Controller::checkMove(Point move){
 
  bool Controller::isBlocked(shared_ptr<Block> box){
     Point pos_box = box->getPos();  // position of the box to check
-    vector<Point> next_case;  // list of positions of cases to try to see if it's blocked
+    vector<Point> possible_moves;  // list of positions of cases to try to see if it's blocked
     vector<bool> blocked;  // list of booleans (true if blocked, false if not)
-    next_case.push_back(pos_box + Point{0, 1}); // add position to try to the list
-    next_case.push_back(pos_box + Point{0, -1});
-    next_case.push_back(pos_box + Point{1, 0});
-    next_case.push_back(pos_box + Point{-1, 0});
-    for (auto i: next_case){  // loop with all the elements of the liste next_case
-        if (board->isInBoard(i)){  // if position (checked) is in the board
-            shared_ptr<Block> box_on_case = board->getBox(i);  // ptr to a box or nullptr if no box on the case
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_DOWN); // add position to try to the list
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_UP);
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_RIGHT);
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_LEFT);
+    for (auto move: possible_moves){  // loop with all the elements of the liste next_case
+        if (board->isInBoard(move)){  // if position (checked) is in the board
+            shared_ptr<Block> box_on_case = board->getBox(move);  // ptr to a box or nullptr if no box on the case
             if (box_on_case) { // if box on case
                 if (box_on_case->getWeight()==9) blocked.push_back(true);  // heavy box blocked by another heavy box
                 else blocked.push_back(false);  // if it's a light box 
             }
-            else if (board->getBlock(i)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
-            else if (board->getBlock(i)->getType()==Block::BlockType::teleporter)blocked.push_back(true); // box blocked by a teleporter
+            else if (board->getBlock(move)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
+            else if (board->getBlock(move)->getType()==Block::BlockType::teleporter)blocked.push_back(true); // box blocked by a teleporter
             else blocked.push_back(false); // position does not block the box
         } else blocked.push_back(true);  // position is not on the board
     } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3));  // true if blocked at least once horizontally and once vertically
