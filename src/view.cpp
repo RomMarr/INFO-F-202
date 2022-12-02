@@ -118,8 +118,8 @@ void MainWindow::drawBoard() {
 
     for (int y = 0; y < board->getHeight(); y++) {
         for (int x = 0; x < board->getWidth(); x++) {
-            shared_ptr<Player> player_here = board->getPlayer(make_tuple(x, y));
-            shared_ptr<Block> box_here = board->getBox(make_tuple(x, y));
+            shared_ptr<Player> player_here = board->getPlayer(Point{x, y});
+            shared_ptr<Block> box_here = board->getBox(Point{x, y});
 
             int pos_x = block_size * x;
             int pos_y = y_offset + block_size * y;
@@ -130,7 +130,7 @@ void MainWindow::drawBoard() {
                 fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 0));
                 fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x + 1, pos_y + 1, block_size - 2, block_size - 2, box_here->getColor());
             } else {
-                shared_ptr<Block> cell = board->getBlock(make_tuple(x, y));
+                shared_ptr<Block> cell = board->getBlock(Point{x, y});
                 if (cell->getType() == Block::BlockType::target) {
                     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x  + (block_size / 4), pos_y  + (block_size / 4), block_size / 2, block_size / 2, cell->getColor());
                 } else {

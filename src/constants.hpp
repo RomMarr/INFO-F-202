@@ -1,6 +1,8 @@
 #ifndef _CONSTANTS_H
 #define _CONSTANTS_H
 
+#include "point.hpp"
+
 #include <FL/Fl.H>
 #include <string>
 
@@ -32,4 +34,14 @@ const Fl_Color BLOCK_FLOOR_COLOR = fl_rgb_color(224, 224, 224);
 const Fl_Color BLOCK_TARGET_COLOR = fl_rgb_color(255, 204, 153);
 const Fl_Color BLOCK_TELEPORTER_COLOR = fl_rgb_color(153, 0, 153);
 
+// WEIGHTS
+const int HEAVY_BOX_WEIGHT = 9;
+const int LIGHT_BOX_WEIGHT = 3;
+const int MAX_PLAYER_WEIGHT = 10;
+
+// POSSIBLE MOVES
+const Point POSSIBLE_MOVE_RIGHT{1, 0};
+const Point POSSIBLE_MOVE_LEFT{-1, 0};
+const Point POSSIBLE_MOVE_UP{0, -1};
+const Point POSSIBLE_MOVE_DOWN{0, 1};
 #endif

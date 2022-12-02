@@ -1,12 +1,12 @@
 #include "player.hpp"
+#include "point.hpp"
 
 #include <iostream>
 #include <fstream>
 
+Player::Player(Point position): position{position} {};
 
-Player::Player(tuple<int, int> position): position{position} {};
-
-void Player::setPos(tuple<int, int> new_pos){
+void Player::setPos(Point new_pos){
     position = new_pos;
 }
 
@@ -14,7 +14,7 @@ void Player::setWeight(int new_weight){
     weight = new_weight;
 }
 
-void Player::setMoveAsked(tuple<int, int> new_move_asked){
+void Player::setMoveAsked(Point new_move_asked){
     move_asked = new_move_asked;
 }
 
@@ -26,11 +26,11 @@ void Player::changeTeleported(){
     teleported = (!teleported); // change the boolean of teleported
 }
 
-tuple<int, int> Player::getPos(){
+Point Player::getPos(){
     return position;
 }
 
-tuple<int, int> Player::getMoveAsked(){
+Point Player::getMoveAsked(){
     return move_asked;
 }
 

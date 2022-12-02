@@ -1,6 +1,7 @@
 #ifndef _MODEL_H
 #define _MODEL_H
 
+#include "point.hpp"
 #include "block.hpp"
 #include "player.hpp"
 // #include "view.hpp"
@@ -13,19 +14,6 @@
 #include <tuple>
 
 using namespace std;
-
-class Point{
-    int posX;
-    int posY;
-public:
-    Point(int posX, int posY);
-    Point sumPoints(Point a, Point b);
-    void setPosX(int new_posX);
-    void setPosY(int new_posY);
-    int getPosX();
-    int getPosY();
-};
-
 
 class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target, Block::BlockType::teleporter};
@@ -42,10 +30,10 @@ class Board{
     int readBestSteps();
 public:
     shared_ptr<Player> getPlayer(); // Get the player
-    shared_ptr<Player> getPlayer(tuple <int, int> position); // get a ptr to the player on position or nullptr if the player isn't on that position
-    shared_ptr<Block> getBlock(tuple<int, int> position);  // get a ptr to the block of the position given 
+    shared_ptr<Player> getPlayer(Point position); // get a ptr to the player on position or nullptr if the player isn't on that position
+    shared_ptr<Block> getBlock(Point position);  // get a ptr to the block of the position given 
     vector<shared_ptr<Block>> getBoxes();  // get a list of ptr of all the boxes
-    shared_ptr<Block> getBox(tuple <int, int> position);  // get a ptr to the box on the position or nullptr if there is no box on it
+    shared_ptr<Block> getBox(Point position);  // get a ptr to the box on the position or nullptr if there is no box on it
     void setShowBoard(bool value);
     bool shouldShowBoard(); // Should the board be shown (is the board ready)
     void setLevel(const string &level_file);
@@ -54,9 +42,9 @@ public:
     int getMaxSteps();
     int getBestSteps();
     int getLvl();
-    bool isInBoard(tuple<int, int> position);
+    bool isInBoard(Point position);
     void resetLevel();
-    void teleport(tuple<int, int> pos_teleporter);
+    void teleport(Point pos_teleporter);
     void writeBestSteps(); // Edit the best steps file with the new record
     int nbBoxOnTarget();
 };
