@@ -70,7 +70,7 @@ bool Controller::checkMove(Point move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
     Point posPlayer = player->getPos();  // position of the player
     Point new_pos = posPlayer + move; // new possible position of the player (not checked yet)
-    Point move_asked = player->getMoveAsked();
+    Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
 
     if (!board->isInBoard(new_pos)) { // check if the player will not leave the board with its movement
@@ -79,8 +79,10 @@ bool Controller::checkMove(Point move){
     if (player->getWeight()> MAX_PLAYER_WEIGHT) {  // A player can push max a weight lesser than 10
         return false;
     }
-    Block::BlockType destination_type = board->getBlock(new_pos)->getType();
+    
+    Block::BlockType destination_type = board->getBlock(new_pos)->getType();  // type of the block of the possible new position
     shared_ptr<Block> block_on_move = board->getBox(new_pos);  // ptr to the box if there is one, nullptr if not
+    
     if (destination_type == Block::BlockType::wall) { // if the block of arrival is a wall
         return false;
     } else if (destination_type == Block::BlockType::floor || destination_type == Block::BlockType::target){

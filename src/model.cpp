@@ -160,7 +160,8 @@ void Board::teleport(Point pos_teleporter){
             if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
                 Point pos_other_teleporter = Point{posX,posY};  
                 if(pos_other_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
-                    getPlayer()->setPos(pos_other_teleporter); // teleport (change position) the player
+                    if (! getBox(pos_other_teleporter)) getPlayer()->setPos(pos_other_teleporter); 
+                    // teleport (change position) the player if there is no box on the teleporter
                     return;  // leave the loop
                  }
              }
