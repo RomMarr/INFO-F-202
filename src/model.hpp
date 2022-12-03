@@ -19,6 +19,7 @@ class Board{
     static const inline vector<Block::BlockType> grid_int_block_type{Block::BlockType::floor, Block::BlockType::wall, Block::BlockType::target, Block::BlockType::teleporter};
     vector<vector<shared_ptr<Block>>> board;
     vector<shared_ptr<Block>> boxes;
+    vector<shared_ptr<Block>> teleporters;
     shared_ptr<Player> player;
     string current_board_file;
     int lvl;         // level chosen 
@@ -31,11 +32,12 @@ class Board{
 public:
     shared_ptr<Player> getPlayer(); // Get the player
     shared_ptr<Player> getPlayer(Point position); // get a ptr to the player on position or nullptr if the player isn't on that position
-    shared_ptr<Block> getBlock(Point position);  // get a ptr to the block of the position given 
-    vector<shared_ptr<Block>> getBoxes();  // get a list of ptr of all the boxes
-    shared_ptr<Block> getBox(Point position);  // get a ptr to the box on the position or nullptr if there is no box on it
+    shared_ptr<Block> getBlock(Point position);   // get a ptr to the block of the position given 
+    shared_ptr<Block> getBox(Point position);     // get a ptr to the box on the position or nullptr if there is no box on it
+    vector<shared_ptr<Block>> getBoxes();         // get a list of ptr of all the boxes
+    vector<shared_ptr<Block>> getTeleporters();   // get a list of ptr of all the teleporters
     void setShowBoard(bool value);
-    bool shouldShowBoard(); // Should the board be shown (is the board ready)
+    bool shouldShowBoard();         // Should the board be shown (is the board ready)
     void setLevel(const string &level_file);
     int getWidth();
     int getHeight();

@@ -56,7 +56,7 @@ void Board::createMatrixFromFile(const string &file_name){
                     shared_ptr block_here = make_shared<Block>(grid_int_block_type.at(stoi(block_type_index)));
                     block_here->setPos(Point{posX, posY});
                     block_this_line.push_back(block_here);
-
+                    if (block_here->getType() == Block::BlockType::teleporter) teleporters.push_back(block_here);
                     posX++;
                 }
                 posX = 0;
@@ -114,6 +114,10 @@ vector<shared_ptr<Block>> Board::getBoxes() {
     return boxes;  // vector of all the boxes of the board
 }
 
+vector<shared_ptr<Block>> Board::getTeleporters() {
+    return teleporters;  // vector of all the teleporters of the board
+}
+
 shared_ptr<Player> Board::getPlayer(Point pos_actual){
     if (player->getPos() == pos_actual) { // if the player is on the position given
         return player;  // shared ptr to the player 
@@ -153,21 +157,12 @@ void Board::resetLevel() {
 }
 
 void Board::teleport(Point pos_teleporter){
-    int posY =0;
-    for (auto line: board){  // go through the board
-        int posX = 0;
-        for (auto block: line){ // go through the board
-            if (block->getType() == Block::BlockType::teleporter){  // if block is a teleporter
-                Point pos_other_teleporter = Point{posX,posY};  
-                if(pos_other_teleporter != pos_teleporter) {  // if the teleporter is not the one the player is using
-                    if (! getBox(pos_other_teleporter)) getPlayer()->setPos(pos_other_teleporter); 
-                    // teleport (change position) the player if there is no box on the teleporter
-                    return;  // leave the loop
-                 }
-             }
-            posX++;
+    vector<shared_ptr<Block>> teleporters = getTeleporters();
+    for (auto teleporter: teleporters){  // go through the teleporters
+        if(teleporter->getPos() != pos_teleporter) {  // if the teleporter is not the one the player is using
+            if (! getBox(teleporter->getPos())) getPlayer()->setPos(teleporter->getPos()); // if no box on the other teleporter
+                return; 
         }
-        posY++;
     }
 }
 
