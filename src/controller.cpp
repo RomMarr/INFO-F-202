@@ -48,16 +48,16 @@ void Controller::keyHandler(int key_event){
 
 void Controller::moveHandler(Point move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    Point posPlayer = player->getPos();  // position of the player
+    Point pos_player = player->getPos();  // position of the player
     player->setMoveAsked(move);
     if (checkMove(move)){
         if (!player->isTeleported()) {
             Point move_asked = player->getMoveAsked();
-            Point new_pos = posPlayer + move_asked;
+            Point new_pos = pos_player + move_asked;
             player->setPos(new_pos);
         } else {
             // new possible position of the player (not checked yet)
-            Point new_pos = posPlayer + move;
+            Point new_pos = pos_player + move;
             board->teleport(new_pos);
             player->changeTeleported();
         }
@@ -68,8 +68,8 @@ void Controller::moveHandler(Point move){
 
 bool Controller::checkMove(Point move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    Point posPlayer = player->getPos();  // position of the player
-    Point new_pos = posPlayer + move; // new possible position of the player (not checked yet)
+    Point pos_player = player->getPos();  // position of the player
+    Point new_pos = pos_player + move; // new possible position of the player (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
 
@@ -92,20 +92,40 @@ bool Controller::checkMove(Point move){
             if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
                 if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
                 else { 
-                    if (board->getBlock(new_pos_box)->getType()==Block::BlockType::teleporter) return false;
-                    else {board->getBox(new_pos)->setPos(new_pos_box); // modifie la position de la box
-                    return true; } 
-                }
+                    board->getBox(new_pos)->setPos(new_pos_box); // modifie la position de la box
+                    return true; 
+                } 
             }else return false;
         }return true;
     } else if (destination_type == Block::BlockType::teleporter){ // if the block of arrival is a teleporter
-        if (block_on_move) return false;
-        else { if (board->getBox(new_pos - move_asked)){
-                return false;
-            } player->changeTeleported();
-            return true;
+        if (block_on_move){
+            player->setWeight(player->getWeight()+ block_on_move->getWeight());
+            if (checkMove(move + move_asked)){
+                if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
+                    board->getBox(new_pos)->setPos(new_pos_box);
+                    if (checkTeleport(new_pos)) {
+                        player->changeTeleported();
+                        return true;
+                    }return false;
+                }board->getBox(new_pos)->setPos(new_pos_box);
+            } 
+        }if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
+            if (checkTeleport(new_pos)) {
+                player->changeTeleported();
+                return true;
+            }return false;
+        }return true;
+    }else return false;
+}
+
+bool Controller::checkTeleport(Point pos_teleporter){
+    vector<shared_ptr<Block>> teleporters = board->getTeleporters();
+    for (auto teleporter: teleporters){  // go through the board
+        if(teleporter->getPos() != pos_teleporter) {  // if the teleporter is not the one the player is using
+            if (! board->getBox(teleporter->getPos())) return true; // if no box on the other teleporter
+                return false; 
         }
-    } else return false;
+    }
 }
 
  bool Controller::isBlocked(shared_ptr<Block> box){
