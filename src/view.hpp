@@ -1,51 +1,65 @@
 #ifndef _VIEW_H
 #define _VIEW_H
 
-#include "model.hpp"
 #include "controller.hpp"
+#include "model.hpp"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
+#include <memory>
+#include <string>
+#include <vector>
 
+class RectangleButton {
+    int x, y, width, height, button_id;
+    std::string button_title;
+    bool is_active = false;
+public:
+    RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id = 0);
+    void draw();
+    bool contains(int x, int y);
+    int getButtonId();
+    void setIsActive(bool value);
+    bool getIsActive();
+};
 
-// la vue en MVC : s'occupe d'afficher le board et les déplacements
-// ATTENTION : Les classes de dessin de base qui appellent les fonctions fltk doivent être séparées de votre
-//      code spécifique à Sokoban
+class LoadingScreen {
+public:
+    static void draw();
+};
 
-
-// class Display_menus{
-// public:
-//     void display_homepage();  // display the home page with both our names
-//     void display_menu();  
-// };
-
-// class Display_board{
-//     shared_ptr<Board> board;
-// public:
-//     Display_board(shared_ptr<Board> board);
-//     void display_board();  
-//     void display_move();  // display blocks moving
-//  }; 
+class MainMenu {
+    shared_ptr<Controller> controller;
+    vector<shared_ptr<RectangleButton>> level_selection_btn;
+    shared_ptr<RectangleButton> play_btn;
+public:
+    MainMenu(shared_ptr<Controller> controller);
+    static void selectLevel(shared_ptr<Controller> controller, int id);
+    void draw();
+    void onWindowClicked(int x, int y);
+};
 
 class MainWindow: public Fl_Window {
+    MainMenu menu;
     shared_ptr<Board> board;
     shared_ptr<Controller> controller;
-    static constexpr inline double refreshPerSecond = 60;
-    enum ScreenType { menu_screen, board_screen };
-    ScreenType current_screen = menu_screen;
-    void draw_board();
-    void draw_menu();
+    shared_ptr<RectangleButton> reset_btn;
+    shared_ptr<RectangleButton> back_to_menu_btn;
+    bool show_loading = true;
+    void drawBoard();
+    void drawBoardInformations();
+    void drawMenu();
 public:
-    MainWindow();
-    void set_controller(shared_ptr<Controller> controller);
-    void set_board(shared_ptr<Board> new_board);
+    MainWindow(MainMenu);
+    void setController(shared_ptr<Controller> controller);
+    void setBoard(shared_ptr<Board> new_board);
     void draw() override;
     int handle(int event) override;
-    void display_menu();
-    void display_board();
-    static void timer_CB(void *userdata);
+    void hideLoading();
+    static void timerCB(void *userdata);
+    static void loadingScreenTimeout(void *userdata);
 };
 
 #endif

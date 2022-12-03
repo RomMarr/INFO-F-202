@@ -3,6 +3,7 @@ grid with
 - 0: floor
 - 1: wall
 - 2: target
-box positions [x y] (0,0 is the top left corner)
+- 3: teleporter (Maximum 2 by level)
+[x y weight] = box positions (x, y) & 1 if light box (0 else) -> (0 0 is the top left corner)
 -
-player position [x y]
+[x y nb_steps_max] = player position (x, y) & maximum number of steps

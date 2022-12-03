@@ -1,111 +1,233 @@
 #include "view.hpp"
+#include "model.hpp"
 #include "controller.hpp"
+#include "constants.hpp"
 
 #include <iostream>
+#include <string>
+#include <memory>
+#include <cassert>
+#include <algorithm>
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Widget.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
 
-// void Display_menus::display_homepage(){
 
-// }; 
-
-
-// void Display_menus::display_menu(){
-
-// };  
-
-
-// Display_board::Display_board(shared_ptr<Board> board): board{board}{};
-
-
-// void Display_board::display_board(){
+RectangleButton::RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id): 
+    x{x}, y{y}, width{width}, height{height}, button_id{button_id}, button_title{button_title} {
     
-// };  
-
-
-// void Display_board::display_move(){
-
-// };
-
-// class MainWindow: public Fl_Window {
-//     shared_ptr<Board> board;
-// public:
-//     void set_board(shared_ptr board);
-//     void display_menu();
-//     void display_board();
-// }
-
-MainWindow::MainWindow(): Fl_Window(500, 500, 500, 500, "Sokoban") {
-    Fl::add_timeout(1.0/refreshPerSecond, timer_CB, this);
-    resizable(this);
+    // -1 is reserved for button not found on getButtonId function
+    assert(button_id != -1);
 }
 
-void MainWindow::set_controller(shared_ptr<Controller> new_controller) {
-    controller = new_controller;
+void RectangleButton::draw() {
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, x, y, width, height, (is_active ? fl_rgb_color(153, 204, 255) : fl_rgb_color(255, 255, 255)));
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_font(FL_HELVETICA, 12);
+    fl_draw(button_title.c_str(), x + 5,  (y + height / 2) + 3);
 }
 
-void MainWindow::draw_board() {
-    for (size_t y = 0; y < (*board).get_height(); y++) {
-        for (size_t x = 0; x < (*board).get_width(); x++) {
-            shared_ptr<Player> player_here = (*board).get_player_on_pos(make_tuple(x, y));
-            shared_ptr<Block> box_here = (*board).get_box_on_pos(make_tuple(x, y));
+bool RectangleButton::contains(int click_x, int click_y) {
+    // check horizontaly if in rectangle
+    if (click_x > x && click_x < x + width) {
+        if (click_y > y && click_y < y + height) {
+            return true;
+        }
+    }
 
-            if (player_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, fl_rgb_color(0, 0, 255));
-            } else if (box_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, (*box_here).getColor());
-            } else {
-                shared_ptr<Block> cell = (*board).get_block(make_tuple(x, y));
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50 * x, 50 * y, 50, 50, (*cell).getColor());
+    return false;
+}
+
+int RectangleButton::getButtonId() {
+    return button_id;
+}
+
+void RectangleButton::setIsActive(bool value) {
+    is_active = value;
+}
+
+bool RectangleButton::getIsActive() {
+    return is_active;
+}
+
+void LoadingScreen::draw() {
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_font(FL_HELVETICA, 24);
+    fl_draw(LOADING_TITLE.c_str(), 50, 100);
+    fl_font(FL_HELVETICA, 12);
+    fl_draw(LOADING_AUTHORS.c_str(), 50,  120);
+}
+
+MainMenu::MainMenu(shared_ptr<Controller> controller): controller{controller} {};
+
+void MainMenu::draw() {
+    if (level_selection_btn.size() == 0) {
+        level_selection_btn.push_back(make_shared<RectangleButton>(50, 50, 30, 30, "0"));
+        level_selection_btn.push_back(make_shared<RectangleButton>(100, 50, 30, 30, "1", 1));
+        level_selection_btn.push_back(make_shared<RectangleButton>(150, 50, 30, 30, "2", 2));
+        level_selection_btn.push_back(make_shared<RectangleButton>(200, 50, 30, 30, "3", 3));
+        level_selection_btn.push_back(make_shared<RectangleButton>(250, 50, 30, 30, "4", 4));
+    }
+
+    if (!play_btn) {
+        play_btn = make_shared<RectangleButton>(50, 100, 130, 30, PLAY_BUTTON_TITLE);
+    }
+
+    for (shared_ptr<RectangleButton> btn: level_selection_btn) {
+        btn->draw();
+    }
+    play_btn->draw();
+}
+
+void MainMenu::onWindowClicked(int x, int y) {
+    // If click on play
+    if (play_btn->contains(x, y)) {
+        // Get btn active and play level associate
+        for (shared_ptr<RectangleButton> btn: level_selection_btn) {
+            if (btn->getIsActive()) {
+                controller->selectLevel(btn->getButtonId());
+                break;
             }
+        }
+    }
+
+    for (shared_ptr<RectangleButton> btn: level_selection_btn) {
+        if (btn->contains(x, y)) {
+            btn->setIsActive(true);
+        } else {
+            btn->setIsActive(false);
         }
     }
 }
 
-void MainWindow::draw_menu() {
-    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, 50, 50, 50, 50, fl_rgb_color(255, 128, 0));
+MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, WINDOW_TITLE.c_str()), menu(menu) {
+    Fl::add_timeout(1.0 / REFRESH_RATE, timerCB, this);
+    Fl::add_timeout(LOADING_SCREEN_TIMEOUT, loadingScreenTimeout, this);
+}
+
+void MainWindow::setController(shared_ptr<Controller> new_controller) {
+    controller = new_controller;
+}
+
+void MainWindow::drawBoard() {
+    int block_size = std::min(500 / board->getWidth(), 500 / board->getHeight());
+
+    int y_offset = (500 - (block_size * board->getHeight())) / 2;
+
+    for (int y = 0; y < board->getHeight(); y++) {
+        for (int x = 0; x < board->getWidth(); x++) {
+            shared_ptr<Player> player_here = board->getPlayer(Point{x, y});
+            shared_ptr<Block> box_here = board->getBox(Point{x, y});
+
+            int pos_x = block_size * x;
+            int pos_y = y_offset + block_size * y;
+
+            if (player_here) {
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, PLAYER_COLOR);
+            } else if (box_here) {
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 0));
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x + 1, pos_y + 1, block_size - 2, block_size - 2, box_here->getColor());
+            } else {
+                shared_ptr<Block> cell = board->getBlock(Point{x, y});
+                if (cell->getType() == Block::BlockType::target) {
+                    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x  + (block_size / 4), pos_y  + (block_size / 4), block_size / 2, block_size / 2, cell->getColor());
+                } else {
+                    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, cell->getColor());
+                }
+            }
+        }
+    }
+
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->getWidth(), 0, 1, 500, fl_rgb_color(0, 0, 0));
+
+    drawBoardInformations();
+}
+
+void MainWindow::drawBoardInformations() {
+    int pos_x = 525;
+
+    std::string title = "Level " + to_string(board->getLvl());
+    std::string steps_information = "Steps " + to_string(board->getPlayer()->getSteps()) + "/" + to_string(board->getMaxSteps());
+    std::string best_steps = board->getBestSteps() == -1 ? "No best score" : "Best : " + to_string(board->getBestSteps());
+    std::string box_on_pos = "Box : " + to_string(board->nbBoxOnTarget()) + "/" + to_string(board->getBoxes().size());
+
+    fl_font(FL_HELVETICA_BOLD, 32);
+    if (controller->checkWin()) {
+        fl_color(fl_rgb_color(0, 102, 0));
+        fl_draw(WIN_TITLE.c_str(), pos_x, 50);
+    } else if (controller->checkLose()) {
+        fl_color(fl_rgb_color(204, 0, 0));
+        fl_draw(LOST_TITLE.c_str(), pos_x, 50);
+    }
+
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_font(FL_HELVETICA, 24);
+    fl_draw(title.c_str(), pos_x, 120);
+
+    fl_color((board->getPlayer()->getSteps() >= board->getMaxSteps() ?  fl_rgb_color(255, 0, 0) : fl_rgb_color(0, 0, 0)));
+    fl_font(FL_HELVETICA, 14);
+    fl_draw(steps_information.c_str(), pos_x, 150);
+
+    fl_color(fl_rgb_color(0, 0, 0));
+    fl_draw(best_steps.c_str(), pos_x, 170);
+
+    fl_draw(box_on_pos.c_str(), pos_x, 190);
+
+    if (!reset_btn) reset_btn = make_shared<RectangleButton>(pos_x, 220, 200, 30, RESET_BUTTON_TITLE);
+    if (!back_to_menu_btn) back_to_menu_btn = make_shared<RectangleButton>(pos_x, 270, 200, 30, CHANGE_LEVEL_BUTTON_TITLE);
+
+    reset_btn->draw();
+    back_to_menu_btn->draw();
 }
 
 void MainWindow::draw() {
     Fl_Window::draw();
-    
-    switch (current_screen) {
-    case menu_screen: draw_menu(); break;
-    case board_screen: draw_board(); break;
-    
-    default:
-        break;
+
+    if (show_loading) {
+        LoadingScreen::draw();
+    } else if (board->shouldShowBoard()) {
+        drawBoard();
+    } else {
+        menu.draw();
     }
 }
 
 int MainWindow::handle(int event) {
-    // Doit pas être ici à terme, je voulais juste test, mais c'est cette fonction qui est call à chaque keyevent (souris ou clavier)
-    if (event == FL_KEYDOWN) {
-        //key_handler(Fl::event_key());
-       
-        controller->key_handler(Fl::event_key());
-        
+    if (event == FL_PUSH) {
+        if (board->shouldShowBoard()) {
+            if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->resetLevel();
+            if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->setShowBoard(false);
+            return 1;    
+        } else if (!show_loading) {
+            menu.onWindowClicked(Fl::event_x(), Fl::event_y());
+            return 1;    
+        } 
     }
+    if (event == FL_KEYDOWN && board->shouldShowBoard()) {
+        controller->keyHandler(Fl::event_key());
+        return 1;    
+    }
+
+    return 0;
 }
 
-void MainWindow::set_board(shared_ptr<Board> new_board) {
+void MainWindow::setBoard(shared_ptr<Board> new_board) {
     board = new_board;
 }
 
-void MainWindow::display_menu() {
-    current_screen = menu_screen;
+void MainWindow::hideLoading() {
+    show_loading = false;
 }
 
-void MainWindow::display_board() {
-    if (board) {
-        current_screen = board_screen;
-    }
+void MainWindow::timerCB(void *userdata) {
+    MainWindow *window = static_cast<MainWindow*>(userdata);
+    window->redraw();
+    Fl::repeat_timeout(1.0 / REFRESH_RATE, timerCB, userdata);
 }
 
-void MainWindow::timer_CB(void *userdata) {
-    MainWindow *o = static_cast<MainWindow*>(userdata);
-    o->redraw();
-    Fl::repeat_timeout(1.0/refreshPerSecond, timer_CB, userdata);
+void MainWindow::loadingScreenTimeout(void *userdata) {
+    MainWindow *window = static_cast<MainWindow*>(userdata);
+    window->hideLoading();
 }

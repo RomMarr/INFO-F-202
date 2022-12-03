@@ -1,106 +1,152 @@
 #include "controller.hpp"
+
 #include "model.hpp"
+#include "block.hpp"
+#include "player.hpp"
+#include "constants.hpp"
+#include "point.hpp"
 
 #include <FL/Fl.H>
 #include <memory>
 #include <tuple>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
+
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
+void Controller::selectLevel(int level_id) {
+    board->setLevel("levels/" + to_string(level_id) + ".txt");
+}
 
-void Controller::key_handler(int key_event){
-    shared_ptr<Player> player = board->get_player();
-    tuple<int, int>actual_pos = player->getPos();
-    
-    if (check_lose() || check_win()) return;
-
+void Controller::keyHandler(int key_event){
+    shared_ptr<Player> player = board->getPlayer();
+    if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
+    if (checkLose() || checkWin()) return;
     switch (key_event) {
              // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
-            player->setMoveAsked(make_tuple(0,-1));
-            if (check_move(make_tuple(0,-1))){
-                player->setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) - 1));
-                player->addStep();
-                break;
-            }; break;
+            moveHandler(POSSIBLE_MOVE_UP);
+            break;
         case FL_Down:
-            player->setMoveAsked(make_tuple(0,1));
-            if (check_move(make_tuple(0,1))){
-                player->setPos(make_tuple(get<0>(actual_pos),get<1>(actual_pos) + 1));
-                player->addStep();
-                break;
-            }; break;
+            moveHandler(POSSIBLE_MOVE_DOWN);
+            break;
         case FL_Right:
-            player->setMoveAsked(make_tuple(1,0));
-            if (check_move(make_tuple(1,0))){
-                player->setPos(make_tuple(get<0>(actual_pos) + 1,get<1>(actual_pos)));
-                player->addStep();
-                break;
-            }; break;
+            moveHandler(POSSIBLE_MOVE_RIGHT);
+            break;
         case FL_Left:
-            player->setMoveAsked(make_tuple(-1,0));
-            if (check_move(make_tuple(-1,0))){
-                player->setPos(make_tuple(get<0>(actual_pos) - 1,get<1>(actual_pos)));
-                player->addStep();
-                break;
-            }; break;
+            moveHandler(POSSIBLE_MOVE_LEFT);
+            break;
         default:
             break;
-    }player->setWeight(0);
-    check_win();
-    if (check_lose()) cout << "LOOOOOOSE"<<endl;;
+    }player->setWeight(0);  // player doesn't push boxes anymore
+    checkWin();
+    checkLose();
+}
+
+void Controller::moveHandler(Point move){
+    shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
+    Point posPlayer = player->getPos();  // position of the player
+    player->setMoveAsked(move);
+    if (checkMove(move)){
+        if (!player->isTeleported()) {
+            Point move_asked = player->getMoveAsked();
+            Point new_pos = posPlayer + move_asked;
+            player->setPos(new_pos);
+        } else {
+            // new possible position of the player (not checked yet)
+            Point new_pos = posPlayer + move;
+            board->teleport(new_pos);
+            player->changeTeleported();
+        }
+        player->addStep();
+    }; 
 }
 
 
-bool Controller::check_move(tuple<int, int> move){
-    shared_ptr<Player> player = board->get_player();  // get the ptr to the player
+bool Controller::checkMove(Point move){
+    shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
+    Point posPlayer = player->getPos();  // position of the player
+    Point new_pos = posPlayer + move; // new possible position of the player (not checked yet)
+    Point move_asked = player->getMoveAsked();
+    Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
 
-    tuple<int, int> posPlayer = player->getPos();  // position of the player
-    tuple<int, int> new_pos = make_tuple(get<0>(posPlayer) + get<0>(move),get<1>(posPlayer)+get<1>(move)); // new possible position of the player (not checked yet)
-    tuple<int, int> new_pos_box = make_tuple(get<0>(new_pos) + get<0>(player->getMoveAsked()),get<1>(new_pos)+get<1>(player->getMoveAsked())); // new possible position of the box (not checked yet)
-
-    Block::BlockType destination_type = board->get_block(new_pos)->getType();
-
-    if ((get<0>(new_pos)<0 || get<0>(new_pos)>= board->get_width()) || (get<1>(new_pos)<0 || get<1>(new_pos)>= board->get_height())) {
-        // check if the player will not leave the board with its movement
+    if (!board->isInBoard(new_pos)) { // check if the player will not leave the board with its movement
+        return false;
+    } 
+    if (player->getWeight()> MAX_PLAYER_WEIGHT) {  // A player can push max a weight lesser than 10
         return false;
     }
-    if (player->getWeight()> 10) {  // A player can push max a weight lesser than 10
-        return false;
-    }
+    Block::BlockType destination_type = board->getBlock(new_pos)->getType();
+    shared_ptr<Block> block_on_move = board->getBox(new_pos);  // ptr to the box if there is one, nullptr if not
     if (destination_type == Block::BlockType::wall) { // if the block of arrival is a wall
         return false;
     } else if (destination_type == Block::BlockType::floor || destination_type == Block::BlockType::target){
         // if the block of arrival is a floor or a target
-        shared_ptr<Block> block_on_move = board->get_box_on_pos(new_pos);  // ptr to the box if there is one, nullptr if not
-       if (block_on_move){  // check if ptr != nullptr
-            player->setWeight(player->getWeight()+block_on_move->getWeight()); // add the weight of the box pushed by the player
-            if (check_move(make_tuple(get<0>(move)+get<0>(player->getMoveAsked()), get<1>(move)+get<1>(player->getMoveAsked())))){
-                // recursive call to check the next block until we have a wall, a free block or too much weight
-                if (player->getWeight() > 10) return false; // too much weight for the player
-                else {board->get_box_on_pos(new_pos)->setPos(new_pos_box); // modifie la position de la box
-                    return true; 
+        if (block_on_move){  // check if ptr != nullptr
+            player->setWeight(player->getWeight()+ block_on_move->getWeight()); // add the weight of the box pushed by the player
+            if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
+                if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
+                else { 
+                    if (board->getBlock(new_pos_box)->getType()==Block::BlockType::teleporter) return false;
+                    else {board->getBox(new_pos)->setPos(new_pos_box); // modifie la position de la box
+                    return true; } 
                 }
             }else return false;
         }return true;
-
     } else if (destination_type == Block::BlockType::teleporter){ // if the block of arrival is a teleporter
-
+        if (block_on_move) return false;
+        else { if (board->getBox(new_pos - move_asked)){
+                return false;
+            } player->changeTeleported();
+            return true;
+        }
     } else return false;
 }
 
-bool Controller::check_lose(){
-    shared_ptr<Player> player = board->get_player();  // get the ptr to the player
-    return (player->getSteps() >= board->getMaxSteps());
+ bool Controller::isBlocked(shared_ptr<Block> box){
+    Point pos_box = box->getPos();  // position of the box to check
+    vector<Point> possible_moves;  // list of positions of cases to try to see if it's blocked
+    vector<bool> blocked;  // list of booleans (true if blocked, false if not)
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_DOWN); // add position to try to the list
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_UP);
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_RIGHT);
+    possible_moves.push_back(pos_box + POSSIBLE_MOVE_LEFT);
+    for (auto move: possible_moves){  // loop with all the elements of the liste next_case
+        if (board->isInBoard(move)){  // if position (checked) is in the board
+            shared_ptr<Block> box_on_case = board->getBox(move);  // ptr to a box or nullptr if no box on the case
+            if (box_on_case) { // if box on case
+                if (box_on_case->getWeight()==9) blocked.push_back(true);  // heavy box blocked by another heavy box
+                else blocked.push_back(false);  // if it's a light box 
+            }
+            else if (board->getBlock(move)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
+            else if (board->getBlock(move)->getType()==Block::BlockType::teleporter)blocked.push_back(true); // box blocked by a teleporter
+            else blocked.push_back(false); // position does not block the box
+        } else blocked.push_back(true);  // position is not on the board
+    } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3));  // true if blocked at least once horizontally and once vertically
+ }
 
-}bool Controller::check_win(){
-    for (shared_ptr<Block> box: board->get_boxes()) {
-        if (board->get_block(box->getPos())->getType() != Block::BlockType::target){
-            return false;
-        }
-     } cout << "WINNNNNNNN" <<endl;
-     return true;
+ bool Controller::failureDetection(){
+    bool all_blocked = true;  // true if all boxes are blocked
+    bool box_blocked;  // test each box at a time
+    for (shared_ptr<Block> box: board->getBoxes()) {  // go through all the boxes of the board 
+        box_blocked = isBlocked(box);  // test if box is blocked
+        all_blocked = (all_blocked && box_blocked);
+    }if (all_blocked) return true; // all boxes are blocked
+    else return false;
+ }
+
+bool Controller::checkLose(){
+    shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
+    return (player->getSteps() >= board->getMaxSteps() || failureDetection()); // true if game over
+
+}
+
+bool Controller::checkWin(){
+    shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
+    if (board->nbBoxOnTarget() != static_cast<int>(board->getBoxes().size())) return false; // if not all boxes are on a target
+    if (board->getBestSteps() == -1 || board->getBestSteps() > player->getSteps()) board->writeBestSteps(); // if best steps has been beaten
+    return true;
 }
