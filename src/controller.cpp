@@ -88,12 +88,12 @@ bool Controller::checkMove(Point move){
         if (box_on_move){  // check if ptr != nullptr
             player->setWeight(player->getWeight()+ box_on_move->getWeight()); // add the weight of the box pushed by the player
             if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
-                if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
-                else { 
+                
+                if (player->getWeight() <= MAX_PLAYER_WEIGHT){ // not too much weight for the player
                     board->getBox(new_pos)->setPos(new_pos_box); // modifie la position de la box
                     return true; 
-                } 
-            }else return false;
+                }
+            }return false;
         }return true;
     } else if (destination_type == Block::BlockType::teleporter){ // if the block of arrival is a teleporter
         if (box_on_move){
@@ -107,7 +107,7 @@ bool Controller::checkMove(Point move){
                     }return false;
                 }board->getBox(new_pos)->setPos(new_pos_box);
             } 
-        }if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
+        } if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
             if (checkTeleport(new_pos)) {
                 player->changeTeleported();
                 return true;
