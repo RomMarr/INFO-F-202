@@ -87,8 +87,7 @@ bool Controller::checkMove(Point move){
     // if the block of arrival is a floor or a target
         if (box_on_move){  // check if ptr != nullptr
             player->setWeight(player->getWeight()+ box_on_move->getWeight()); // add the weight of the box pushed by the player
-            if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
-                
+            if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight    
                 if (player->getWeight() <= MAX_PLAYER_WEIGHT){ // not too much weight for the player
                     board->getBox(new_pos)->setPos(new_pos_box); // modifie la position de la box
                     return true; 
