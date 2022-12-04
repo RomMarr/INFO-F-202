@@ -140,8 +140,7 @@ bool Controller::checkTeleport(Point pos_teleporter){
             if (box_on_case) { // if box on case
                 if (box_on_case->getWeight()==9) blocked.push_back(true);  // heavy box blocked by another heavy box
                 else blocked.push_back(false);  // if it's a light box 
-            }
-            else if (board->getBlock(move)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
+            }else if (board->getBlock(move)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
             else blocked.push_back(false); // position does not block the box
         } else blocked.push_back(true);  // position is not on the board
     } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3));  // true if blocked at least once horizontally and once vertically
