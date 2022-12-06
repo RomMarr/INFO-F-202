@@ -21,7 +21,7 @@ private:
     const int height = 50;  // height of the block 
     BlockType type;         // type of the block   
     int weight;             // weight du block
-    int id_color;           // id of the color (between 0 and 3)
+    int id_color = 0;       // id of the color (0 or 1)
     Point pos;              // position of the block
 public:
     Block(BlockType type);
@@ -33,6 +33,7 @@ public:
     int getWeight();
     int getWidth();
     int getHeight();
+    int getIdColor();
     Fl_Color getColor();
     BlockType getType();
 };
