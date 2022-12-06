@@ -81,8 +81,8 @@ void Board::createMatrixFromFile(const string &file_name){
                     box->setPos(Point{stoi(line_splitted.at(0)), stoi(line_splitted.at(1))});
                     Block::BlockType box_type = box->getType();
                     if (box_type == Block::BlockType::heavy_box){
-                        if (line_splitted.size()>= 4) box->setIdColor(stoi(line_splitted.at(3)));
-                        else box->setIdColor(0);
+                        if (line_splitted.size()>= 4) box->setIdColor(1);
+                        //else box->setIdColor(0);
                     }boxes.push_back(box);
                 }
             }
@@ -219,7 +219,8 @@ void Board::writeBestSteps(){
 int Board::nbBoxOnTarget() {
     int nb_box = 0;
     for (shared_ptr<Block> box: getBoxes()) {  // go through all the boxes 
-        if (getBlock(box->getPos())->getType() == Block::BlockType::target) {  // true if the box is on a target
+        shared_ptr<Block> block_of_box = getBlock(box->getPos());
+        if (block_of_box->getType() == Block::BlockType::target && box->getIdColor() == block_of_box->getIdColor()) {  // true if the box is on a target
             nb_box += 1;
         }
      } return nb_box;

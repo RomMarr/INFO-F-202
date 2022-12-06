@@ -46,6 +46,10 @@ int Block::getHeight(){
     return height;
 }
 
+int Block::getIdColor(){
+    return id_color;
+}
+
 Fl_Color Block::getColor(){
     switch (type) {
         case (BlockType::wall): return BLOCK_WALL_COLOR; break;
