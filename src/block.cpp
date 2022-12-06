@@ -50,14 +50,16 @@ Fl_Color Block::getColor(){
     switch (type) {
         case (BlockType::wall): return BLOCK_WALL_COLOR; break;
         case (BlockType::floor): return BLOCK_FLOOR_COLOR;  break;
-        case (BlockType::target): return BLOCK_TARGET_COLOR; break;
         case (BlockType::teleporter): return BLOCK_TELEPORTER_COLOR; break;
         case (BlockType::light_box): return BLOCK_LIGHT_BOX_COLOR; break;
         default: {
             if (type == Block::BlockType::heavy_box){
-                return BLOCK_HEAVY_BOX_COLORS.at(id_color); break;
-            }return fl_rgb_color(100, 100, 100); break;
-            }
+                return BLOCK_HEAVY_BOX_COLORS.at(id_color);
+            }else if (type == Block::BlockType::target){
+                if (id_color== 0) return BLOCK_TARGET_COLOR; 
+                else return BLOCK_HEAVY_BOX_COLORS.at(id_color);
+            } return fl_rgb_color(100, 100, 100); break;
+        }
     }
 }
 

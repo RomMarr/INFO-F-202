@@ -53,11 +53,18 @@ void Board::createMatrixFromFile(const string &file_name){
             } else if (line_index <= height) {
                 vector<shared_ptr<Block>> block_this_line;
                 for (auto block_type_index: line_splitted) {
-                    shared_ptr block_here = make_shared<Block>(grid_int_block_type.at(stoi(block_type_index)));
-                    block_here->setPos(Point{posX, posY});
-                    block_this_line.push_back(block_here);
-                    Block::BlockType block_type = block_here->getType();
-                    if (block_type == Block::BlockType::teleporter) teleporters.push_back(block_here);
+                    if (stoi(block_type_index)> 3) {
+                        shared_ptr block_here = make_shared<Block>(Block::BlockType::target);
+                        block_here->setIdColor(1);
+                        block_here->setPos(Point{posX, posY});
+                        block_this_line.push_back(block_here);
+                    } else {
+                        shared_ptr block_here = make_shared<Block>(grid_int_block_type.at(stoi(block_type_index)));
+                        block_here->setPos(Point{posX, posY});
+                        block_this_line.push_back(block_here);
+                        Block::BlockType block_type = block_here->getType();
+                        if (block_type == Block::BlockType::teleporter) teleporters.push_back(block_here);
+                    }
                     posX++;
                 }
                 posX = 0;
@@ -73,7 +80,7 @@ void Board::createMatrixFromFile(const string &file_name){
                     shared_ptr<Block> box = make_shared<Block>((stoi(line_splitted.at(2)) ? Block::BlockType::light_box : Block::BlockType::heavy_box));
                     box->setPos(Point{stoi(line_splitted.at(0)), stoi(line_splitted.at(1))});
                     Block::BlockType box_type = box->getType();
-                    if (box_type == Block::BlockType::light_box || box_type == Block::BlockType::heavy_box){
+                    if (box_type == Block::BlockType::heavy_box){
                         if (line_splitted.size()>= 4) box->setIdColor(stoi(line_splitted.at(3)));
                         else box->setIdColor(0);
                     }boxes.push_back(box);

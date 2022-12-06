@@ -31,12 +31,10 @@ const Fl_Color BLOCK_WALL_COLOR = fl_rgb_color(0, 0, 0);
 const Fl_Color BLOCK_FLOOR_COLOR = fl_rgb_color(224, 224, 224);
 const Fl_Color BLOCK_TARGET_COLOR = fl_rgb_color(255, 204, 153);
 const Fl_Color BLOCK_TELEPORTER_COLOR = fl_rgb_color(153, 0, 153);
-const Fl_Color BLOCK_HEAVY_BOX_COLOR_NORMAL = fl_rgb_color(102, 51, 0);
-const Fl_Color BLOCK_HEAVY_BOX_COLOR_YELLOW = fl_rgb_color(217, 223, 32);
-const Fl_Color BLOCK_HEAVY_BOX_COLOR_RED = fl_rgb_color(203, 2, 22);
-const Fl_Color BLOCK_HEAVY_BOX_COLOR_GREEN = fl_rgb_color(35, 78, 20);
-const vector<const Fl_Color> BLOCK_HEAVY_BOX_COLORS{BLOCK_HEAVY_BOX_COLOR_NORMAL, BLOCK_HEAVY_BOX_COLOR_YELLOW, BLOCK_HEAVY_BOX_COLOR_RED, BLOCK_HEAVY_BOX_COLOR_GREEN};
 const Fl_Color BLOCK_LIGHT_BOX_COLOR = fl_rgb_color(204, 102, 0);
+const Fl_Color BLOCK_HEAVY_BOX_COLOR_NORMAL = fl_rgb_color(102, 51, 0);
+const Fl_Color BLOCK_HEAVY_BOX_COLOR_GREEN = fl_rgb_color(35, 78, 20);
+const vector<const Fl_Color> BLOCK_HEAVY_BOX_COLORS{BLOCK_HEAVY_BOX_COLOR_NORMAL, BLOCK_HEAVY_BOX_COLOR_GREEN};
 
 // WEIGHTS
 const int HEAVY_BOX_WEIGHT = 9;
