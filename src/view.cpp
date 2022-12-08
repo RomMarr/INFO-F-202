@@ -72,8 +72,7 @@ void MainMenu::draw() {
     }
 
     if (!play_btn) {
-        double fraction = NUMBER_OF_LEVELS/(3);
-        int posY = round(fraction);
+        int posY = round(NUMBER_OF_LEVELS/3);
         play_btn = make_shared<RectangleButton>(50, 90+ 40*posY, 110, 30, PLAY_BUTTON_TITLE);
     }
 
