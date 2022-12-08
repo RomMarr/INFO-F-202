@@ -65,9 +65,9 @@ MainMenu::MainMenu(shared_ptr<Controller> controller): controller{controller} {}
 
 void MainMenu::draw() {
     if (level_selection_btn.size() == 0) {
-        for (int i =0; i<NUMBER_OF_LEVELS; i++){
-            int posY = round(i/3); // level's buttoms are drawn 3 by 3
-            level_selection_btn.push_back(make_shared<RectangleButton>(50 + 40*(i%3),50 + 40*posY, 30, 30, to_string(i),i));
+        for (int index_level =0; index_level<NUMBER_OF_LEVELS; index_level++){
+            int posY = round(index_level/3); // level's buttoms are drawn 3 by 3
+            level_selection_btn.push_back(make_shared<RectangleButton>(50 + 40*(index_level%3),50 + 40*posY, 30, 30, to_string(index_level),index_level));
         }
     }
 
