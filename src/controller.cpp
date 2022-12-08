@@ -46,7 +46,7 @@ void Controller::keyHandler(int key_event){
     checkLose();
 }
 
-void Controller::moveHandler(Point move){
+void Controller::moveHandler(const Point &move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
     Point pos_player = player->getPos();  // position of the player
     player->setMoveAsked(move);

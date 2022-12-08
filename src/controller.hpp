@@ -16,7 +16,7 @@ public:
     Controller(shared_ptr<Board> board);     // constructor
     void selectLevel(int level_id);          // selector of level 
     void keyHandler(int key_event);          // handle the event of using some of the keyboard's keys 
-    void moveHandler(Point move);            // handle every move after being called by the key_handler
+    void moveHandler(const Point &move);            // handle every move after being called by the key_handler
     bool checkMove(Point move);              // check if the move is authorized 
     bool checkMoveTeleport(Point move);      // check if the move to a teleporter is authorized
     bool checkMoveNormal(Point move);        // check if the move to a target or the floor is authorized
