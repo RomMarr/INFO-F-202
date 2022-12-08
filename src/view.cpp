@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <memory>
 #include <cassert>
 #include <algorithm>
@@ -64,16 +65,16 @@ MainMenu::MainMenu(shared_ptr<Controller> controller): controller{controller} {}
 
 void MainMenu::draw() {
     if (level_selection_btn.size() == 0) {
-        level_selection_btn.push_back(make_shared<RectangleButton>(50, 50, 30, 30, "0"));
-        level_selection_btn.push_back(make_shared<RectangleButton>(100, 50, 30, 30, "1", 1));
-        level_selection_btn.push_back(make_shared<RectangleButton>(150, 50, 30, 30, "2", 2));
-        level_selection_btn.push_back(make_shared<RectangleButton>(200, 50, 30, 30, "3", 3));
-        level_selection_btn.push_back(make_shared<RectangleButton>(250, 50, 30, 30, "4", 4));
-        //level_selection_btn.push_back(make_shared<RectangleButton>(300, 50, 30, 30, "5", 5));
+        for (int i =0; i<NUMBER_OF_LEVELS; i++){
+            int posY = round(i/3); // level's buttoms are drawn 3 by 3
+            level_selection_btn.push_back(make_shared<RectangleButton>(50 + 40*(i%3),50 + 40*posY, 30, 30, to_string(i),i));
+        }
     }
 
     if (!play_btn) {
-        play_btn = make_shared<RectangleButton>(50, 100, 130, 30, PLAY_BUTTON_TITLE);
+        double fraction = NUMBER_OF_LEVELS/(3);
+        int posY = round(fraction);
+        play_btn = make_shared<RectangleButton>(50, 90+ 40*posY, 110, 30, PLAY_BUTTON_TITLE);
     }
 
     for (shared_ptr<RectangleButton> btn: level_selection_btn) {
