@@ -18,15 +18,14 @@ using namespace std;
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
 void Controller::selectLevel(int level_id) {
-    board->setLevel("levels/" + to_string(level_id) + ".txt");
+    board->setLevel("levels/" + to_string(level_id) + ".txt"); // set the level to correspond the file chosen
 }
 
-void Controller::keyHandler(int key_event){
-    shared_ptr<Player> player = board->getPlayer();
+void Controller::keyHandler(int key_event){ // handle the keys pushed from the keyboard
+    shared_ptr<Player> player = board->getPlayer();  //ptr to the player
     if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
-    if (checkLose() || checkWin()) return;
     switch (key_event) {
-             // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
+    // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
             moveHandler(POSSIBLE_MOVE_UP);
             break;
@@ -49,16 +48,15 @@ void Controller::keyHandler(int key_event){
 void Controller::moveHandler(const Point &move){
     shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
     Point pos_player = player->getPos();  // position of the player
-    player->setMoveAsked(move);
-    if (checkMove(move)){
-        if (!player->isTeleported()) {
+    player->setMoveAsked(move); // change the move asked by the player
+    if (checkMove(move)){  // if the move is authorized
+        if (!player->isTeleported()) { // if the player do a normal move
             Point move_asked = player->getMoveAsked();
             Point new_pos = pos_player + move_asked;
-            player->setPos(new_pos);
+            player->setPos(new_pos); // change de position of the player
         } else {
-            // new possible position of the player (not checked yet)
             Point new_pos = pos_player + move;
-            board->teleport(new_pos);
+            board->teleport(new_pos); // check if the play can teleport and does it if he can
             player->changeTeleported();
         }
         player->addStep();
@@ -96,23 +94,25 @@ bool Controller::checkMoveTeleport(Point move){
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
     shared_ptr<Block> box_on_move = board->getBox(new_pos);  // ptr to the box if there is one, nullptr if not
-    if (box_on_move){
-            player->setWeight(player->getWeight()+ box_on_move->getWeight());
-            if (checkMove(move + move_asked)){
+    if (box_on_move){ // if box on the new_pos of the player
+            player->setWeight(player->getWeight()+ box_on_move->getWeight()); // add the weight of the box
+            if (checkMove(move + move_asked)){  // if move authorized
                 if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
-                    board->getBox(new_pos)->setPos(new_pos_box);
-                    if (checkTeleport(new_pos)) {
-                        player->changeTeleported();
+                    // type of the block of the new_pos is a teleporter
+                    board->getBox(new_pos)->setPos(new_pos_box); // change de position of the box
+                    if (checkTeleport(new_pos)) { // if player can teleport
+                        player->changeTeleported(); // teleported = true
                         return true;
                     }return false;
-                }board->getBox(new_pos)->setPos(new_pos_box);
+                }board->getBox(new_pos)->setPos(new_pos_box); // change de position of the box
             } 
-        }if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
-            if (checkTeleport(new_pos)) {
-                player->changeTeleported();
-                return true;
-            }return false;
-        }return true;
+    }if (board->getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
+    // type of the block of the new_pos is a teleporter
+        if (checkTeleport(new_pos)) { // if player can teleport
+            player->changeTeleported(); // teleported = true
+            return true;
+        }return false;
+    }return true;
 }
 
 bool Controller::checkMoveNormal(Point move){
