@@ -17,7 +17,7 @@ Les tâches de bases :
 Les tâches additionnelles :
 - [ ] Animation des éléments en cours de déplacement
 - [X] Cases de téléportation
-- [ ] Boites de couleur
+- [X] Boites de couleur
 - [X] Boîtes légères
 - [X] Compteur de pas
 - [X] Meilleur score de pas
