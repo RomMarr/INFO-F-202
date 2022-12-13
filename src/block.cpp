@@ -8,9 +8,9 @@
 
 Block::Block(BlockType type): type{type} {
     if (type == BlockType::heavy_box) {
-        this->setWeight(HEAVY_BOX_WEIGHT);
+        setWeight(HEAVY_BOX_WEIGHT);
     } else if (type == BlockType::light_box) {
-        this->setWeight(LIGHT_BOX_WEIGHT);
+        setWeight(LIGHT_BOX_WEIGHT);
     }
 }
 

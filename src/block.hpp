@@ -34,7 +34,7 @@ public:
     int getWidth();
     int getHeight();
     int getIdColor();
-    Fl_Color getColor();
+    Fl_Color getColor();  // return the color that matches the type 
     BlockType getType();
 };
 
