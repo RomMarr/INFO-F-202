@@ -4,6 +4,7 @@ grid with
 - 1: wall
 - 2: target
 - 3: teleporter (Maximum 2 by level)
-[x y weight] = box positions (x, y) & 1 if light box (0 else) -> (0 0 is the top left corner)
+- 4: colored target
+[x y weight color] = box positions (x, y) & 1 if light box (0 else) -> (0 0 is the top left corner) & (0 or nothing) if normal color or (1) if special color
 -
 [x y nb_steps_max] = player position (x, y) & maximum number of steps

@@ -18,7 +18,7 @@ const string LOADING_AUTHORS = "By Romain Markowitch & Pol Marnette";
 
 // LEVEL SELECTOR
 const string PLAY_BUTTON_TITLE = "Play";
-const int NUMBER_OF_LEVELS = 5;
+const int NUMBER_OF_LEVELS = 7;
 
 // IN GAME
 const string WIN_TITLE = "Gagné";
