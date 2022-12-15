@@ -34,6 +34,10 @@ void Player::setMoveAnimation(Point new_move_animation) {
     move_animation = new_move_animation;
 }
 
+void Player::setAnimated(bool new_value) {
+    animated = new_value;
+}
+
 Point Player::getPos(){
     return position;
 }
@@ -60,4 +64,8 @@ int Player::getWeight(){
 
 bool Player::isTeleported(){
     return teleported;
+}
+
+bool Player::isAnimated(){
+    return animated;
 }

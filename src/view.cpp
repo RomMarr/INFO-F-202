@@ -143,7 +143,10 @@ void MainWindow::drawBoard() {
     }
 
     // Draw the player
-    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * player->getPos().getPosX(), y_offset + block_size * player->getPos().getPosY(), block_size, block_size, PLAYER_COLOR);
+    Point player_position{player->getPos().getPosX(), player->getPos().getPosY()};
+    player_position = (player_position + player->getMoveAnimation()) * block_size;
+
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, player_position.getPosX(), y_offset + player_position.getPosY(), block_size, block_size, PLAYER_COLOR);
 
     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->getWidth(), 0, 1, 500, fl_rgb_color(0, 0, 0));
 
