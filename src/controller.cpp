@@ -51,9 +51,12 @@ void Controller::moveHandler(const Point &move){
     player->setMoveAsked(move); // change the move asked by the player
     if (checkMove(move)){  // if the move is authorized
         if (!player->isTeleported()) { // if the player do a normal move
-            Point move_asked = player->getMoveAsked();
-            Point new_pos = pos_player + move_asked;
-            player->setPos(new_pos); // change de position of the player
+            // Point move_asked = player->getMoveAsked();
+            // Point new_pos = pos_player + move_asked;
+            // player->setPos(new_pos); // change de position of the player
+            // player->setDestination(new_pos);
+            player->setPositionFrom(player->getPos());
+            player->move_checked = true;
         } else {
             Point new_pos = pos_player + move;
             board->teleport(new_pos); // check if the play can teleport and does it if he can
@@ -185,4 +188,33 @@ bool Controller::checkWin(){
     if (board->nbBoxOnTarget() != static_cast<int>(board->getBoxes().size())) return false; // if not all boxes are on a target
     if (board->getBestSteps() == -1 || board->getBestSteps() > player->getSteps()) board->writeBestSteps(); // if best steps has been beaten
     return true;
+}
+
+void Controller::animationHandler() {
+    auto player = board->getPlayer();
+    Point destination = player->getPositionFrom() + player->getMoveAsked();
+    Point new_position;
+
+   
+        new_position = player->getPos() + (player->getMoveAsked() * 0.1);
+    
+
+    if (player->getMoveAsked() == Point(1, 0) && new_position.getPosX() >= destination.getPosX() || 
+        player->getMoveAsked() == Point(0, 1) && new_position.getPosY() >= destination.getPosY() || 
+        player->getMoveAsked() == Point(-1, 0) && new_position.getPosX() <= destination.getPosX() || 
+        player->getMoveAsked() == Point(0, -1) && new_position.getPosY() <= destination.getPosY()
+    ) {
+        player->move_checked = false;
+    }
+
+     if (player->move_checked) {
+        player->setPos(new_position);
+     }
+
+    // if ((player->getMoveAsked() == Point(1, 0) || player->getMoveAsked() == Point(0, 1)) && 
+    //         (destination.getPosX() > player->getPos().getPosX() || destination.getPosY() > player->getPos().getPosY())) {
+    //     cout << "bah ouais" << endl;
+        
+    // }
+
 }

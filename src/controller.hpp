@@ -25,6 +25,7 @@ public:
     bool checkWin();                         // check if the player has win the level
     bool isBlocked(shared_ptr<Block> box);   // check if the box can still be moved
     bool failureDetection();                 // check if all the boxes can still be moved
+    void animationHandler();                 // called every redraw of the interface to animate the movement
 };
 
 #endif
