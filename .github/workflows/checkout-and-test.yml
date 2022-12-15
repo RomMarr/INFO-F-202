@@ -8,6 +8,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Add Fltk
+        run: sudo apt install libfltk1.3-dev
       - name: Build C++ code
         run: |
           cd src
