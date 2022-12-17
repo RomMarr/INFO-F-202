@@ -117,6 +117,13 @@ shared_ptr<Player> Board::getPlayer() {
     return player; // shared ptr to the player
 }
 
+shared_ptr<Player> Board::getPlayer(Point pos_actual){
+    if (player->getPos() == pos_actual) { // if the player is on the position given
+        return player;  // shared ptr to the player 
+    }
+    return nullptr;
+}
+
 shared_ptr<Block> Board::getBox(Point actual_pos){
     for (auto box: boxes){  // go through all the boxes
         if (box->getPos() == actual_pos) return box;  // shared ptr to the box
@@ -130,13 +137,6 @@ vector<shared_ptr<Block>> Board::getBoxes() {
 
 vector<shared_ptr<Block>> Board::getTeleporters() {
     return teleporters;  // vector of all the teleporters of the board
-}
-
-shared_ptr<Player> Board::getPlayer(Point pos_actual){
-    if (player->getPos() == pos_actual) { // if the player is on the position given
-        return player;  // shared ptr to the player 
-    }
-    return nullptr;
 }
 
 int Board::getWidth() {

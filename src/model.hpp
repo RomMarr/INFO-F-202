@@ -4,7 +4,6 @@
 #include "point.hpp"
 #include "block.hpp"
 #include "player.hpp"
-// #include "view.hpp"
 
 #include <FL/Fl.H>
 #include "stdio.h"
