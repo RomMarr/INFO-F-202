@@ -27,6 +27,7 @@ vector<string> split (string s, string delimiter) {
 void Board::resetLevelStates() {
     board.clear();
     boxes.clear();
+    teleporters.clear();
     player = nullptr;
 }
 
