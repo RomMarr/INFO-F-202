@@ -230,21 +230,17 @@ int Board::nbBoxOnTarget() {
 
 
 bool Board::checkWin(){
-    //shared_ptr<Player> player = getPlayer();  // get the ptr to the player
     if (nbBoxOnTarget() != static_cast<int>(getBoxes().size())) return false; // if not all boxes are on a target
     if (getBestSteps() == -1 || getBestSteps() > player->getSteps()) writeBestSteps(); // if best steps has been beaten
     return true;
 }
 
 bool Board::checkLose(){
-    //shared_ptr<Player> player = getPlayer();  // get the ptr to the player
     return (player->getSteps() >= getMaxSteps() || failureDetection()); // true if game over
-
 }
 
 
 bool Board::checkMove(Point move){
-    //shared_ptr<Player> player = getPlayer();  // get the ptr to the player
     Point new_pos = player->getPos() + move; // new possible position of the player (not checked yet)
 
     if (!isInBoard(new_pos)) return false; 
@@ -268,7 +264,6 @@ bool Board::checkMove(Point move){
 
 
 bool Board::checkMoveTeleport(Point move){
-    //shared_ptr<Player> player = getPlayer();  // get the ptr to the player
     Point pos_player = player->getPos();  // position of the player
     Point new_pos = pos_player + move; // new possible position of the player (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
@@ -296,7 +291,6 @@ bool Board::checkMoveTeleport(Point move){
 }
 
 bool Board::checkMoveNormal(Point move){
-    //shared_ptr<Player> player = getPlayer();  // get the ptr to the player
     Point pos_player = player->getPos();  // position of the player
     Point new_pos = pos_player + move; // new possible position of the player (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position

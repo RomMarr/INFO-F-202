@@ -62,12 +62,3 @@ void Controller::moveHandler(const Point &move){
         player->addStep();
     }; 
 }
-
-void Controller::moveBox(shared_ptr<Block> box, Point new_pos){
-    box->setPos(new_pos);
-}
-
-void Controller::movePlayer(Point new_pos){
-    shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    player->setPos(new_pos);
-}
