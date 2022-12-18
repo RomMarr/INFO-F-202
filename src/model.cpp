@@ -302,6 +302,7 @@ bool Board::checkMoveNormal(Point move){
                 if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
                 else { 
                     getBox(new_pos)->setPos(new_pos_box); // change the box position 
+
                     return true; 
                 } 
             }else return false;
