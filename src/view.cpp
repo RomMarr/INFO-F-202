@@ -155,10 +155,10 @@ void MainWindow::drawBoardInformations() {
     std::string box_on_pos = "Box : " + to_string(board->nbBoxOnTarget()) + "/" + to_string(board->getBoxes().size());
 
     fl_font(FL_HELVETICA_BOLD, 32);
-    if (controller->checkWin()) {
+    if (board->checkWin()) {
         fl_color(fl_rgb_color(0, 102, 0));
         fl_draw(WIN_TITLE.c_str(), pos_x, 50);
-    } else if (controller->checkLose()) {
+    } else if (board->checkLose()) {
         fl_color(fl_rgb_color(204, 0, 0));
         fl_draw(LOST_TITLE.c_str(), pos_x, 50);
     }
