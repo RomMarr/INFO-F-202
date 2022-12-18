@@ -23,6 +23,8 @@ void Controller::selectLevel(int level_id) {
 
 void Controller::keyHandler(int key_event){ // handle the keys pushed from the keyboard
     shared_ptr<Player> player = board->getPlayer();  //ptr to the player
+    if (player->isAnimated()) return; // If being animated, does nothing
+
     if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
     if (board->checkWin() || board->checkLose()) return;
     switch (key_event) {
@@ -54,7 +56,12 @@ void Controller::moveHandler(const Point &move){
         if (!player->isTeleported()) { // if the player do a normal move
             Point move_asked = player->getMoveAsked();
             Point new_pos = pos_player + move_asked;
-            player->setPos(new_pos); // change de position of the player
+            // player->setPos(new_pos); // change de position of the player
+            // player->setDestination(new_pos);
+            player->setMoveAnimation(move_asked * -1);
+            player->setPositionFrom(player->getPos());
+            player->setPos(new_pos);
+            player->setAnimated(true);
         } else {
             Point new_pos = pos_player + move;
             board->teleport(new_pos); // check if the play can teleport and does it if he can
@@ -63,3 +70,40 @@ void Controller::moveHandler(const Point &move){
         player->addStep();
     }; 
 }
+
+void Controller::animationHandler() {
+    auto player = board->getPlayer();
+    
+    if (player->isAnimated()) {
+        Point new_animation;
+
+        new_animation = player->getMoveAnimation() + (player->getMoveAsked() * 0.1);  // -1 -> -0.9 etc.
+    
+        if (player->getMoveAsked() == Point(1, 0) && new_animation.getPosX() >= 0 || 
+            player->getMoveAsked() == Point(0, 1) && new_animation.getPosY() >= 0 || 
+            player->getMoveAsked() == Point(-1, 0) && new_animation.getPosX() <= 0 || 
+            player->getMoveAsked() == Point(0, -1) && new_animation.getPosY() <= 0
+        ) {
+            player->setAnimated(false);
+            player->setMoveAnimation({0, 0});
+        }
+
+        if (player->isAnimated()) {
+            player->setMoveAnimation(new_animation);
+        }
+    }
+    
+
+
+    //  if (player->move_checked) {
+    //     // player->setMoveAnimation(new_position);
+    //  }
+
+    // if ((player->getMoveAsked() == Point(1, 0) || player->getMoveAsked() == Point(0, 1)) && 
+    //         (destination.getPosX() > player->getPos().getPosX() || destination.getPosY() > player->getPos().getPosY())) {
+    //     cout << "bah ouais" << endl;
+        
+    // }
+
+}
+

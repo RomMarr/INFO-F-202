@@ -113,21 +113,22 @@ void MainWindow::setController(shared_ptr<Controller> new_controller) {
 }
 
 void MainWindow::drawBoard() {
+    shared_ptr<Player> player = board->getPlayer();
     int block_size = std::min(500 / board->getWidth(), 500 / board->getHeight());
 
     int y_offset = (500 - (block_size * board->getHeight())) / 2;
 
     for (int y = 0; y < board->getHeight(); y++) {
         for (int x = 0; x < board->getWidth(); x++) {
-            shared_ptr<Player> player_here = board->getPlayer(Point{x, y});
             shared_ptr<Block> box_here = board->getBox(Point{x, y});
 
             int pos_x = block_size * x;
             int pos_y = y_offset + block_size * y;
 
-            if (player_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, PLAYER_COLOR);
-            } else if (box_here) {
+            // if (player_here) {
+            //     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, PLAYER_COLOR);
+            // } 
+            if (box_here) {
                 fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 0));
                 fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x + 1, pos_y + 1, block_size - 2, block_size - 2, box_here->getColor());
             } else {
@@ -140,6 +141,12 @@ void MainWindow::drawBoard() {
             }
         }
     }
+
+    // Draw the player
+    Point player_position{player->getPos().getPosX(), player->getPos().getPosY()};
+    player_position = (player_position + player->getMoveAnimation()) * block_size;
+
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, player_position.getPosX(), y_offset + player_position.getPosY(), block_size, block_size, PLAYER_COLOR);
 
     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, block_size * board->getWidth(), 0, 1, 500, fl_rgb_color(0, 0, 0));
 
@@ -189,6 +196,7 @@ void MainWindow::draw() {
     if (show_loading) {
         LoadingScreen::draw();
     } else if (board->shouldShowBoard()) {
+        controller->animationHandler();
         drawBoard();
     } else {
         menu.draw();

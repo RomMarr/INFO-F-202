@@ -16,22 +16,32 @@ using namespace std;
 
 class Player{
     Point position;              // position in the matrix
+    // Point animates_position;     // position of the player animated
     Point move_asked;            // point to add to the position of the player
+    Point position_from;
+    Point move_animation;
     int steps = 0;               // number of steps the player has done
     int weight = 0;              // weight of the boxes the player is pushing
     bool teleported = false;     // true if the player use a teleporter
+    bool animated = false;
 public:
     Player(Point position);
     void setPos(Point new_pos);  
     void setWeight(int new_weight);
     void setMoveAsked(Point new_move_asked);
+    void setPositionFrom(Point new_from);
+    void setMoveAnimation(Point new_move_animation);
+    void setAnimated(bool new_value);
     void addStep();                // add a step to steps
     void changeTeleported();       // change de boolean of teleprted
     int getSteps();
     int getWeight();
     bool isTeleported(); 
+    bool isAnimated();
     Point getPos();          
     Point getMoveAsked();
+    Point getPositionFrom();
+    Point getMoveAnimation();
 };
 
 #endif
