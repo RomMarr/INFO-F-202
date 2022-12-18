@@ -24,6 +24,7 @@ void Controller::selectLevel(int level_id) {
 void Controller::keyHandler(int key_event){ // handle the keys pushed from the keyboard
     shared_ptr<Player> player = board->getPlayer();  //ptr to the player
     if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
+    if (board->checkWin() || board->checkLose()) return;
     switch (key_event) {
     // REF https://www.fltk.org/doc-1.3/group__fl__events.html#ga12be48f03872da009734f557d1e761bc           
         case FL_Up:
