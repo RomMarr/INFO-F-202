@@ -5,11 +5,13 @@
 
 #include <FL/Fl.H>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 const string WINDOW_TITLE = "Sokoban";
 const int REFRESH_RATE = 60; // Frames per seconds
+const float ANIMATION_SPEED = 10; // Blocks per seconds
 
 // LOADING SCREEN
 const double LOADING_SCREEN_TIMEOUT = 1.0; // seconds

@@ -1,6 +1,6 @@
 #include "animation.hpp"
 
-
+#include "constants.hpp"
 #include "point.hpp"
 
 Animation::Animation(): animated{false} {}
@@ -32,7 +32,7 @@ void Animation::computeAnimation() {
   if (isAnimated()) {
     Point new_animation;
 
-    new_animation = getAnimationOffset() + (getMove() * 0.1);  // -1 -> -0.9 etc.
+    new_animation = getAnimationOffset() + (getMove() * (ANIMATION_SPEED / REFRESH_RATE));  // -1 -> -0.9 etc.
 
     if (getMove() == Point(1, 0) && new_animation.getPosX() >= 0 || 
         getMove() == Point(0, 1) && new_animation.getPosY() >= 0 || 
