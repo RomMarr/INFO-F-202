@@ -6,7 +6,7 @@
 #include <FL/Fl.H>
 
 
-Block::Block(BlockType type): type{type} {
+Block::Block(BlockType type): type{type}, animation{} {
     if (type == BlockType::heavy_box) {
         setWeight(HEAVY_BOX_WEIGHT);
     } else if (type == BlockType::light_box) {
@@ -48,6 +48,10 @@ int Block::getHeight(){
 
 int Block::getIdColor(){
     return id_color;
+}
+
+Animation &Block::getAnimation() {
+    return animation;
 }
 
 Fl_Color Block::getColor(){

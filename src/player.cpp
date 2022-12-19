@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-Player::Player(Point position): position{position} {};
+Player::Player(Point position): position{position}, animation{} {};
 
 void Player::setPos(Point new_pos){
     position = new_pos;
@@ -44,4 +44,8 @@ int Player::getWeight(){
 
 bool Player::isTeleported(){
     return teleported;
+}
+
+Animation &Player::getAnimation() {
+    return animation;
 }

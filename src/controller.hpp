@@ -17,6 +17,7 @@ public:
     void selectLevel(int level_id);          // selector of level 
     void keyHandler(int key_event);          // handle the event of using some of the keyboard's keys 
     void moveHandler(const Point &move);     // handle every move after being called by the key_handler
+    void animationHandler();                 // called every redraw of the interface to animate the movement
 };
 
 #endif

@@ -23,6 +23,8 @@ void Controller::selectLevel(int level_id) {
 
 void Controller::keyHandler(int key_event){ // handle the keys pushed from the keyboard
     shared_ptr<Player> player = board->getPlayer();  //ptr to the player
+    if (player->getAnimation().isAnimated()) return; // If being animated, does nothing
+
     if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
     if (board->checkWin() || board->checkLose()) return;
     switch (key_event) {
@@ -54,7 +56,9 @@ void Controller::moveHandler(const Point &move){
         if (!player->isTeleported()) { // if the player do a normal move
             Point move_asked = player->getMoveAsked();
             Point new_pos = pos_player + move_asked;
-            player->setPos(new_pos); // change de position of the player
+
+            player->getAnimation().animate(player->getPos(), move_asked);
+            player->setPos(new_pos);
         } else {
             Point new_pos = pos_player + move;
             board->teleport(new_pos); // check if the play can teleport and does it if he can
@@ -63,3 +67,14 @@ void Controller::moveHandler(const Point &move){
         player->addStep();
     }; 
 }
+
+void Controller::animationHandler() {
+    auto player = board->getPlayer();
+    
+    player->getAnimation().computeAnimation();
+
+    for (auto box: board->getBoxes()) {
+        box->getAnimation().computeAnimation();
+    }
+}
+
