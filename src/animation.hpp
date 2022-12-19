@@ -20,6 +20,7 @@ public:
   void setAnimated(bool new_value);
   void animate(Point from, Point movement);
   void computeAnimation();
+  Point getAnimatedPosition(Point current_position);
   Point getMove();
   Point getPositionFrom();
   Point getAnimationOffset();

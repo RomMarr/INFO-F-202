@@ -46,7 +46,11 @@ void Animation::computeAnimation() {
     if (isAnimated()) {
       setAnimationOffset(new_animation);
     }
+  }
 }
+
+Point Animation::getAnimatedPosition(Point current_position) {
+  return current_position + getAnimationOffset();
 }
 
 Point Animation::getMove() {
