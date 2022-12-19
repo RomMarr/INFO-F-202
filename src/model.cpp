@@ -264,8 +264,8 @@ bool Board::checkMove(Point move){
 
 
 bool Board::checkMoveTeleport(Point move){
-    Point pos_player = player->getPos();  // position of the player
-    Point new_pos = pos_player + move; // new possible position of the player (not checked yet)
+    Point pos_player = player->getPos();
+    Point new_pos = pos_player + move; // new possible position of the player or box (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
     shared_ptr<Block> box_on_move = getBox(new_pos);  // ptr to the box if there is one, nullptr if not
@@ -291,7 +291,7 @@ bool Board::checkMoveTeleport(Point move){
 }
 
 bool Board::checkMoveNormal(Point move){
-    Point pos_player = player->getPos();  // position of the player
+    Point pos_player = player->getPos(); 
     Point new_pos = pos_player + move; // new possible position of the player (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
@@ -304,7 +304,6 @@ bool Board::checkMoveNormal(Point move){
                     auto box = getBox(new_pos);
                     box->getAnimation().animate(new_pos, move_asked);
                     box->setPos(new_pos_box); // change the box position 
-
                     return true; 
                 } 
             }else return false;
@@ -312,7 +311,6 @@ bool Board::checkMoveNormal(Point move){
 }
 
 bool Board::checkTeleport(Point pos_teleporter){
-    //vector<shared_ptr<Block>> teleporters = getTeleporters(); //vector of ptr of teleporters
     for (auto teleporter: teleporters){  // go through the teleporters
         if(teleporter->getPos() != pos_teleporter) {  // if the teleporter is not the one the player is using
             if (!getBox(teleporter->getPos())) return true; // if no box on the other teleporter

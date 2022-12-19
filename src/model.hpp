@@ -37,12 +37,12 @@ public:
     vector<shared_ptr<Block>> getTeleporters();   // get a list of ptr of all the teleporters
     shared_ptr<Block> readLevel(string block_type_index, int posX, int posY);  // read level.txt and return the block of the board at coord : (posX,posY)
     void setShowBoard(bool value);
-    bool shouldShowBoard();         // Should the board be shown (is the board ready)
+    bool shouldShowBoard();                   // Should the board be shown (is the board ready)
     void setLevel(const string &level_file);
-    void readPlayerBoxes(bool next_is_player_coord, vector<string> line_splitted); // read lvl.txt and init player and boxes
-    void resetLevel();
-    void teleport(Point pos_teleporter);
-    void writeBestSteps();                   // Edit the best steps file with the new record
+    void readPlayerBoxes(bool next_is_player_coord, vector<string> line_splitted); // read lvl.txt and init the player and boxes
+    void resetLevel();                        // restart the level
+    void teleport(Point pos_teleporter);      // teleport the player
+    void writeBestSteps();                    // Edit the best steps file with the new record
     int getWidth();
     int getHeight();
     int getMaxSteps();
@@ -50,14 +50,14 @@ public:
     int getLvl();
     int nbBoxOnTarget();
     bool isInBoard(Point position);
-    bool checkLose();                        // check if the player has lost the level
-    bool checkWin();                         // check if the player has win the level
-    bool checkMove(Point move);              // check if the move is authorized 
-    bool checkMoveTeleport(Point move);      // check if the move to a teleporter is authorized
-    bool checkMoveNormal(Point move);        // check if the move to a target or the floor is authorized
+    bool checkLose();                         // check if the player has lost the level
+    bool checkWin();                          // check if the player has win the level
+    bool checkMove(Point move);               // check if the move is authorized 
+    bool checkMoveTeleport(Point move);       // check if the move to a teleporter is authorized
+    bool checkMoveNormal(Point move);         // check if the move to a target or the floor is authorized
     bool checkTeleport(Point pos_teleporter); // check if the player can teleport 
-    bool isBlocked(shared_ptr<Block> box);   // check if the box can still be moved
-    bool failureDetection();                 // check if all the boxes can still be moved
+    bool isBlocked(shared_ptr<Block> box);    // check if the box can still be moved
+    bool failureDetection();                  // check if all the boxes can still be moved
 };
 
 #endif

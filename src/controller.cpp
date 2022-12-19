@@ -18,7 +18,8 @@ using namespace std;
 Controller::Controller(shared_ptr<Board> board): board{board} {};
 
 void Controller::selectLevel(int level_id) {
-    board->setLevel("levels/" + to_string(level_id) + ".txt"); // set the level to correspond the file chosen
+    board->setLevel("levels/" + to_string(level_id) + ".txt"); 
+    // set the level to correspond the file chosen
 }
 
 void Controller::keyHandler(int key_event){ // handle the keys pushed from the keyboard

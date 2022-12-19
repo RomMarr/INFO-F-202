@@ -16,7 +16,7 @@ using namespace std;
 
 class Block {
 public:
-    enum BlockType { wall, floor, target, heavy_box, light_box, teleporter }; // peut ajouter Block pour extérieur si on veut
+    enum BlockType { wall, floor, target, heavy_box, light_box, teleporter }; 
 private:    
     const int width = 50;   // wifth of the block
     const int height = 50;  // height of the block 
