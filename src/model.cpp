@@ -301,7 +301,9 @@ bool Board::checkMoveNormal(Point move){
             if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
                 if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
                 else { 
-                    getBox(new_pos)->setPos(new_pos_box); // change the box position 
+                    auto box = getBox(new_pos);
+                    box->getAnimation().animate(new_pos, move_asked);
+                    box->setPos(new_pos_box); // change the box position 
 
                     return true; 
                 } 

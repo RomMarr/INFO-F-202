@@ -128,18 +128,27 @@ void MainWindow::drawBoard() {
             // if (player_here) {
             //     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, PLAYER_COLOR);
             // } 
-            if (box_here) {
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 0));
-                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x + 1, pos_y + 1, block_size - 2, block_size - 2, box_here->getColor());
+            // if (box_here) {
+            //     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, fl_rgb_color(0, 0, 0));
+            //     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x + 1, pos_y + 1, block_size - 2, block_size - 2, box_here->getColor());
+            // } else {
+            shared_ptr<Block> cell = board->getBlock(Point{x, y});
+            if (cell->getType() == Block::BlockType::target) {
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x  + (block_size / 4), pos_y  + (block_size / 4), block_size / 2, block_size / 2, cell->getColor());
             } else {
-                shared_ptr<Block> cell = board->getBlock(Point{x, y});
-                if (cell->getType() == Block::BlockType::target) {
-                    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x  + (block_size / 4), pos_y  + (block_size / 4), block_size / 2, block_size / 2, cell->getColor());
-                } else {
-                    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, cell->getColor());
-                }
+                fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, pos_x, pos_y, block_size, block_size, cell->getColor());
             }
+            // }
         }
+    }
+
+    // Draw the boxes
+    for (auto box: board->getBoxes()) {
+        Point position{box->getPos().getPosX(), box->getPos().getPosY()};
+        position = (position + box->getAnimation().getAnimationOffset()) * block_size;
+
+        fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX(), y_offset + position.getPosY(), block_size, block_size, fl_rgb_color(0, 0, 0));
+        fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX() + 1, y_offset + position.getPosY() + 1, block_size - 2, block_size - 2, box->getColor());
     }
 
     // Draw the player

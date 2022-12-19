@@ -2,6 +2,7 @@
 #define _BLOCK_H
 
 #include "point.hpp"
+#include "animation.hpp"
 
 #include "stdio.h"
 #include <FL/Fl.H>
@@ -23,6 +24,7 @@ private:
     int weight;             // weight du block
     int id_color = 0;       // id of the color (0 or 1)
     Point pos;              // position of the block
+    Animation animation;
 public:
     Block(BlockType type);
     void setWeight(int weight);
@@ -34,6 +36,7 @@ public:
     int getWidth();
     int getHeight();
     int getIdColor();
+    Animation &getAnimation();
     Fl_Color getColor();  // return the color that matches the type 
     BlockType getType();
 };

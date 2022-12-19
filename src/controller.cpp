@@ -72,5 +72,9 @@ void Controller::animationHandler() {
     auto player = board->getPlayer();
     
     player->getAnimation().computeAnimation();
+
+    for (auto box: board->getBoxes()) {
+        box->getAnimation().computeAnimation();
+    }
 }
 
