@@ -11,7 +11,7 @@ using namespace std;
 
 const string WINDOW_TITLE = "Sokoban";
 const int REFRESH_RATE = 60; // Frames per seconds
-const float ANIMATION_SPEED = 10; // Blocks per seconds
+const float ANIMATION_SPEED = 8; // Blocks per seconds
 
 // LOADING SCREEN
 const double LOADING_SCREEN_TIMEOUT = 1.0; // seconds
