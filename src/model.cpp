@@ -10,7 +10,7 @@
 #include <fstream>
 #include <FL/Fl.H>
 
-// The following function come from https://stackoverflow.com/a/46931770/7905936
+// The following function comes from https://stackoverflow.com/a/46931770/7905936
 vector<string> split (string s, string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     string token;
@@ -34,13 +34,13 @@ void Board::resetLevelStates() {
 }
 
 shared_ptr<Block> Board::readLevel(string block_type_index, int posX, int posY){
-    if (stoi(block_type_index)> 3) {
-        shared_ptr block_here = make_shared<Block>(Block::BlockType::target);
+    if (stoi(block_type_index) > 3) { // If the index is more than 3, it is the second type of colored box
+        auto block_here = make_shared<Block>(Block::BlockType::target);
         block_here->setIdColor(1);
         block_here->setPos(Point{posX, posY});
         return block_here;
-    } else {
-        shared_ptr block_here = make_shared<Block>(grid_int_block_type.at(stoi(block_type_index)));
+    } else { // First type of box
+        auto block_here = make_shared<Block>(grid_int_block_type.at(stoi(block_type_index)));
         block_here->setPos(Point{posX, posY});
         Block::BlockType block_type = block_here->getType();
         if (block_type == Block::BlockType::teleporter) teleporters.push_back(block_here);
@@ -49,15 +49,15 @@ shared_ptr<Block> Board::readLevel(string block_type_index, int posX, int posY){
 }
 
 void Board::readPlayerBoxes(bool next_is_player_coord, vector<string>line_splitted){
-    if (next_is_player_coord) {
+    if (next_is_player_coord) { // If line_splitted is player coord
         player = make_shared<Player>(Point(stoi(line_splitted.at(0)), stoi(line_splitted.at(1))));
         max_steps = stoi(line_splitted.at(2));
-    } else {
+    } else { // If line_splitted is boxes informations
         shared_ptr<Block> box = make_shared<Block>((stoi(line_splitted.at(2)) ? Block::BlockType::light_box : Block::BlockType::heavy_box));
         box->setPos(Point{stoi(line_splitted.at(0)), stoi(line_splitted.at(1))});
         Block::BlockType box_type = box->getType();
         if (box_type == Block::BlockType::heavy_box){
-            if (line_splitted.size()>= 4) box->setIdColor(1);
+            if (line_splitted.size() >= 4) box->setIdColor(1);
         }boxes.push_back(box);
     }
 }
@@ -69,7 +69,9 @@ void Board::createMatrixFromFile(const string &file_name){
     // Reset the board matrix
     resetLevelStates();
 
+    // Get the best step for the current level
     readBestSteps();
+
     int height = 0, line_index = 0;
     bool next_is_player_coord = false;
     string line;
@@ -80,14 +82,17 @@ void Board::createMatrixFromFile(const string &file_name){
             vector<string> line_splitted = split(line, " ");
             if (line_index == 0) height = stoi(line_splitted.at(0));
             else if (line_index <= height) {
+                // Skim through the level's vector in the level file
                 vector<shared_ptr<Block>> block_this_line;
                 for (auto block_type_index: line_splitted) {
                     block_this_line.push_back(readLevel(block_type_index, posX, posY));
                     posX++;
                 } posX = 0;
                 posY ++;
+                // Append the line to the board
                 board.push_back(block_this_line);
             } else {
+                // Read boxes and player
                 if (line == "-") next_is_player_coord = true;
                 else readPlayerBoxes(next_is_player_coord, line_splitted);
             } line_index += 1;
