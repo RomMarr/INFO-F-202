@@ -16,24 +16,25 @@
 #include <FL/fl_draw.H>
 
 
-RectangleButton::RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id): 
-    x{x}, y{y}, width{width}, height{height}, button_id{button_id}, button_title{button_title} {
+RectangleButton::RectangleButton(Point set_position, int width, int height, std::string button_title, int button_id): 
+    position{set_position}, width{width}, height{height}, button_id{button_id}, button_title{button_title} {
     
     // -1 is reserved for button not found on getButtonId function
     assert(button_id != -1);
 }
 
 void RectangleButton::draw() {
-    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, x, y, width, height, (is_active ? fl_rgb_color(153, 204, 255) : fl_rgb_color(255, 255, 255)));
+    fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX(), position.getPosY(), width, height, (is_active ? fl_rgb_color(153, 204, 255) : fl_rgb_color(255, 255, 255)));
     fl_color(fl_rgb_color(0, 0, 0));
     fl_font(FL_HELVETICA, 12);
-    fl_draw(button_title.c_str(), x + 5,  (y + height / 2) + 3);
+    fl_draw(button_title.c_str(), position.getPosX() + 5,  (position.getPosY() + height / 2) + 3);
 }
 
-bool RectangleButton::contains(int click_x, int click_y) {
-    // check horizontaly if in rectangle
-    if (click_x > x && click_x < x + width) {
-        if (click_y > y && click_y < y + height) {
+bool RectangleButton::contains(Point clicked_position) {
+    // check horizontaly if contained
+    if (clicked_position.getPosX() > position.getPosX() && clicked_position.getPosX() < position.getPosX() + width) {
+        // check vertically if contained
+        if (clicked_position.getPosY() > position.getPosY() && clicked_position.getPosY() < position.getPosY() + height) {
             return true;
         }
     }
@@ -64,27 +65,31 @@ void LoadingScreen::draw() {
 MainMenu::MainMenu(shared_ptr<Controller> controller): controller{controller} {};
 
 void MainMenu::draw() {
+    // If there is no level selection button already initialised, initialise them
     if (level_selection_btn.size() == 0) {
-        for (int index_level =0; index_level<NUMBER_OF_LEVELS; index_level++){
-            int posY = round(index_level/3); // level's buttoms are drawn 3 by 3
-            level_selection_btn.push_back(make_shared<RectangleButton>(50 + 40*(index_level%3),50 + 40*posY, 30, 30, to_string(index_level),index_level));
+        for (int index_level = 0; index_level<NUMBER_OF_LEVELS; index_level++){
+            int posY = round(index_level/3); // level's buttons in a 3 by 3 grid
+            Point position{50 + 40 * (index_level%3), 50 + 40 * posY};
+            level_selection_btn.push_back(make_shared<RectangleButton>(position, 30, 30, to_string(index_level),index_level));
         }
     }
 
+    // If there is no play button already initialised, initialise it
     if (!play_btn) {
         int posY = round(NUMBER_OF_LEVELS/3);
-        play_btn = make_shared<RectangleButton>(50, 90+ 40*posY, 110, 30, PLAY_BUTTON_TITLE);
+        play_btn = make_shared<RectangleButton>(Point{50, 90 + 40 * posY}, 110, 30, PLAY_BUTTON_TITLE);
     }
 
-    for (shared_ptr<RectangleButton> btn: level_selection_btn) {
+    // Draw all the buttons
+    for (auto btn: level_selection_btn) {
         btn->draw();
     }
     play_btn->draw();
 }
 
-void MainMenu::onWindowClicked(int x, int y) {
+void MainMenu::onWindowClicked(Point clicked_position) {
     // If click on play
-    if (play_btn->contains(x, y)) {
+    if (play_btn->contains(clicked_position)) {
         // Get btn active and play level associate
         for (shared_ptr<RectangleButton> btn: level_selection_btn) {
             if (btn->getIsActive()) {
@@ -94,8 +99,9 @@ void MainMenu::onWindowClicked(int x, int y) {
         }
     }
 
-    for (shared_ptr<RectangleButton> btn: level_selection_btn) {
-        if (btn->contains(x, y)) {
+    // Check if clicked on a level selection button
+    for (auto btn: level_selection_btn) {
+        if (btn->contains(clicked_position)) {
             btn->setIsActive(true);
         } else {
             btn->setIsActive(false);
@@ -104,8 +110,8 @@ void MainMenu::onWindowClicked(int x, int y) {
 }
 
 MainWindow::MainWindow(MainMenu menu): Fl_Window(500, 500, 750, 500, WINDOW_TITLE.c_str()), menu(menu) {
-    Fl::add_timeout(1.0 / REFRESH_RATE, timerCB, this);
-    Fl::add_timeout(LOADING_SCREEN_TIMEOUT, loadingScreenTimeout, this);
+    Fl::add_timeout(1.0 / REFRESH_RATE, timerCB, this); // Called on every refresh to redraw
+    Fl::add_timeout(LOADING_SCREEN_TIMEOUT, loadingScreenTimeout, this); // Called after one second to hide the loading screen
 }
 
 void MainWindow::setController(shared_ptr<Controller> new_controller) {
@@ -114,14 +120,16 @@ void MainWindow::setController(shared_ptr<Controller> new_controller) {
 
 void MainWindow::drawBoard() {
     shared_ptr<Player> player = board->getPlayer();
-    int block_size = std::min(500 / board->getWidth(), 500 / board->getHeight());
 
+    // Block size to have the board within the 500 by 500 space reserved for the board
+    int block_size = std::min(500 / board->getWidth(), 500 / board->getHeight());
+    
+    // The offset to have the board horizontally centered
     int y_offset = (500 - (block_size * board->getHeight())) / 2;
 
+    // Draw the blocks of the board
     for (int y = 0; y < board->getHeight(); y++) {
         for (int x = 0; x < board->getWidth(); x++) {
-            shared_ptr<Block> box_here = board->getBox(Point{x, y});
-
             int pos_x = block_size * x;
             int pos_y = y_offset + block_size * y;
 
@@ -159,6 +167,7 @@ void MainWindow::drawBoardInformations() {
     std::string best_steps = board->getBestSteps() == -1 ? "No best score" : "Best : " + to_string(board->getBestSteps());
     std::string box_on_pos = "Box : " + to_string(board->nbBoxOnTarget()) + "/" + to_string(board->getBoxes().size());
 
+    // Win/lose indicator
     fl_font(FL_HELVETICA_BOLD, 32);
     if (board->checkWin()) {
         fl_color(fl_rgb_color(0, 102, 0));
@@ -181,8 +190,8 @@ void MainWindow::drawBoardInformations() {
 
     fl_draw(box_on_pos.c_str(), pos_x, 190);
 
-    if (!reset_btn) reset_btn = make_shared<RectangleButton>(pos_x, 220, 200, 30, RESET_BUTTON_TITLE);
-    if (!back_to_menu_btn) back_to_menu_btn = make_shared<RectangleButton>(pos_x, 270, 200, 30, CHANGE_LEVEL_BUTTON_TITLE);
+    if (!reset_btn) reset_btn = make_shared<RectangleButton>(Point{pos_x, 220}, 200, 30, RESET_BUTTON_TITLE);
+    if (!back_to_menu_btn) back_to_menu_btn = make_shared<RectangleButton>(Point{pos_x, 270}, 200, 30, CHANGE_LEVEL_BUTTON_TITLE);
 
     reset_btn->draw();
     back_to_menu_btn->draw();
@@ -204,11 +213,11 @@ void MainWindow::draw() {
 int MainWindow::handle(int event) {
     if (event == FL_PUSH) {
         if (board->shouldShowBoard()) {
-            if (reset_btn && reset_btn->contains(Fl::event_x(), Fl::event_y())) board->resetLevel();
-            if (back_to_menu_btn && back_to_menu_btn->contains(Fl::event_x(), Fl::event_y())) board->setShowBoard(false);
+            if (reset_btn && reset_btn->contains({Fl::event_x(), Fl::event_y()})) board->resetLevel();
+            if (back_to_menu_btn && back_to_menu_btn->contains({Fl::event_x(), Fl::event_y()})) board->setShowBoard(false);
             return 1;    
         } else if (!show_loading) {
-            menu.onWindowClicked(Fl::event_x(), Fl::event_y());
+            menu.onWindowClicked({Fl::event_x(), Fl::event_y()});
             return 1;    
         } 
     }

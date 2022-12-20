@@ -3,6 +3,7 @@
 
 #include "controller.hpp"
 #include "model.hpp"
+#include "point.hpp"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
@@ -13,13 +14,14 @@
 #include <vector>
 
 class RectangleButton {
-    int x, y, width, height, button_id;
+    Point position;
+    int width, height, button_id; // button id is used to differenciate button and know what behavior to apply to them
     std::string button_title;
     bool is_active = false;
 public:
-    RectangleButton(int x, int y, int width, int height, std::string button_title, int button_id = 0);
+    RectangleButton(Point position, int width, int height, std::string button_title, int button_id = 0);
     void draw();
-    bool contains(int x, int y);
+    bool contains(Point position); // is the position inside the button
     int getButtonId();
     void setIsActive(bool value);
     bool getIsActive();
@@ -36,9 +38,8 @@ class MainMenu {
     shared_ptr<RectangleButton> play_btn;
 public:
     MainMenu(shared_ptr<Controller> controller);
-    static void selectLevel(shared_ptr<Controller> controller, int id);
     void draw();
-    void onWindowClicked(int x, int y);
+    void onWindowClicked(Point clicked_position); // called when clicked on the menu
 };
 
 class MainWindow: public Fl_Window {
