@@ -4,7 +4,7 @@ COMPILER=g++
 CXXFLAGS += $(shell fltk-config --cxxflags | sed 's/-I/-isystem/g')
 LDFLAGS  += $(shell fltk-config --ldflags)
 
-CXXFLAGS += -std='c++20' -Wall -Wextra -Wsign-compare -pedantic -fmax-errors=2
+CXXFLAGS += -std='c++20' -Wall -Wextra -Wsign-compare -pedantic -fmax-errors=2 -Werror=all
 LDFLAGS  += -lfltk
 
 OBJ=point.o block.o player.o controller.o model.o view.o animation.o
