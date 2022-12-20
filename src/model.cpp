@@ -188,7 +188,7 @@ int Board::getBestSteps() {
     return best_steps;
 }
 
-int Board::readBestSteps(){
+void Board::readBestSteps(){
     int index_line = 0;
     int new_best_steps = 9999;
     string line;

@@ -27,7 +27,7 @@ class Board{
     bool show_board = false;                 // true if the board is ready to be diplayed
     void createMatrixFromFile(const string &file_name); // init all board's states 
     void resetLevelStates();
-    int readBestSteps();                    // read bestSteps.txt and returns the best step for the current level
+    void readBestSteps();                    // read bestSteps.txt and returns the best step for the current level
     shared_ptr<Block> readLevel(string block_type_index, int posX, int posY);  // return the block at coord : (posX,posY)
     void readPlayerBoxes(bool next_is_player_coord, vector<string> line_splitted); // init the player and boxes
 public:
