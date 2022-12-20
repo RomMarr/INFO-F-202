@@ -330,6 +330,8 @@ bool Board::checkTeleport(Point pos_teleporter){
                 return false; 
         }
     }
+
+    return false;
 }
 
 bool Board::isBlocked(shared_ptr<Block> box){
