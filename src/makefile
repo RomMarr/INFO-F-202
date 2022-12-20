@@ -1,4 +1,4 @@
-# Inspiré des Makefile fournit lors des séances de TP
+# Inspiré des Makefile fournit lors des séances de TPs
 COMPILER=g++
 
 CXXFLAGS += $(shell fltk-config --cxxflags | sed 's/-I/-isystem/g')

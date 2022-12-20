@@ -11,13 +11,13 @@
 
 
 class Controller {
-    shared_ptr<Board> board;                 // shared ptr to the board (in model)
+    shared_ptr<Board> board;
 public:
-    Controller(shared_ptr<Board> board);     // constructor
+    Controller(shared_ptr<Board> board);
     void selectLevel(int level_id);          // level selector
-    void keyHandler(int key_event);          // handle the event of using some of the keyboard's keys 
+    void keyHandler(int key_event);          // handle the event of using the keyboard's keys 
     void moveHandler(const Point &move);     // handle every move after being called by the key_handler
-    void animationHandler();                 // called every redraw of the interface to animate the movement
+    void animationHandler();                 // called by every redraw of the interface to animate the movement
 };
 
 #endif

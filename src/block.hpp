@@ -18,13 +18,11 @@ class Block {
 public:
     enum BlockType { wall, floor, target, heavy_box, light_box, teleporter }; 
 private:    
-    const int width = 50;   // wifth of the block
-    const int height = 50;  // height of the block 
     BlockType type;         // type of the block   
     int weight;             // weight du block
     int id_color = 0;       // id of the color (0 or 1)
     Point pos;              // position of the block
-    Animation animation;
+    Animation animation;    // to allow the boxes' animation
 public:
     Block(BlockType type);
     void setWeight(int weight);
@@ -33,8 +31,6 @@ public:
     void setPos(Point new_position);
     Point getPos();
     int getWeight();
-    int getWidth();
-    int getHeight();
     int getIdColor();
     Animation &getAnimation();
     Fl_Color getColor();  // return the color that matches the type 

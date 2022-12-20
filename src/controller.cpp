@@ -23,7 +23,7 @@ void Controller::selectLevel(int level_id) {
 }
 
 void Controller::keyHandler(int key_event){ // handle the keys pushed from the keyboard
-    shared_ptr<Player> player = board->getPlayer();  //ptr to the player
+    shared_ptr<Player> player = board->getPlayer();
     if (player->getAnimation().isAnimated()) return; // If being animated, does nothing
 
     if (key_event == 32) board->resetLevel(); // key_event 32 is the space bar
@@ -50,32 +50,28 @@ void Controller::keyHandler(int key_event){ // handle the keys pushed from the k
 }
 
 void Controller::moveHandler(const Point &move){
-    shared_ptr<Player> player = board->getPlayer();  // get the ptr to the player
-    Point pos_player = player->getPos();  // position of the player
-    player->setMoveAsked(move); // change the move asked by the player
+    shared_ptr<Player> player = board->getPlayer();
+    Point pos_player = player->getPos();
+    player->setMoveAsked(move);
     if (board->checkMove(move)){  // if the move is authorized
         if (!player->isTeleported()) { // if the player do a normal move
             Point move_asked = player->getMoveAsked();
-            Point new_pos = pos_player + move_asked;
-
-            player->getAnimation().animate(player->getPos(), move_asked);
+            Point new_pos = pos_player + move_asked;  // player's destination
+            player->getAnimation().animate(player->getPos(), move_asked); // start the animation
             player->setPos(new_pos);
-        } else {
+        } else { // if the player go to a teleporter
             Point new_pos = pos_player + move;
-            board->teleport(new_pos); // check if the play can teleport and does it if he can
+            board->teleport(new_pos); // teleport the player to the other teleporter
             player->changeTeleported();
-        }
-        player->addStep();
+        } player->addStep();
     }; 
 }
 
 void Controller::animationHandler() {
     auto player = board->getPlayer();
-    
-    player->getAnimation().computeAnimation();
+    player->getAnimation().computeAnimation(); // move the player little by little
 
     for (auto box: board->getBoxes()) {
-        box->getAnimation().computeAnimation();
+        box->getAnimation().computeAnimation();  // move the boxes little by little
     }
 }
-

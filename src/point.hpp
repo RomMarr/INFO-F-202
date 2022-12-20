@@ -18,8 +18,9 @@ public:
     bool operator!=(const Point &other);         // compare if the two points have different coordinates
     Point operator-(const Point &other);         // do the - operation separatly for posX and posY
     Point operator+(const Point &other);         // do the + operation separatly for posX and posY
-    Point operator*(const float multiplicator);
+    Point operator*(const float multiplicator);  // multply the point's coordonates with the multiplicator
     friend std::ostream& operator<<(std::ostream& os, const Point& point);
+    // used while trying to debug the animations -> allow to cout a Point 
 };
 
 #endif

@@ -199,7 +199,7 @@ int Board::readBestSteps(){
     best_steps = bestSteps;
 }
 
-void Board::writeBestSteps(){
+void Board::editBestSteps(){
     int index_line = 0; // matches the levels (lvl = 0 -> index_line = 0 )
     string line;
     ofstream file_write("tmp.txt");
@@ -231,7 +231,7 @@ int Board::nbBoxOnTarget() {
 
 bool Board::checkWin(){
     if (nbBoxOnTarget() != static_cast<int>(getBoxes().size())) return false; // if not all boxes are on a target
-    if (getBestSteps() == -1 || getBestSteps() > player->getSteps()) writeBestSteps(); // if best steps has been beaten
+    if (getBestSteps() == -1 || getBestSteps() > player->getSteps()) editBestSteps(); // if best steps has been beaten
     return true;
 }
 

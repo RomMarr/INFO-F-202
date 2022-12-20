@@ -12,7 +12,6 @@
 
 using namespace std;
 
-
 int main(int argc, char *argv[]) {
   //init of board and controller
   shared_ptr<Board> board = make_shared<Board>(); 
@@ -29,3 +28,4 @@ int main(int argc, char *argv[]) {
 
   return Fl::run();
 }
+

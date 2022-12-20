@@ -21,7 +21,7 @@ class Player{
     int steps = 0;               // number of steps the player has done
     int weight = 0;              // weight of the boxes the player is pushing
     bool teleported = false;     // true if the player use a teleporter
-    Animation animation;
+    Animation animation;         // to allow the player's animation
 public:
     Player(Point position);
     void setPos(Point new_pos);  
