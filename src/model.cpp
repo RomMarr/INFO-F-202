@@ -273,26 +273,33 @@ bool Board::checkMoveTeleport(Point move){
     Point new_pos = pos_player + move; // new possible position of the player or box (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
-    shared_ptr<Block> box_on_move = getBox(new_pos);  // ptr to the box if there is one, nullptr if not
-    if (box_on_move){ // if box on the new_pos of the player
-            player->setWeight(player->getWeight()+ box_on_move->getWeight()); // add the weight of the box
-            if (checkMove(move + move_asked)){  // if move authorized
-                if (getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
-                    // type of the block of the new_pos is a teleporter
-                    getBox(new_pos)->setPos(new_pos_box); // change de position of the box
-                    if (checkTeleport(new_pos)) { // if player can teleport
-                        player->changeTeleported(); // teleported = true
-                        return true;
-                    }return false;
-                }getBox(new_pos)->setPos(new_pos_box); // change de position of the box
-            } 
-    }if (getBlock(pos_player+ move_asked)->getType()==Block::BlockType::teleporter){
-    // type of the block of the new_pos is a teleporter
+    shared_ptr<Block> box_on_move = getBox(new_pos);
+
+    if (box_on_move) { // if box is not nullptr
+        player->setWeight(player->getWeight() + box_on_move->getWeight()); // add the weight of the box
+        
+        if (checkMove(move + move_asked)){  // if move authorized
+            if (getBlock(pos_player + move_asked)->getType() == Block::BlockType::teleporter){
+                // type of the block of the new_pos is a teleporter
+                getBox(new_pos)->setPos(new_pos_box); // change de position of the box
+                if (checkTeleport(new_pos)) { // if player can teleport
+                    player->changeTeleported();
+                    return true;
+                }
+                return false;
+            }
+            getBox(new_pos)->setPos(new_pos_box); // change the position of the box
+        } 
+    }
+    if (getBlock(pos_player + move_asked)->getType() == Block::BlockType::teleporter){
+        // type of the block of the new_pos is a teleporter
         if (checkTeleport(new_pos)) { // if player can teleport
-            player->changeTeleported(); // teleported = true
+            player->changeTeleported();
             return true;
-        }return false;
-    }return true;
+        }
+        return false;
+    }
+    return true;
 }
 
 bool Board::checkMoveNormal(Point move){
