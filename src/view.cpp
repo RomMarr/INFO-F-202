@@ -145,8 +145,17 @@ void MainWindow::drawBoard() {
     // Draw the boxes
     for (auto box: board->getBoxes()) {
         Point position = box->getAnimation().getAnimatedPosition(box->getPos()) * block_size;
-        fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX(), y_offset + position.getPosY(), block_size, block_size, fl_rgb_color(0, 0, 0));
+
+        fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX(), y_offset + position.getPosY(), block_size, block_size, fl_rgb_color(0, 0, 0));        
         fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX() + 1, y_offset + position.getPosY() + 1, block_size - 2, block_size - 2, box->getColor());
+
+        auto block_here = board->getBlock(box->getPos());
+        // Check if block on target and draw green square on it
+        if (block_here->getType() == Block::BlockType::target && box->getIdColor() == block_here->getIdColor()) {   
+            int x = position.getPosX() + block_size / 4;
+            int y = y_offset + position.getPosY() + block_size / 4l;
+            fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, x, y, block_size / 2, block_size / 2, fl_rgb_color(0, 255, 0));
+        }   
     }
 
     // Draw the player
