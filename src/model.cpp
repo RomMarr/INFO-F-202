@@ -162,7 +162,7 @@ int Board::getLvl() {
 
 bool Board::isInBoard(Point pos){
     // check if the position is inside the board
-    return (pos.getPosX() < 0 || pos.getPosX() >= getWidth() || pos.getPosY() < 0 ||pos.getPosY() >= getHeight());
+    return !(pos.getPosX() < 0 || pos.getPosX() >= getWidth() || pos.getPosY() < 0 ||pos.getPosY() >= getHeight());
 }
 
 shared_ptr<Block> Board::getBlock(Point coord) {
