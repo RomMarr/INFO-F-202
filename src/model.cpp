@@ -125,7 +125,7 @@ shared_ptr<Player> Board::getPlayer(Point pos_actual){
 }
 
 shared_ptr<Block> Board::getBox(Point actual_pos){
-    for (auto box: boxes){  // go through all the boxes
+    for (auto box: boxes){ 
         if (box->getPos() == actual_pos) return box;  // shared ptr to the box
     }
     return nullptr;
@@ -156,14 +156,13 @@ int Board::getLvl() {
 }
 
 bool Board::isInBoard(Point pos){
-    if (pos.getPosX() < 0 || pos.getPosX() >= getWidth() || pos.getPosY() < 0 ||pos.getPosY() >= getHeight()) {
-        // check if it will leave the board with its movement
-        return false;
-    } else return true;
+    // check if the position is inside the board
+    return (pos.getPosX() < 0 || pos.getPosX() >= getWidth() || pos.getPosY() < 0 ||pos.getPosY() >= getHeight());
 }
 
 shared_ptr<Block> Board::getBlock(Point coord) {
-    return board.at(coord.getPosY()).at(coord.getPosX());  // shared ptr to the block at the position given
+    return board.at(coord.getPosY()).at(coord.getPosX()); 
+    // shared ptr to the block at the position given
 }
 
 void Board::resetLevel() {
@@ -172,7 +171,7 @@ void Board::resetLevel() {
 
 void Board::teleport(Point pos_teleporter){
     vector<shared_ptr<Block>> teleporters = getTeleporters();
-    for (auto teleporter: teleporters){  // go through the teleporters
+    for (auto teleporter: teleporters){
         if(teleporter->getPos() != pos_teleporter) {  // if the teleporter is not the one the player is using
             if (! getBox(teleporter->getPos())) player->setPos(teleporter->getPos()); // if no box on the other teleporter
                 return; 
@@ -186,43 +185,45 @@ int Board::getBestSteps() {
 
 int Board::readBestSteps(){
     int index_line = 0;
-    int bestSteps = 9999;
+    int new_best_steps = 9999;
     string line;
     ifstream file("bestSteps.txt");
     if (file.is_open()) {  // open the bestSteps file
         while (getline(file, line)) {  // go through all the lines
-            if (index_line == getLvl()) bestSteps = stoi(line);  // get the best score of the level
+            if (index_line == getLvl()) new_best_steps = stoi(line);  // get the best score of the level
             index_line++;
         }
-        file.close();  // close the file
+        file.close();
     } 
-    best_steps = bestSteps;
+    best_steps = new_best_steps;
 }
 
 void Board::editBestSteps(){
     int index_line = 0; // matches the levels (lvl = 0 -> index_line = 0 )
     string line;
-    ofstream file_write("tmp.txt");
-    if (file_write.is_open()) {  // open the temporary file
-        ifstream file_read("bestSteps.txt");
-        if (file_read.is_open()) { // open the bestSteps file 
-            while (getline(file_read, line)) {  // go through all the lines of the bestSteps file
-                if (index_line == getLvl()) file_write << player->getSteps() << endl;  // change the line where the best record has been brocken
-                else file_write << line << endl;  // copy each line in the temporary file
+    ofstream tmp_file("tmp.txt");
+    if (tmp_file.is_open()) {
+        ifstream bestSteps_file("bestSteps.txt");
+        if (bestSteps_file.is_open()) {
+            while (getline(bestSteps_file, line)) {  // go through all the lines of the bestSteps file
+                if (index_line == getLvl()) tmp_file << player->getSteps() << endl;  
+                // change the line where the best record has been brocken
+                else tmp_file << line << endl;  // copy each line in the temporary file
                 index_line++;
-            } file_read.close();  // close the bestSteps file
-        } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "bestSteps.txt" << endl;  // if bestSteps file can not be opened
-        file_write.close();  //  close  the temporary file 
+            } bestSteps_file.close();
+        } else cerr << "Impossible d’ouvrir le fichier " << "bestSteps.txt" << endl;  // if bestSteps file can not be opened
+        tmp_file.close();
         remove("bestSteps.txt"); // delete the bestSteps file 
-        rename("tmp.txt", "bestSteps.txt");  // rename de temporary file to the bestSteps file
-    } else cerr << "Impossible␣d’ouvrir␣le␣fichier␣" << "tmp.txt" << endl; // if temporary file can not be opened
+        rename("tmp.txt", "bestSteps.txt");  // rename de temporary file to "bestSteps.txt"
+    } else cerr << "Impossible d’ouvrir le fichier " << "tmp.txt" << endl; // if temporary file can not be opened
 }
 
 int Board::nbBoxOnTarget() {
     int nb_box = 0;
-    for (shared_ptr<Block> box: getBoxes()) {  // go through all the boxes 
+    for (auto box: getBoxes()) {
         shared_ptr<Block> block_of_box = getBlock(box->getPos());
-        if (block_of_box->getType() == Block::BlockType::target && box->getIdColor() == block_of_box->getIdColor()) {  // true if the box is on a target
+        if (block_of_box->getType() == Block::BlockType::target && box->getIdColor() == block_of_box->getIdColor()) { 
+            // true if the box is on a target
             nb_box += 1;
         }
      } return nb_box;
@@ -246,10 +247,9 @@ bool Board::checkMove(Point move){
     if (!isInBoard(new_pos)) return false; 
     // check if the player will not leave the board with its movement
     if (player->getWeight()> MAX_PLAYER_WEIGHT) return false;
-    // A player can push max a weight lesser than 10
+    // A player can push max a weight lesser than MAX_PLAYER_WEIGHT
     
     Block::BlockType destination_type = getBlock(new_pos)->getType();  
-    // type of the block of the possible new position
     
     if (destination_type == Block::BlockType::wall) return false;
     // if the block of arrival is a wall
@@ -295,15 +295,16 @@ bool Board::checkMoveNormal(Point move){
     Point new_pos = pos_player + move; // new possible position of the player (not checked yet)
     Point move_asked = player->getMoveAsked();  // movement add to the player's position to get his new position
     Point new_pos_box = new_pos + move_asked; // new possible position of the box (not checked yet)
-    shared_ptr<Block> box_on_move = getBox(new_pos);  // ptr to the box if there is one, nullptr if not
-    if (box_on_move){  // check if ptr != nullptr
+    shared_ptr<Block> box_on_move = getBox(new_pos);  // nullptr if no box at the position
+    if (box_on_move){  // check if box_on_move != nullptr
             player->setWeight(player->getWeight()+ box_on_move->getWeight()); // add the weight of the box pushed by the player
-            if (checkMove(move + move_asked)){ // recursive call to check the next block until we have a wall, a free block or too much weight
-                if (player->getWeight() > MAX_PLAYER_WEIGHT) return false; // too much weight for the player
+            if (checkMove(move + move_asked)){ 
+                // recursive call to check the next block until we have a wall, a free block or too much weight
+                if (player->getWeight() > MAX_PLAYER_WEIGHT) return false;
                 else { 
                     auto box = getBox(new_pos);
-                    box->getAnimation().animate(new_pos, move_asked);
-                    box->setPos(new_pos_box); // change the box position 
+                    box->getAnimation().animate(new_pos, move_asked);  // box's movement animated
+                    box->setPos(new_pos_box);
                     return true; 
                 } 
             }else return false;
@@ -311,8 +312,8 @@ bool Board::checkMoveNormal(Point move){
 }
 
 bool Board::checkTeleport(Point pos_teleporter){
-    for (auto teleporter: teleporters){  // go through the teleporters
-        if(teleporter->getPos() != pos_teleporter) {  // if the teleporter is not the one the player is using
+    for (auto teleporter: teleporters){ 
+        if(teleporter->getPos() != pos_teleporter) {  // if the teleporter is not the one used by the player
             if (!getBox(teleporter->getPos())) return true; // if no box on the other teleporter
                 return false; 
         }
@@ -321,30 +322,31 @@ bool Board::checkTeleport(Point pos_teleporter){
 
 bool Board::isBlocked(shared_ptr<Block> box){
     Point pos_box = box->getPos();  // position of the box to check
-    vector<Point> possible_moves;  // list of positions of cases to try to see if it's blocked
+    vector<Point> possible_moves;  // list of the box's possible destinations
     vector<bool> blocked;  // list of booleans (true if blocked, false if not)
     possible_moves.push_back(pos_box + POSSIBLE_MOVE_DOWN); // add position to try to the list
     possible_moves.push_back(pos_box + POSSIBLE_MOVE_UP);
     possible_moves.push_back(pos_box + POSSIBLE_MOVE_RIGHT);
     possible_moves.push_back(pos_box + POSSIBLE_MOVE_LEFT);
-    for (auto move: possible_moves){  // loop with all the elements of the liste next_case
-        if (isInBoard(move)){  // if position (checked) is in the board
-            shared_ptr<Block> box_on_case = getBox(move);  // ptr to a box or nullptr if no box on the case
-            if (box_on_case) { // if box on case
-                if (box_on_case->getWeight()==9) blocked.push_back(true);  // heavy box blocked by another heavy box
+    for (auto move: possible_moves){
+        if (isInBoard(move)){
+            shared_ptr<Block> box_on_case = getBox(move);  // nullptr if no box on the case
+            if (box_on_case) {
+                if (box_on_case->getWeight() == HEAVY_BOX_WEIGHT) blocked.push_back(true);  // box blocked by an heavy box
                 else blocked.push_back(false);  // if it's a light box 
-            }else if (getBlock(move)->getType()==Block::BlockType::wall) blocked.push_back(true); // boc blocked by a wall
-            else blocked.push_back(false); // position does not block the box
-        } else blocked.push_back(true);  // position is not on the board
-    } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3));  // true if blocked at least once horizontally and once vertically
+            }else if (getBlock(move)->getType() == Block::BlockType::wall) blocked.push_back(true); // box blocked by a wall
+            else blocked.push_back(false); // box is not blocked
+        } else blocked.push_back(true);  // possible position is not on the board
+    } return(blocked.at(0)|| blocked.at(1))&& (blocked.at(2)|| blocked.at(3)); 
+    // true if the box is blocked at least once horizontally and once vertically
  }
 
  bool Board::failureDetection(){
     bool all_blocked = true;  // true if all boxes are blocked
-    bool box_blocked;  // test each box at a time
-    for (shared_ptr<Block> box: getBoxes()) {  // go through all the boxes of the board 
+    bool box_blocked;
+    for (shared_ptr<Block> box: getBoxes()) {
         box_blocked = isBlocked(box);  // test if box is blocked
         all_blocked = (all_blocked && box_blocked);
-    }if (all_blocked) return true; // all boxes are blocked
+    }if (all_blocked) return true; // if all boxes are blocked
     else return false;
  }
