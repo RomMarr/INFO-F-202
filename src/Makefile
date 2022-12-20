@@ -7,8 +7,10 @@ LDFLAGS  += $(shell fltk-config --ldflags)
 CXXFLAGS += -std='c++20' -Wall -Wextra -Wsign-compare -pedantic -fmax-errors=2
 LDFLAGS  += -lfltk
 
-main: main.cpp constants.hpp point.o block.o player.o controller.o model.o view.o animation.o
-	${COMPILER} ${CXXFLAGS} -o projet main.cpp point.o block.o player.o controller.o model.o view.o animation.o ${LDFLAGS}
+OBJ=point.o block.o player.o controller.o model.o view.o animation.o
+
+main: main.cpp constants.hpp ${OBJ}
+	${COMPILER} ${CXXFLAGS} -o projet main.cpp ${OBJ} ${LDFLAGS}
 
 %.o: %.cpp %.hpp
 	$(info ************)
