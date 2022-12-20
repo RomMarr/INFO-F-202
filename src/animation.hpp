@@ -8,8 +8,8 @@ using namespace std;
 
 class Animation {
 private:    
-  Point move;
-  Point position_from;
+  Point move;             // The move performed
+  Point position_from; 
   Point animation_offset; // What will be animated, going from (-1, 0) to (0, 0)
   bool animated;
 public:
@@ -18,9 +18,9 @@ public:
   void setPositionFrom(Point new_from);
   void setAnimationOffset(Point new_offset);
   void setAnimated(bool new_value);
-  void animate(Point from, Point movement);
-  void computeAnimation();
-  Point getAnimatedPosition(Point current_position);
+  void animate(Point from, Point movement);          // Will initialize move, position_from, animation_offset and animated
+  void computeAnimation();                           // Called on when redraw, will decrase the animation offset slowly
+  Point getAnimatedPosition(Point current_position); // Return the animation_offset + current_position
   Point getMove();
   Point getPositionFrom();
   Point getAnimationOffset();

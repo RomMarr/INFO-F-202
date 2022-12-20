@@ -34,11 +34,13 @@ void Animation::computeAnimation() {
 
     new_animation = getAnimationOffset() + (getMove() * (ANIMATION_SPEED / REFRESH_RATE));  // -1 -> -0.9 etc.
 
-    if (getMove() == Point(1, 0) && new_animation.getPosX() >= 0 || 
-        getMove() == Point(0, 1) && new_animation.getPosY() >= 0 || 
-        getMove() == Point(-1, 0) && new_animation.getPosX() <= 0 || 
-        getMove() == Point(0, -1) && new_animation.getPosY() <= 0
+    // Check if the offset is not bigger that the movement
+    if ((getMove() == Point(1, 0) && new_animation.getPosX() >= 0) || 
+        (getMove() == Point(0, 1) && new_animation.getPosY() >= 0) || 
+        (getMove() == Point(-1, 0) && new_animation.getPosX() <= 0) || 
+        (getMove() == Point(0, -1) && new_animation.getPosY() <= 0)
     ) {
+      // The animation is done, it reached the position
       setAnimated(false);
       setAnimationOffset({0, 0});
     }
