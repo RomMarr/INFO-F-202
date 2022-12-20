@@ -55,15 +55,15 @@ Point Animation::getAnimatedPosition(Point current_position) {
   return current_position + getAnimationOffset();
 }
 
-Point Animation::getMove() {
+Point &Animation::getMove() {
   return move;
 }
 
-Point Animation::getPositionFrom() {
+Point &Animation::getPositionFrom() {
   return position_from;
 }
 
-Point Animation::getAnimationOffset() {
+Point &Animation::getAnimationOffset() {
   return animation_offset;
 }
 

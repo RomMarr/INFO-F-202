@@ -29,12 +29,12 @@ public:
     void setType(BlockType new_type);
     void setIdColor(int new_id_color);
     void setPos(Point new_position);
-    Point getPos();
+    Point &getPos();
     int getWeight();
     int getIdColor();
     Animation &getAnimation();
     Fl_Color getColor();  // return the color that matches the type 
-    BlockType getType();
+    BlockType &getType();
 };
 
 #endif

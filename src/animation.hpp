@@ -21,9 +21,9 @@ public:
   void animate(Point from, Point movement);          // Will initialize move, position_from, animation_offset and animated
   void computeAnimation();                           // Called on when redraw, will decrase the animation offset slowly
   Point getAnimatedPosition(Point current_position); // Return the animation_offset + current_position
-  Point getMove();
-  Point getPositionFrom();
-  Point getAnimationOffset();
+  Point &getMove();
+  Point &getPositionFrom();
+  Point &getAnimationOffset();
   bool isAnimated();
 };
 

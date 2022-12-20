@@ -30,7 +30,7 @@ void Block::setPos(Point new_position){
     pos = new_position;
 }
 
-Point Block::getPos(){
+Point &Block::getPos(){
     return pos;
 }
 
@@ -63,6 +63,6 @@ Fl_Color Block::getColor(){
     }
 }
 
-Block::BlockType Block::getType(){
+Block::BlockType &Block::getType(){
     return type;
 }
