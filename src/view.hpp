@@ -17,7 +17,7 @@ class RectangleButton {
     Point position;
     int width, height, button_id; // button id is used to differenciate button and know what behavior to apply to them
     std::string button_title;
-    bool is_active = false;
+    bool is_active = false;       // used for buttons in select level, they have an active state meaning it is selected
 public:
     RectangleButton(Point position, int width, int height, std::string button_title, int button_id = 0);
     void draw();
