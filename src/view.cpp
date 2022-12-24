@@ -17,11 +17,7 @@
 
 
 RectangleButton::RectangleButton(Point set_position, int width, int height, std::string button_title, int button_id): 
-    position{set_position}, width{width}, height{height}, button_id{button_id}, button_title{button_title} {
-    
-    // -1 is reserved for button not found on getButtonId function
-    assert(button_id != -1);
-}
+    position{set_position}, width{width}, height{height}, button_id{button_id}, button_title{button_title} {}
 
 void RectangleButton::draw() {
     fl_draw_box(Fl_Boxtype::FL_FLAT_BOX, position.getPosX(), position.getPosY(), width, height, (is_active ? fl_rgb_color(153, 204, 255) : fl_rgb_color(255, 255, 255)));
